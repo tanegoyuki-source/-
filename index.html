@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DATA EDITORIAL / ANALYSIS PLATFORM</title>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- EXTERNAL LIBRARIES -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+  <!-- APPLICATION CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ================================================================
+       HTML: STRUCTURE LAYER - Semantic Document Architecture
+       ================================================================ -->
+  <div class="app-container">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="main-header">
+      <div class="header-top">
+        <div class="logo">DATA EDITORIAL</div>
+        <div class="header-actions">
+          <button class="btn btn-outline" id="uploadBtn">CSV UPLOAD</button>
+        </div>
+      </div>
+
+      <div class="nav-container">
+        <nav class="nav-tabs">
+          <button class="nav-tab active" data-tab="momentum">
+            MARKET MOMENTUM
+            <span class="nav-tab-jp">売上動向</span>
+          </button>
+          <button class="nav-tab" data-tab="architecture">
+            PRODUCT ARCHITECTURE
+            <span class="nav-tab-jp">商品構造</span>
+          </button>
+          <button class="nav-tab" data-tab="narrative">
+            INDIVIDUAL NARRATIVE
+            <span class="nav-tab-jp">顧客分析</span>
+          </button>
+        </nav>
+
+        <!-- Slicer Controls -->
+        <div class="slicer-bar">
+          <div class="slicer-group">
+            <span class="slicer-label">性別</span>
+            <button class="slicer-btn active" data-slicer="gender" data-value="all">全て</button>
+            <button class="slicer-btn" data-slicer="gender" data-value="male">男性</button>
+            <button class="slicer-btn" data-slicer="gender" data-value="female">女性</button>
+          </div>
+
+          <div class="slicer-divider"></div>
+
+          <div class="slicer-group">
+            <span class="slicer-label">年代</span>
+            <button class="slicer-btn active" data-slicer="age" data-value="all">全て</button>
+            <button class="slicer-btn" data-slicer="age" data-value="10-20">10-20代</button>
+            <button class="slicer-btn" data-slicer="age" data-value="30-40">30-40代</button>
+            <button class="slicer-btn" data-slicer="age" data-value="50-60">50-60代</button>
+            <button class="slicer-btn" data-slicer="age" data-value="70+">70代以上</button>
+          </div>
+
+          <div class="slicer-divider"></div>
+
+          <div class="slicer-group">
+            <span class="slicer-label">ライフステージ</span>
+            <button class="slicer-btn active" data-slicer="lifestage" data-value="all">全て</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="single">単身</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="dinks">DINKS</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="dewks">DEWKS</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="senior">老年夫婦</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="main-content">
+
+      <!-- HERO SECTION -->
+      <section class="hero-section">
+        <div class="hero-left">
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: var(--space-md);">ANALYSIS PLATFORM v3.0</p>
+          <h1 class="typo-hero">RETAIL</h1>
+          <h1 class="typo-hero" style="color: var(--red);">INTEL</h1>
+          <div class="hero-desc">
+            <p class="typo-body" style="color: var(--gray-400);">
+              汎用リテールデータ解析プラットフォーム。CSVファイルをドロップするだけで、売上トレンド・商品構造・顧客セグメントを自動解析します。全てのグラフはスライサーと連動して即座に更新されます。
+            </p>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-metric">
+            <p class="hero-metric-label">TOTAL REVENUE / 総売上</p>
+            <p class="hero-metric-value" id="heroRevenue">¥0</p>
+            <p class="hero-metric-sub">2025年10月 集計期間</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 1: MARKET MOMENTUM ==================== -->
+      <section class="tab-panel active" id="panel-momentum">
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <p class="metric-card-label">取引件数</p>
+            <p class="metric-card-value" id="metricTransactions">—</p>
+            <p class="metric-card-sub">Total Transactions</p>
+            <p class="metric-card-change up" id="metricTransactionsChange">—</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-card-label">平均客単価</p>
+            <p class="metric-card-value" id="metricBasket">—</p>
+            <p class="metric-card-sub">Avg. Basket Size</p>
+            <p class="metric-card-change up" id="metricBasketChange">—</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-card-label">ユニーク顧客数</p>
+            <p class="metric-card-value" id="metricCustomers">—</p>
+            <p class="metric-card-sub">Unique Customers</p>
+            <p class="metric-card-change up" id="metricCustomersChange">—</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-card-label">販売点数</p>
+            <p class="metric-card-value" id="metricItems">—</p>
+            <p class="metric-card-sub">Items Sold</p>
+            <p class="metric-card-change up" id="metricItemsChange">—</p>
+          </div>
+        </div>
+
+        <!-- Section: Daily Trend -->
+        <div class="section-header">
+          <p class="section-number">01</p>
+          <h2 class="section-title-en">DAILY REVENUE</h2>
+          <p class="section-title-jp">日別売上推移 — 土日祝日は色分けで表示されます</p>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">DAILY SALES</h3>
+                <p class="chart-subtitle">日別売上金額（10月1日〜31日）</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="dailyChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card alt">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">HOURLY PATTERN</h3>
+                <p class="chart-subtitle">時間帯別来客指数</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="hourlyChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Section: Day x Hour Heatmap -->
+        <div class="section-header">
+          <p class="section-number">02</p>
+          <h2 class="section-title-en">CONGESTION HEATMAP</h2>
+          <p class="section-title-jp">曜日×時間帯の混雑度マップ — 赤いほど混雑</p>
+        </div>
+
+        <div class="heatmap-container">
+          <div class="heatmap-grid" id="congestionHeatmap">
+            <!-- Generated by JS -->
+          </div>
+          <div class="heatmap-legend">
+            <span class="typo-caption">閑散</span>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.15);"></div>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.3);"></div>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.45);"></div>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.65);"></div>
+            <div class="heatmap-legend-item" style="background: var(--red);"></div>
+            <span class="typo-caption">混雑</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 2: PRODUCT ARCHITECTURE ==================== -->
+      <section class="tab-panel" id="panel-architecture">
+
+        <div class="section-header">
+          <p class="section-number">01</p>
+          <h2 class="section-title-en">CATEGORY SHARE</h2>
+          <p class="section-title-jp">カテゴリ別売上構成比 — 商品分類ごとの売上シェア</p>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">REVENUE BY CATEGORY</h3>
+                <p class="chart-subtitle">カテゴリ別売上金額</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card alt">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">TOP 10 ITEMS</h3>
+                <p class="chart-subtitle">売上トップ10商品</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="topItemsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider navy"></div>
+
+        <!-- Cross-sell Network -->
+        <div class="section-header">
+          <p class="section-number">02</p>
+          <h2 class="section-title-en">CROSS-SELL NETWORK</h2>
+          <p class="section-title-jp">併売ネットワーク — 一緒に購入されやすい商品の関係性</p>
+        </div>
+
+        <div class="network-container">
+          <svg id="crossSellNetwork"></svg>
+          <div class="network-legend">
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--red);"></div>
+              <span>日配食品</span>
+            </div>
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--white);"></div>
+              <span>加工食品</span>
+            </div>
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--navy-light);"></div>
+              <span>飲料・酒類</span>
+            </div>
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--gray-400);"></div>
+              <span>その他</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider thin"></div>
+
+        <!-- Attribute Breakdown -->
+        <div class="section-header">
+          <p class="section-number">03</p>
+          <h2 class="section-title-en">CUSTOMER ATTRIBUTES</h2>
+          <p class="section-title-jp">顧客属性分布 — 購買者の年代・性別・ライフステージ</p>
+        </div>
+
+        <div class="attribute-grid">
+          <div class="attribute-card">
+            <h4 class="attribute-card-title">AGE / 年代別</h4>
+            <div id="ageDistribution"></div>
+          </div>
+          <div class="attribute-card">
+            <h4 class="attribute-card-title">GENDER / 性別</h4>
+            <div id="genderDistribution"></div>
+          </div>
+          <div class="attribute-card">
+            <h4 class="attribute-card-title">LIFESTAGE / ライフステージ</h4>
+            <div id="lifestageDistribution"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 3: INDIVIDUAL NARRATIVE ==================== -->
+      <section class="tab-panel" id="panel-narrative">
+
+        <!-- RFM Analysis -->
+        <div class="section-header">
+          <p class="section-number">01</p>
+          <h2 class="section-title-en">RFM MATRIX</h2>
+          <p class="section-title-jp">RFM分析マトリクス — 顧客の優良度を可視化（R:最終購買日, F:購買頻度, M:購買金額）</p>
+        </div>
+
+        <div class="rfm-section">
+          <div class="rfm-wrapper">
+            <div class="rfm-y-axis">
+              <div class="rfm-y-label">R5 最近</div>
+              <div class="rfm-y-label">R4</div>
+              <div class="rfm-y-label">R3</div>
+              <div class="rfm-y-label">R2</div>
+              <div class="rfm-y-label">R1 過去</div>
+            </div>
+            <div class="rfm-content">
+              <div class="rfm-x-axis">
+                <div class="rfm-x-label">M1 低</div>
+                <div class="rfm-x-label">M2</div>
+                <div class="rfm-x-label">M3</div>
+                <div class="rfm-x-label">M4</div>
+                <div class="rfm-x-label">M5 高</div>
+              </div>
+              <div class="rfm-grid" id="rfmGrid"></div>
+            </div>
+          </div>
+          <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg);">
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <div style="width: 16px; height: 16px; background: var(--red);"></div>
+              <span class="typo-caption">優良顧客（Champion）</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <div style="width: 16px; height: 16px; background: var(--navy-light);"></div>
+              <span class="typo-caption">ロイヤル顧客</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <div style="width: 16px; height: 16px; background: #FF6600;"></div>
+              <span class="typo-caption">要注意顧客（At Risk）</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- N1 Analysis -->
+        <div class="section-header">
+          <p class="section-number">02</p>
+          <h2 class="section-title-en">N1 DEEP DIVE</h2>
+          <p class="section-title-jp">個客深掘り分析 — 一人ひとりの購買DNA・行動タイムラインを可視化</p>
+        </div>
+
+        <div class="entity-section">
+          <div class="entity-list" id="customerList"></div>
+          <div class="entity-detail" id="customerDetail">
+            <div style="text-align: center; padding: var(--space-3xl); color: var(--gray-500);">
+              <p class="typo-label" style="margin-bottom: var(--space-sm);">SELECT CUSTOMER</p>
+              <p class="typo-caption">左のリストから顧客を選択してください</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ==================== UPLOAD OVERLAY ==================== -->
+    <div class="upload-overlay" id="uploadOverlay">
+      <div class="upload-zone" id="uploadZone">
+        <h2 class="typo-title" style="margin-bottom: var(--space-md);">DROP CSV FILE</h2>
+        <p class="typo-body" style="color: var(--gray-400);">
+          CSVファイルをドラッグ＆ドロップ、またはクリックして選択してください。<br>
+          日付・金額・属性カラムを自動判別します。
+        </p>
+        <input type="file" id="fileInput" accept=".csv" style="display: none;">
+      </div>
+      <button class="upload-close" id="uploadClose">閉じる</button>
+    </div>
+
+  </div>
+
+  <!-- APPLICATION JAVASCRIPT -->
+  <script src="js/app.js"></script>
+
+</body>
+</html>
