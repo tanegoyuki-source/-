@@ -1,0 +1,23 @@
+# Data files (large CSV files)
+*.csv
+IDPOS_*.csv
+
+# Temporary files
+tmpclaude-*
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Node modules (if any)
+node_modules/
+dashboard/
+
+# Logs
+*.log

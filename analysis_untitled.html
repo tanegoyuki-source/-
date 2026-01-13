@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DATA EDITORIAL / ANALYSIS PLATFORM</title>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- LIBRARIES -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+  <!-- ================================================================
+       CSS: PRESENTATION LAYER - Editorial Noir Design System
+       ================================================================ -->
+  <style>
+    /* ==================== RESET & VARIABLES ==================== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Core Palette */
+      --black: #000000;
+      --white: #FFFFFF;
+      --red: #FF0000;
+      --navy: #0A1628;
+      --navy-light: #152238;
+
+      /* Grays */
+      --gray-50: #FAFAFA;
+      --gray-100: #F0F0F0;
+      --gray-200: #E0E0E0;
+      --gray-300: #BDBDBD;
+      --gray-400: #9E9E9E;
+      --gray-500: #757575;
+      --gray-600: #616161;
+      --gray-700: #424242;
+      --gray-800: #212121;
+      --gray-900: #121212;
+
+      /* Typography Scale */
+      --font-en: 'Montserrat', 'Arial Black', sans-serif;
+      --font-jp: 'Noto Sans JP', sans-serif;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 40px;
+      --space-2xl: 64px;
+      --space-3xl: 100px;
+    }
+
+    /* ==================== BASE STYLES ==================== */
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--font-jp);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    /* ==================== TYPOGRAPHY SYSTEM ==================== */
+    .typo-hero {
+      font-family: var(--font-en);
+      font-size: clamp(72px, 14vw, 220px);
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 0.8;
+      text-transform: uppercase;
+    }
+
+    .typo-display {
+      font-family: var(--font-en);
+      font-size: clamp(48px, 8vw, 120px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.85;
+      text-transform: uppercase;
+    }
+
+    .typo-headline {
+      font-family: var(--font-en);
+      font-size: clamp(32px, 5vw, 72px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.9;
+      text-transform: uppercase;
+    }
+
+    .typo-title {
+      font-family: var(--font-en);
+      font-size: clamp(20px, 3vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .typo-label {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .typo-body {
+      font-family: var(--font-jp);
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .typo-caption {
+      font-family: var(--font-jp);
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--gray-400);
+    }
+
+    .typo-data {
+      font-family: var(--font-en);
+      font-size: clamp(36px, 6vw, 80px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==================== LAYOUT FRAMEWORK ==================== */
+    .app-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .main-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--black);
+      border-bottom: 1px solid var(--gray-800);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-xl);
+      height: 56px;
+    }
+
+    .logo {
+      font-family: var(--font-en);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.4em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    /* Navigation Tabs */
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--space-xl);
+      border-top: 1px solid var(--gray-800);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0;
+    }
+
+    .nav-tab {
+      padding: var(--space-md) var(--space-lg);
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--gray-500);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-tab:hover {
+      color: var(--white);
+    }
+
+    .nav-tab.active {
+      color: var(--white);
+    }
+
+    .nav-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--red);
+    }
+
+    .nav-tab-jp {
+      display: block;
+      font-family: var(--font-jp);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+      opacity: 0.6;
+    }
+
+    /* Slicer Controls */
+    .slicer-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) 0;
+    }
+
+    .slicer-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .slicer-label {
+      font-size: 10px;
+      color: var(--gray-500);
+      margin-right: var(--space-xs);
+    }
+
+    .slicer-btn {
+      padding: 6px 12px;
+      font-family: var(--font-jp);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--gray-400);
+      background: transparent;
+      border: 1px solid var(--gray-700);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .slicer-btn:hover {
+      border-color: var(--gray-500);
+      color: var(--white);
+    }
+
+    .slicer-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: var(--white);
+    }
+
+    .slicer-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--gray-700);
+      margin: 0 var(--space-md);
+    }
+
+    /* Main Content */
+    .main-content {
+      padding-top: 140px;
+      flex: 1;
+    }
+
+    /* ==================== HERO SECTION ==================== */
+    .hero-section {
+      min-height: 60vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+    }
+
+    .hero-left {
+      padding: var(--space-3xl) var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-right {
+      background: var(--red);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-right::before {
+      content: 'DATA';
+      position: absolute;
+      font-family: var(--font-en);
+      font-size: 280px;
+      font-weight: 900;
+      color: rgba(0,0,0,0.08);
+      transform: rotate(-90deg) translateX(50%);
+      right: -100px;
+    }
+
+    .hero-metric {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-metric-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: rgba(0,0,0,0.5);
+      margin-bottom: var(--space-sm);
+    }
+
+    .hero-metric-value {
+      font-family: var(--font-en);
+      font-size: clamp(60px, 12vw, 140px);
+      font-weight: 900;
+      color: var(--black);
+      line-height: 1;
+    }
+
+    .hero-metric-sub {
+      font-family: var(--font-jp);
+      font-size: 13px;
+      color: rgba(0,0,0,0.5);
+      margin-top: var(--space-md);
+    }
+
+    .hero-desc {
+      margin-top: var(--space-xl);
+      max-width: 480px;
+    }
+
+    /* ==================== TAB PANELS ==================== */
+    .tab-panel {
+      display: none;
+      padding: var(--space-2xl) var(--space-xl);
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Section Headers */
+    .section-header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .section-number {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      color: var(--red);
+      margin-bottom: var(--space-sm);
+    }
+
+    .section-title-en {
+      font-family: var(--font-en);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .section-title-jp {
+      font-family: var(--font-jp);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--gray-400);
+      margin-top: var(--space-sm);
+    }
+
+    /* ==================== DIVIDERS ==================== */
+    .divider {
+      height: 4px;
+      background: var(--red);
+      margin: var(--space-2xl) 0;
+    }
+
+    .divider.navy {
+      background: var(--navy);
+    }
+
+    .divider.thin {
+      height: 1px;
+      background: var(--gray-700);
+    }
+
+    /* ==================== METRIC CARDS ==================== */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--gray-800);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .metric-card {
+      background: var(--black);
+      padding: var(--space-lg);
+      position: relative;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .metric-card:nth-child(1)::before { background: var(--red); }
+    .metric-card:nth-child(2)::before { background: var(--white); }
+    .metric-card:nth-child(3)::before { background: var(--navy-light); }
+    .metric-card:nth-child(4)::before { background: var(--gray-500); }
+
+    .metric-card-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--gray-500);
+      margin-bottom: var(--space-sm);
+    }
+
+    .metric-card-value {
+      font-family: var(--font-en);
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: var(--space-xs);
+    }
+
+    .metric-card-sub {
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    .metric-card-change {
+      font-size: 11px;
+      margin-top: var(--space-sm);
+    }
+
+    .metric-card-change.up { color: #00E676; }
+    .metric-card-change.down { color: var(--red); }
+
+    /* ==================== CHART CONTAINERS ==================== */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .charts-row.equal {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .chart-card {
+      background: var(--gray-900);
+      padding: var(--space-lg);
+      position: relative;
+    }
+
+    .chart-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 80px;
+      height: 3px;
+      background: var(--red);
+    }
+
+    .chart-card.alt::before {
+      background: var(--navy-light);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-lg);
+    }
+
+    .chart-title {
+      font-family: var(--font-en);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .chart-subtitle {
+      font-family: var(--font-jp);
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    .chart-area {
+      height: 320px;
+      position: relative;
+    }
+
+    .chart-area.short {
+      height: 240px;
+    }
+
+    .chart-area.tall {
+      height: 420px;
+    }
+
+    /* ==================== HEATMAP ==================== */
+    .heatmap-container {
+      margin-bottom: var(--space-2xl);
+    }
+
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: 50px repeat(24, 1fr);
+      gap: 2px;
+    }
+
+    .heatmap-label {
+      font-size: 10px;
+      color: var(--gray-500);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: var(--space-sm);
+    }
+
+    .heatmap-header {
+      font-size: 9px;
+      color: var(--gray-500);
+      text-align: center;
+      padding: var(--space-xs) 0;
+    }
+
+    .heatmap-cell {
+      aspect-ratio: 1;
+      background: var(--gray-900);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .heatmap-cell:hover {
+      transform: scale(1.15);
+      z-index: 10;
+    }
+
+    .heatmap-cell.l1 { background: rgba(255,0,0,0.15); }
+    .heatmap-cell.l2 { background: rgba(255,0,0,0.3); }
+    .heatmap-cell.l3 { background: rgba(255,0,0,0.45); }
+    .heatmap-cell.l4 { background: rgba(255,0,0,0.65); color: var(--white); }
+    .heatmap-cell.l5 { background: var(--red); color: var(--white); }
+
+    .heatmap-legend {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-top: var(--space-md);
+    }
+
+    .heatmap-legend-item {
+      width: 24px;
+      height: 12px;
+    }
+
+    /* ==================== NETWORK GRAPH ==================== */
+    .network-container {
+      background: var(--gray-900);
+      height: 500px;
+      position: relative;
+      margin-bottom: var(--space-2xl);
+    }
+
+    .network-container svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .network-legend {
+      position: absolute;
+      top: var(--space-lg);
+      left: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .network-legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 10px;
+      color: var(--gray-400);
+    }
+
+    .network-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* ==================== ATTRIBUTE BARS ==================== */
+    .attribute-section {
+      margin-bottom: var(--space-2xl);
+    }
+
+    .attribute-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+    }
+
+    .attribute-card {
+      background: var(--gray-900);
+      padding: var(--space-lg);
+    }
+
+    .attribute-card-title {
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--gray-300);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--gray-700);
+      margin-bottom: var(--space-lg);
+    }
+
+    .attribute-row {
+      margin-bottom: var(--space-md);
+    }
+
+    .attribute-row-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .attribute-row-label {
+      font-size: 12px;
+      color: var(--gray-300);
+    }
+
+    .attribute-row-value {
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .attribute-row-bar {
+      height: 20px;
+      background: var(--gray-800);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .attribute-row-fill {
+      height: 100%;
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .attribute-row-fill.red { background: var(--red); }
+    .attribute-row-fill.navy { background: var(--navy-light); }
+    .attribute-row-fill.white { background: var(--white); }
+
+    /* ==================== RFM MATRIX ==================== */
+    .rfm-section {
+      margin-bottom: var(--space-2xl);
+    }
+
+    .rfm-wrapper {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: var(--space-sm);
+    }
+
+    .rfm-y-axis {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding-top: 40px;
+    }
+
+    .rfm-y-label {
+      font-size: 9px;
+      color: var(--gray-500);
+      text-align: right;
+      padding-right: var(--space-sm);
+    }
+
+    .rfm-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .rfm-x-axis {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      margin-bottom: var(--space-sm);
+    }
+
+    .rfm-x-label {
+      font-size: 9px;
+      color: var(--gray-500);
+      text-align: center;
+    }
+
+    .rfm-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+    }
+
+    .rfm-cell {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray-800);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .rfm-cell:hover {
+      transform: scale(1.03);
+    }
+
+    .rfm-cell.champion {
+      background: var(--red);
+    }
+
+    .rfm-cell.loyal {
+      background: var(--navy-light);
+    }
+
+    .rfm-cell.at-risk {
+      background: #FF6600;
+    }
+
+    .rfm-cell-count {
+      font-family: var(--font-en);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .rfm-cell-label {
+      font-size: 8px;
+      color: var(--gray-300);
+      margin-top: 4px;
+    }
+
+    /* ==================== ENTITY LIST ==================== */
+    .entity-section {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .entity-list {
+      background: var(--gray-900);
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .entity-item {
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--gray-800);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .entity-item:hover,
+    .entity-item.active {
+      background: var(--gray-800);
+    }
+
+    .entity-item.active {
+      border-left: 3px solid var(--red);
+    }
+
+    .entity-rank {
+      font-family: var(--font-en);
+      font-size: 10px;
+      color: var(--gray-500);
+      letter-spacing: 0.1em;
+    }
+
+    .entity-name {
+      font-family: var(--font-en);
+      font-size: 15px;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+
+    .entity-meta {
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    .entity-detail {
+      background: var(--gray-900);
+      padding: var(--space-xl);
+    }
+
+    .entity-profile {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-md);
+      padding-bottom: var(--space-xl);
+      border-bottom: 1px solid var(--gray-700);
+      margin-bottom: var(--space-xl);
+    }
+
+    .profile-stat {
+      text-align: center;
+    }
+
+    .profile-stat-value {
+      font-family: var(--font-en);
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .profile-stat-value.red { color: var(--red); }
+
+    .profile-stat-label {
+      font-size: 10px;
+      color: var(--gray-500);
+      letter-spacing: 0.1em;
+    }
+
+    /* Radar Chart */
+    .radar-container {
+      height: 280px;
+      margin-bottom: var(--space-xl);
+    }
+
+    /* Timeline */
+    .timeline-container {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: var(--space-md);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--gray-800);
+    }
+
+    .timeline-date {
+      font-family: var(--font-en);
+      font-size: 11px;
+      color: var(--gray-500);
+      min-width: 80px;
+    }
+
+    .timeline-content {
+      flex: 1;
+    }
+
+    .timeline-amount {
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .timeline-items {
+      font-size: 11px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    /* ==================== UPLOAD OVERLAY ==================== */
+    .upload-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .upload-overlay.active {
+      display: flex;
+    }
+
+    .upload-zone {
+      width: 90%;
+      max-width: 600px;
+      padding: var(--space-3xl);
+      border: 2px dashed var(--gray-600);
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.drag-over {
+      border-color: var(--red);
+      background: rgba(255,0,0,0.05);
+    }
+
+    .upload-close {
+      margin-top: var(--space-xl);
+      padding: var(--space-md) var(--space-xl);
+      background: transparent;
+      border: 1px solid var(--gray-600);
+      color: var(--white);
+      font-family: var(--font-en);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .upload-close:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* ==================== BUTTONS ==================== */
+    .btn {
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-en);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--gray-600);
+      color: var(--white);
+    }
+
+    .btn-outline:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* ==================== SCROLLBAR ==================== */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--black);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray-700);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gray-600);
+    }
+
+    /* ==================== ANIMATIONS ==================== */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes countUp {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .animate-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1200px) {
+      .hero-section { grid-template-columns: 1fr; }
+      .hero-right { min-height: 350px; }
+      .charts-row { grid-template-columns: 1fr; }
+      .attribute-grid { grid-template-columns: 1fr; }
+      .entity-section { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .header-top { padding: 0 var(--space-md); }
+      .nav-container { padding: 0 var(--space-md); flex-direction: column; }
+      .nav-tab { padding: var(--space-sm) var(--space-md); }
+      .slicer-bar { flex-wrap: wrap; }
+      .tab-panel { padding: var(--space-xl) var(--space-md); }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .heatmap-grid { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================================================================
+       HTML: STRUCTURE LAYER - Semantic Document Architecture
+       ================================================================ -->
+  <div class="app-container">
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="main-header">
+      <div class="header-top">
+        <div class="logo">DATA EDITORIAL</div>
+        <div class="header-actions">
+          <button class="btn btn-outline" id="uploadBtn">CSV UPLOAD</button>
+        </div>
+      </div>
+
+      <div class="nav-container">
+        <nav class="nav-tabs">
+          <button class="nav-tab active" data-tab="momentum">
+            MARKET MOMENTUM
+            <span class="nav-tab-jp">売上動向</span>
+          </button>
+          <button class="nav-tab" data-tab="architecture">
+            PRODUCT ARCHITECTURE
+            <span class="nav-tab-jp">商品構造</span>
+          </button>
+          <button class="nav-tab" data-tab="narrative">
+            INDIVIDUAL NARRATIVE
+            <span class="nav-tab-jp">顧客分析</span>
+          </button>
+        </nav>
+
+        <!-- Slicer Controls -->
+        <div class="slicer-bar">
+          <div class="slicer-group">
+            <span class="slicer-label">性別</span>
+            <button class="slicer-btn active" data-slicer="gender" data-value="all">全て</button>
+            <button class="slicer-btn" data-slicer="gender" data-value="male">男性</button>
+            <button class="slicer-btn" data-slicer="gender" data-value="female">女性</button>
+          </div>
+
+          <div class="slicer-divider"></div>
+
+          <div class="slicer-group">
+            <span class="slicer-label">年代</span>
+            <button class="slicer-btn active" data-slicer="age" data-value="all">全て</button>
+            <button class="slicer-btn" data-slicer="age" data-value="10-20">10-20代</button>
+            <button class="slicer-btn" data-slicer="age" data-value="30-40">30-40代</button>
+            <button class="slicer-btn" data-slicer="age" data-value="50-60">50-60代</button>
+            <button class="slicer-btn" data-slicer="age" data-value="70+">70代以上</button>
+          </div>
+
+          <div class="slicer-divider"></div>
+
+          <div class="slicer-group">
+            <span class="slicer-label">ライフステージ</span>
+            <button class="slicer-btn active" data-slicer="lifestage" data-value="all">全て</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="single">単身</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="dinks">DINKS</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="dewks">DEWKS</button>
+            <button class="slicer-btn" data-slicer="lifestage" data-value="senior">老年夫婦</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="main-content">
+
+      <!-- HERO SECTION -->
+      <section class="hero-section">
+        <div class="hero-left">
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: var(--space-md);">ANALYSIS PLATFORM v3.0</p>
+          <h1 class="typo-hero">RETAIL</h1>
+          <h1 class="typo-hero" style="color: var(--red);">INTEL</h1>
+          <div class="hero-desc">
+            <p class="typo-body" style="color: var(--gray-400);">
+              汎用リテールデータ解析プラットフォーム。CSVファイルをドロップするだけで、売上トレンド・商品構造・顧客セグメントを自動解析します。全てのグラフはスライサーと連動して即座に更新されます。
+            </p>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-metric">
+            <p class="hero-metric-label">TOTAL REVENUE / 総売上</p>
+            <p class="hero-metric-value" id="heroRevenue">¥0</p>
+            <p class="hero-metric-sub">2025年10月 集計期間</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 1: MARKET MOMENTUM ==================== -->
+      <section class="tab-panel active" id="panel-momentum">
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <p class="metric-card-label">取引件数</p>
+            <p class="metric-card-value" id="metricTransactions">—</p>
+            <p class="metric-card-sub">Total Transactions</p>
+            <p class="metric-card-change up" id="metricTransactionsChange">—</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-card-label">平均客単価</p>
+            <p class="metric-card-value" id="metricBasket">—</p>
+            <p class="metric-card-sub">Avg. Basket Size</p>
+            <p class="metric-card-change up" id="metricBasketChange">—</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-card-label">ユニーク顧客数</p>
+            <p class="metric-card-value" id="metricCustomers">—</p>
+            <p class="metric-card-sub">Unique Customers</p>
+            <p class="metric-card-change up" id="metricCustomersChange">—</p>
+          </div>
+          <div class="metric-card">
+            <p class="metric-card-label">販売点数</p>
+            <p class="metric-card-value" id="metricItems">—</p>
+            <p class="metric-card-sub">Items Sold</p>
+            <p class="metric-card-change up" id="metricItemsChange">—</p>
+          </div>
+        </div>
+
+        <!-- Section: Daily Trend -->
+        <div class="section-header">
+          <p class="section-number">01</p>
+          <h2 class="section-title-en">DAILY REVENUE</h2>
+          <p class="section-title-jp">日別売上推移 — 土日祝日は色分けで表示されます</p>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">DAILY SALES</h3>
+                <p class="chart-subtitle">日別売上金額（10月1日〜31日）</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="dailyChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card alt">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">HOURLY PATTERN</h3>
+                <p class="chart-subtitle">時間帯別来客指数</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="hourlyChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Section: Day x Hour Heatmap -->
+        <div class="section-header">
+          <p class="section-number">02</p>
+          <h2 class="section-title-en">CONGESTION HEATMAP</h2>
+          <p class="section-title-jp">曜日×時間帯の混雑度マップ — 赤いほど混雑</p>
+        </div>
+
+        <div class="heatmap-container">
+          <div class="heatmap-grid" id="congestionHeatmap">
+            <!-- Generated by JS -->
+          </div>
+          <div class="heatmap-legend">
+            <span class="typo-caption">閑散</span>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.15);"></div>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.3);"></div>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.45);"></div>
+            <div class="heatmap-legend-item" style="background: rgba(255,0,0,0.65);"></div>
+            <div class="heatmap-legend-item" style="background: var(--red);"></div>
+            <span class="typo-caption">混雑</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 2: PRODUCT ARCHITECTURE ==================== -->
+      <section class="tab-panel" id="panel-architecture">
+
+        <div class="section-header">
+          <p class="section-number">01</p>
+          <h2 class="section-title-en">CATEGORY SHARE</h2>
+          <p class="section-title-jp">カテゴリ別売上構成比 — 商品分類ごとの売上シェア</p>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">REVENUE BY CATEGORY</h3>
+                <p class="chart-subtitle">カテゴリ別売上金額</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="categoryChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card alt">
+            <div class="chart-header">
+              <div>
+                <h3 class="chart-title">TOP 10 ITEMS</h3>
+                <p class="chart-subtitle">売上トップ10商品</p>
+              </div>
+            </div>
+            <div class="chart-area tall">
+              <canvas id="topItemsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider navy"></div>
+
+        <!-- Cross-sell Network -->
+        <div class="section-header">
+          <p class="section-number">02</p>
+          <h2 class="section-title-en">CROSS-SELL NETWORK</h2>
+          <p class="section-title-jp">併売ネットワーク — 一緒に購入されやすい商品の関係性</p>
+        </div>
+
+        <div class="network-container">
+          <svg id="crossSellNetwork"></svg>
+          <div class="network-legend">
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--red);"></div>
+              <span>日配食品</span>
+            </div>
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--white);"></div>
+              <span>加工食品</span>
+            </div>
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--navy-light);"></div>
+              <span>飲料・酒類</span>
+            </div>
+            <div class="network-legend-item">
+              <div class="network-legend-dot" style="background: var(--gray-400);"></div>
+              <span>その他</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider thin"></div>
+
+        <!-- Attribute Breakdown -->
+        <div class="section-header">
+          <p class="section-number">03</p>
+          <h2 class="section-title-en">CUSTOMER ATTRIBUTES</h2>
+          <p class="section-title-jp">顧客属性分布 — 購買者の年代・性別・ライフステージ</p>
+        </div>
+
+        <div class="attribute-grid">
+          <div class="attribute-card">
+            <h4 class="attribute-card-title">AGE / 年代別</h4>
+            <div id="ageDistribution"></div>
+          </div>
+          <div class="attribute-card">
+            <h4 class="attribute-card-title">GENDER / 性別</h4>
+            <div id="genderDistribution"></div>
+          </div>
+          <div class="attribute-card">
+            <h4 class="attribute-card-title">LIFESTAGE / ライフステージ</h4>
+            <div id="lifestageDistribution"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 3: INDIVIDUAL NARRATIVE ==================== -->
+      <section class="tab-panel" id="panel-narrative">
+
+        <!-- RFM Analysis -->
+        <div class="section-header">
+          <p class="section-number">01</p>
+          <h2 class="section-title-en">RFM MATRIX</h2>
+          <p class="section-title-jp">RFM分析マトリクス — 顧客の優良度を可視化（R:最終購買日, F:購買頻度, M:購買金額）</p>
+        </div>
+
+        <div class="rfm-section">
+          <div class="rfm-wrapper">
+            <div class="rfm-y-axis">
+              <div class="rfm-y-label">R5 最近</div>
+              <div class="rfm-y-label">R4</div>
+              <div class="rfm-y-label">R3</div>
+              <div class="rfm-y-label">R2</div>
+              <div class="rfm-y-label">R1 過去</div>
+            </div>
+            <div class="rfm-content">
+              <div class="rfm-x-axis">
+                <div class="rfm-x-label">M1 低</div>
+                <div class="rfm-x-label">M2</div>
+                <div class="rfm-x-label">M3</div>
+                <div class="rfm-x-label">M4</div>
+                <div class="rfm-x-label">M5 高</div>
+              </div>
+              <div class="rfm-grid" id="rfmGrid"></div>
+            </div>
+          </div>
+          <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg);">
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <div style="width: 16px; height: 16px; background: var(--red);"></div>
+              <span class="typo-caption">優良顧客（Champion）</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <div style="width: 16px; height: 16px; background: var(--navy-light);"></div>
+              <span class="typo-caption">ロイヤル顧客</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space-sm);">
+              <div style="width: 16px; height: 16px; background: #FF6600;"></div>
+              <span class="typo-caption">要注意顧客（At Risk）</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- N1 Analysis -->
+        <div class="section-header">
+          <p class="section-number">02</p>
+          <h2 class="section-title-en">N1 DEEP DIVE</h2>
+          <p class="section-title-jp">個客深掘り分析 — 一人ひとりの購買DNA・行動タイムラインを可視化</p>
+        </div>
+
+        <div class="entity-section">
+          <div class="entity-list" id="customerList"></div>
+          <div class="entity-detail" id="customerDetail">
+            <div style="text-align: center; padding: var(--space-3xl); color: var(--gray-500);">
+              <p class="typo-label" style="margin-bottom: var(--space-sm);">SELECT CUSTOMER</p>
+              <p class="typo-caption">左のリストから顧客を選択してください</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ==================== UPLOAD OVERLAY ==================== -->
+    <div class="upload-overlay" id="uploadOverlay">
+      <div class="upload-zone" id="uploadZone">
+        <h2 class="typo-title" style="margin-bottom: var(--space-md);">DROP CSV FILE</h2>
+        <p class="typo-body" style="color: var(--gray-400);">
+          CSVファイルをドラッグ＆ドロップ、またはクリックして選択してください。<br>
+          日付・金額・属性カラムを自動判別します。
+        </p>
+        <input type="file" id="fileInput" accept=".csv" style="display: none;">
+      </div>
+      <button class="upload-close" id="uploadClose">閉じる</button>
+    </div>
+
+  </div>
+
+  <!-- ================================================================
+       JAVASCRIPT: BEHAVIOR / LOGIC LAYER - Universal Data Engine
+       ================================================================ -->
+  <script>
+    // ================================================================
+    // DEMO DATA GENERATOR
+    // ================================================================
+    const DEMO_DATA = generateDemoData();
+
+    function generateDemoData() {
+      return {
+        dailySales: generateDailySales(),
+        hourlySales: generateHourlySales(),
+        congestionMap: generateCongestionMap(),
+        categories: generateCategories(),
+        topItems: generateTopItems(),
+        ageDistribution: [
+          { label: '10代', value: 5 },
+          { label: '20代', value: 12 },
+          { label: '30代', value: 18 },
+          { label: '40代', value: 24 },
+          { label: '50代', value: 20 },
+          { label: '60代', value: 13 },
+          { label: '70代', value: 6 },
+          { label: '80代以上', value: 2 }
+        ],
+        genderDistribution: [
+          { label: '女性', value: 58 },
+          { label: '男性', value: 42 }
+        ],
+        lifestageDistribution: [
+          { label: '単身', value: 22 },
+          { label: 'DINKS', value: 18 },
+          { label: 'DEWKS', value: 28 },
+          { label: '老年夫婦', value: 20 },
+          { label: 'その他', value: 12 }
+        ],
+        customers: generateCustomers(60),
+        rfmMatrix: generateRFMMatrix(),
+        crossSellLinks: generateCrossSellLinks()
+      };
+    }
+
+    function generateDailySales() {
+      const sales = [];
+      const holidays = [13, 14]; // Sports Day weekend
+      const weekends = [4, 5, 11, 12, 18, 19, 25, 26];
+
+      for (let day = 1; day <= 31; day++) {
+        let base = 680000 + Math.random() * 180000;
+
+        if (weekends.includes(day)) base *= 1.35 + Math.random() * 0.15;
+        if (holidays.includes(day)) base *= 1.55 + Math.random() * 0.2;
+        if (day <= 5 || (day >= 25 && day <= 28)) base *= 1.12;
+
+        const dow = new Date(2025, 9, day).getDay();
+
+        sales.push({
+          day,
+          date: `10/${day}`,
+          revenue: Math.round(base),
+          isHoliday: holidays.includes(day),
+          isWeekend: dow === 0 || dow === 6,
+          dayOfWeek: dow
+        });
+      }
+      return sales;
+    }
+
+    function generateHourlySales() {
+      return [
+        { hour: '09', label: '9時', value: 42 },
+        { hour: '10', label: '10時', value: 65 },
+        { hour: '11', label: '11時', value: 88 },
+        { hour: '12', label: '12時', value: 82 },
+        { hour: '13', label: '13時', value: 68 },
+        { hour: '14', label: '14時', value: 72 },
+        { hour: '15', label: '15時', value: 85 },
+        { hour: '16', label: '16時', value: 92 },
+        { hour: '17', label: '17時', value: 100 },
+        { hour: '18', label: '18時', value: 96 },
+        { hour: '19', label: '19時', value: 78 },
+        { hour: '20', label: '20時', value: 52 },
+        { hour: '21', label: '21時', value: 25 }
+      ];
+    }
+
+    function generateCongestionMap() {
+      const days = ['日', '月', '火', '水', '木', '金', '土'];
+      const hours = Array.from({ length: 13 }, (_, i) => i + 9);
+      const map = [];
+
+      days.forEach((day, di) => {
+        hours.forEach(hour => {
+          let base = 30 + Math.random() * 40;
+
+          // Weekend boost
+          if (di === 0 || di === 6) base += 25;
+          // Evening peak
+          if (hour >= 17 && hour <= 19) base += 30;
+          // Lunch time
+          if (hour >= 11 && hour <= 13) base += 15;
+          // Late night drop
+          if (hour >= 20) base -= 20;
+
+          map.push({
+            day: di,
+            dayLabel: day,
+            hour,
+            value: Math.min(100, Math.max(10, Math.round(base)))
+          });
+        });
+      });
+      return map;
+    }
+
+    function generateCategories() {
+      return [
+        { name: '日配食品', nameEn: 'Daily Foods', revenue: 5120000, share: 23.8 },
+        { name: '加工食品', nameEn: 'Processed', revenue: 4280000, share: 19.9 },
+        { name: '菓子', nameEn: 'Snacks', revenue: 2850000, share: 13.2 },
+        { name: '飲料', nameEn: 'Beverages', revenue: 2480000, share: 11.5 },
+        { name: '酒類', nameEn: 'Alcohol', revenue: 2120000, share: 9.8 },
+        { name: '生鮮食品', nameEn: 'Fresh', revenue: 1860000, share: 8.6 },
+        { name: '冷凍食品', nameEn: 'Frozen', revenue: 1420000, share: 6.6 },
+        { name: '日用品', nameEn: 'Daily Goods', revenue: 980000, share: 4.5 },
+        { name: '化粧品', nameEn: 'Cosmetics', revenue: 450000, share: 2.1 }
+      ];
+    }
+
+    function generateTopItems() {
+      return [
+        { name: 'プレミアム牛乳 1L', category: '日配食品', sales: 4580, revenue: 916000 },
+        { name: '食パン 6枚切り', category: '日配食品', sales: 4120, revenue: 576800 },
+        { name: 'ミネラルウォーター 2L', category: '飲料', sales: 3860, revenue: 347400 },
+        { name: 'カップヌードル 各種', category: '加工食品', sales: 3580, revenue: 644400 },
+        { name: 'バナナ 1房', category: '生鮮食品', sales: 3320, revenue: 431600 },
+        { name: 'ヨーグルト 4個パック', category: '日配食品', sales: 3080, revenue: 523600 },
+        { name: '卵 10個入り', category: '日配食品', sales: 2920, revenue: 642400 },
+        { name: 'ポテトチップス 各種', category: '菓子', sales: 2780, revenue: 389200 },
+        { name: '缶ビール 350ml 6本', category: '酒類', sales: 2540, revenue: 838200 },
+        { name: 'インスタントコーヒー', category: '飲料', sales: 2280, revenue: 592800 }
+      ];
+    }
+
+    function generateCustomers(count) {
+      const ages = ['10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代以上'];
+      const genders = ['女性', '男性'];
+      const lifestages = ['単身', 'DINKS', 'DEWKS', '老年夫婦', 'その他'];
+      const categories = ['日配食品', '加工食品', '菓子', '飲料', '酒類'];
+      const customers = [];
+
+      for (let i = 0; i < count; i++) {
+        const totalSpend = Math.round(30000 + Math.random() * 470000);
+        const visits = Math.round(3 + Math.random() * 47);
+
+        customers.push({
+          id: `CU${String(i + 1).padStart(6, '0')}`,
+          totalSpend,
+          visits,
+          avgBasket: Math.round(totalSpend / visits),
+          lastVisit: Math.round(1 + Math.random() * 28),
+          age: ages[Math.floor(Math.random() * ages.length)],
+          gender: genders[Math.floor(Math.random() * genders.length)],
+          lifestage: lifestages[Math.floor(Math.random() * lifestages.length)],
+          topCategory: categories[Math.floor(Math.random() * categories.length)],
+          rfmScore: {
+            r: Math.floor(Math.random() * 5) + 1,
+            f: Math.floor(Math.random() * 5) + 1,
+            m: Math.floor(Math.random() * 5) + 1
+          },
+          dna: {
+            frequency: Math.round(20 + Math.random() * 80),
+            basket: Math.round(20 + Math.random() * 80),
+            variety: Math.round(20 + Math.random() * 80),
+            loyalty: Math.round(20 + Math.random() * 80),
+            timing: Math.round(20 + Math.random() * 80)
+          },
+          timeline: generateTimeline()
+        });
+      }
+
+      return customers.sort((a, b) => b.totalSpend - a.totalSpend);
+    }
+
+    function generateTimeline() {
+      const timeline = [];
+      for (let i = 0; i < 8; i++) {
+        const day = Math.round(1 + Math.random() * 28);
+        timeline.push({
+          date: `10/${day}`,
+          amount: Math.round(800 + Math.random() * 8000),
+          items: Math.round(2 + Math.random() * 12)
+        });
+      }
+      return timeline.sort((a, b) => {
+        const dayA = parseInt(a.date.split('/')[1]);
+        const dayB = parseInt(b.date.split('/')[1]);
+        return dayB - dayA;
+      });
+    }
+
+    function generateRFMMatrix() {
+      const matrix = [];
+      for (let r = 5; r >= 1; r--) {
+        for (let m = 1; m <= 5; m++) {
+          let count;
+          const isChampion = r >= 4 && m >= 4;
+          const isLoyal = r >= 3 && m >= 3 && !isChampion;
+          const isAtRisk = r <= 2 && m >= 4;
+
+          if (isChampion) count = Math.round(180 + Math.random() * 320);
+          else if (isAtRisk) count = Math.round(40 + Math.random() * 80);
+          else if (r <= 2 && m <= 2) count = Math.round(250 + Math.random() * 350);
+          else count = Math.round(80 + Math.random() * 180);
+
+          matrix.push({ r, m, count, isChampion, isLoyal, isAtRisk });
+        }
+      }
+      return matrix;
+    }
+
+    function generateCrossSellLinks() {
+      const items = [
+        { id: 'milk', name: '牛乳', group: 'daily' },
+        { id: 'bread', name: 'パン', group: 'daily' },
+        { id: 'egg', name: '卵', group: 'daily' },
+        { id: 'yogurt', name: 'ヨーグルト', group: 'daily' },
+        { id: 'noodle', name: 'カップ麺', group: 'processed' },
+        { id: 'snack', name: 'スナック菓子', group: 'processed' },
+        { id: 'rice', name: 'お米', group: 'processed' },
+        { id: 'water', name: 'ミネラルウォーター', group: 'beverage' },
+        { id: 'beer', name: 'ビール', group: 'beverage' },
+        { id: 'coffee', name: 'コーヒー', group: 'beverage' },
+        { id: 'tissue', name: 'ティッシュ', group: 'other' },
+        { id: 'detergent', name: '洗剤', group: 'other' }
+      ];
+
+      const links = [
+        { source: 'milk', target: 'bread', value: 85 },
+        { source: 'milk', target: 'egg', value: 72 },
+        { source: 'bread', target: 'egg', value: 68 },
+        { source: 'milk', target: 'yogurt', value: 65 },
+        { source: 'noodle', target: 'snack', value: 58 },
+        { source: 'beer', target: 'snack', value: 75 },
+        { source: 'water', target: 'snack', value: 45 },
+        { source: 'coffee', target: 'bread', value: 52 },
+        { source: 'rice', target: 'egg', value: 48 },
+        { source: 'tissue', target: 'detergent', value: 62 },
+        { source: 'beer', target: 'noodle', value: 42 }
+      ];
+
+      return { items, links };
+    }
+
+    // ================================================================
+    // GLOBAL STATE
+    // ================================================================
+    let currentData = DEMO_DATA;
+    let charts = {};
+    let slicerState = {
+      gender: 'all',
+      age: 'all',
+      lifestage: 'all'
+    };
+
+    // ================================================================
+    // INITIALIZATION
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initNavigation();
+      initSlicers();
+      initFileUpload();
+      renderAllVisualization();
+    });
+
+    // ================================================================
+    // NAVIGATION
+    // ================================================================
+    function initNavigation() {
+      const tabs = document.querySelectorAll('.nav-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+          document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+        });
+      });
+    }
+
+    // ================================================================
+    // SLICERS
+    // ================================================================
+    function initSlicers() {
+      document.querySelectorAll('.slicer-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const slicer = btn.dataset.slicer;
+          const value = btn.dataset.value;
+
+          // Update active state
+          document.querySelectorAll(`.slicer-btn[data-slicer="${slicer}"]`).forEach(b => {
+            b.classList.remove('active');
+          });
+          btn.classList.add('active');
+
+          // Update state
+          slicerState[slicer] = value;
+
+          // Re-render with filtered data
+          renderAllVisualization();
+        });
+      });
+    }
+
+    // ================================================================
+    // FILE UPLOAD
+    // ================================================================
+    function initFileUpload() {
+      const overlay = document.getElementById('uploadOverlay');
+      const zone = document.getElementById('uploadZone');
+      const input = document.getElementById('fileInput');
+      const closeBtn = document.getElementById('uploadClose');
+      const openBtn = document.getElementById('uploadBtn');
+
+      openBtn.addEventListener('click', () => overlay.classList.add('active'));
+      closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+      zone.addEventListener('click', () => input.click());
+
+      zone.addEventListener('dragover', e => {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+      });
+
+      zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+
+      zone.addEventListener('drop', e => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (file) processFile(file);
+      });
+
+      input.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) processFile(file);
+      });
+    }
+
+    function processFile(file) {
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        encoding: 'Shift_JIS',
+        complete: results => {
+          if (results.data.length === 0) {
+            Papa.parse(file, {
+              header: true,
+              skipEmptyLines: true,
+              complete: handleParsedData
+            });
+          } else {
+            handleParsedData(results);
+          }
+        }
+      });
+    }
+
+    function handleParsedData(results) {
+      console.log('Loaded:', results.data.length, 'rows');
+      document.getElementById('uploadOverlay').classList.remove('active');
+      alert(`${results.data.length}件のデータを読み込みました。\n解析を開始します。`);
+      // In production, transform CSV to visualization format here
+    }
+
+    // ================================================================
+    // RENDER ALL VISUALIZATIONS
+    // ================================================================
+    function renderAllVisualization() {
+      renderHeroStats();
+      renderMetrics();
+      renderDailyChart();
+      renderHourlyChart();
+      renderCongestionHeatmap();
+      renderCategoryChart();
+      renderTopItemsChart();
+      renderCrossSellNetwork();
+      renderAttributeDistributions();
+      renderRFMMatrix();
+      renderCustomerList();
+    }
+
+    // ================================================================
+    // HERO STATS
+    // ================================================================
+    function renderHeroStats() {
+      const total = currentData.dailySales.reduce((sum, d) => sum + d.revenue, 0);
+      animateValue('heroRevenue', total, '¥', true);
+    }
+
+    // ================================================================
+    // KEY METRICS
+    // ================================================================
+    function renderMetrics() {
+      const total = currentData.dailySales.reduce((sum, d) => sum + d.revenue, 0);
+      const transactions = Math.round(total / 2920);
+      const avgBasket = Math.round(total / transactions);
+      const customers = Math.round(transactions * 0.68);
+      const items = Math.round(transactions * 4.5);
+
+      animateValue('metricTransactions', transactions);
+      animateValue('metricBasket', avgBasket, '¥');
+      animateValue('metricCustomers', customers);
+      animateValue('metricItems', items);
+
+      document.getElementById('metricTransactionsChange').textContent = '+7.8% 前月比';
+      document.getElementById('metricBasketChange').textContent = '+2.9% 前月比';
+      document.getElementById('metricCustomersChange').textContent = '+4.6% 前月比';
+      document.getElementById('metricItemsChange').textContent = '+11.2% 前月比';
+    }
+
+    function animateValue(elementId, targetValue, prefix = '', useMillion = false) {
+      const el = document.getElementById(elementId);
+      const duration = 1200;
+      const startTime = performance.now();
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(targetValue * eased);
+
+        if (useMillion && current >= 1000000) {
+          el.textContent = prefix + (current / 1000000).toFixed(1) + 'M';
+        } else {
+          el.textContent = prefix + current.toLocaleString();
+        }
+
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+
+    // ================================================================
+    // DAILY CHART
+    // ================================================================
+    function renderDailyChart() {
+      const ctx = document.getElementById('dailyChart').getContext('2d');
+      if (charts.daily) charts.daily.destroy();
+
+      charts.daily = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: currentData.dailySales.map(d => d.date),
+          datasets: [{
+            data: currentData.dailySales.map(d => d.revenue),
+            backgroundColor: currentData.dailySales.map(d =>
+              d.isHoliday ? '#FFFFFF' :
+              d.isWeekend ? '#152238' :
+              '#FF0000'
+            ),
+            borderRadius: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#000',
+              titleFont: { family: 'Noto Sans JP' },
+              bodyFont: { family: 'Noto Sans JP' },
+              callbacks: {
+                label: ctx => `売上: ¥${ctx.raw.toLocaleString()}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#757575', font: { size: 9 }, maxRotation: 0 },
+              grid: { display: false }
+            },
+            y: {
+              ticks: {
+                color: '#757575',
+                font: { size: 10 },
+                callback: v => `¥${(v / 10000).toFixed(0)}万`
+              },
+              grid: { color: '#212121' }
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // HOURLY CHART
+    // ================================================================
+    function renderHourlyChart() {
+      const ctx = document.getElementById('hourlyChart').getContext('2d');
+      if (charts.hourly) charts.hourly.destroy();
+
+      charts.hourly = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: currentData.hourlySales.map(d => d.label),
+          datasets: [{
+            data: currentData.hourlySales.map(d => d.value),
+            borderColor: '#FF0000',
+            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: '#FF0000',
+            pointBorderColor: '#000',
+            pointBorderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `来客指数: ${ctx.raw}%`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#757575', font: { size: 10 } },
+              grid: { display: false }
+            },
+            y: {
+              ticks: {
+                color: '#757575',
+                callback: v => `${v}%`
+              },
+              grid: { color: '#212121' },
+              min: 0,
+              max: 120
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // CONGESTION HEATMAP
+    // ================================================================
+    function renderCongestionHeatmap() {
+      const container = document.getElementById('congestionHeatmap');
+      const days = ['日', '月', '火', '水', '木', '金', '土'];
+      const hours = Array.from({ length: 13 }, (_, i) => i + 9);
+
+      let html = '<div class="heatmap-header"></div>';
+      hours.forEach(h => {
+        html += `<div class="heatmap-header">${h}時</div>`;
+      });
+
+      days.forEach((day, di) => {
+        html += `<div class="heatmap-label">${day}</div>`;
+        hours.forEach(hour => {
+          const cell = currentData.congestionMap.find(c => c.day === di && c.hour === hour);
+          const level = Math.ceil(cell.value / 20);
+          html += `<div class="heatmap-cell l${level}" title="${day}曜 ${hour}時: ${cell.value}%"></div>`;
+        });
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ================================================================
+    // CATEGORY CHART
+    // ================================================================
+    function renderCategoryChart() {
+      const ctx = document.getElementById('categoryChart').getContext('2d');
+      if (charts.category) charts.category.destroy();
+
+      charts.category = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: currentData.categories.map(c => c.name),
+          datasets: [{
+            data: currentData.categories.map(c => c.revenue),
+            backgroundColor: [
+              '#FF0000', '#FFFFFF', '#152238', '#FF0000', '#FFFFFF',
+              '#152238', '#FF0000', '#FFFFFF', '#152238'
+            ],
+            borderRadius: 2
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `売上: ¥${ctx.raw.toLocaleString()}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: '#757575',
+                callback: v => `¥${(v / 10000).toFixed(0)}万`
+              },
+              grid: { color: '#212121' }
+            },
+            y: {
+              ticks: { color: '#BDBDBD', font: { size: 11 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // TOP ITEMS CHART
+    // ================================================================
+    function renderTopItemsChart() {
+      const ctx = document.getElementById('topItemsChart').getContext('2d');
+      if (charts.topItems) charts.topItems.destroy();
+
+      const top8 = currentData.topItems.slice(0, 8);
+
+      charts.topItems = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: top8.map(i => i.name.substring(0, 12)),
+          datasets: [{
+            data: top8.map(i => i.revenue),
+            backgroundColor: '#FF0000',
+            borderRadius: 2
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `売上: ¥${ctx.raw.toLocaleString()}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: '#757575',
+                callback: v => `¥${(v / 10000).toFixed(0)}万`
+              },
+              grid: { color: '#212121' }
+            },
+            y: {
+              ticks: { color: '#BDBDBD', font: { size: 10 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // CROSS-SELL NETWORK (D3.js)
+    // ================================================================
+    function renderCrossSellNetwork() {
+      const svg = d3.select('#crossSellNetwork');
+      svg.selectAll('*').remove();
+
+      const container = document.querySelector('.network-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      svg.attr('width', width).attr('height', height);
+
+      const { items, links } = currentData.crossSellLinks;
+
+      const colorMap = {
+        daily: '#FF0000',
+        processed: '#FFFFFF',
+        beverage: '#152238',
+        other: '#757575'
+      };
+
+      const simulation = d3.forceSimulation(items)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(120))
+        .force('charge', d3.forceManyBody().strength(-400))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(50));
+
+      const link = svg.append('g')
+        .selectAll('line')
+        .data(links)
+        .join('line')
+        .attr('stroke', '#424242')
+        .attr('stroke-opacity', 0.6)
+        .attr('stroke-width', d => d.value / 20);
+
+      const node = svg.append('g')
+        .selectAll('circle')
+        .data(items)
+        .join('circle')
+        .attr('r', 24)
+        .attr('fill', d => colorMap[d.group])
+        .attr('stroke', '#000')
+        .attr('stroke-width', 2)
+        .call(d3.drag()
+          .on('start', dragstarted)
+          .on('drag', dragged)
+          .on('end', dragended));
+
+      const label = svg.append('g')
+        .selectAll('text')
+        .data(items)
+        .join('text')
+        .text(d => d.name)
+        .attr('font-family', 'Noto Sans JP')
+        .attr('font-size', 10)
+        .attr('fill', '#9E9E9E')
+        .attr('text-anchor', 'middle')
+        .attr('dy', 40);
+
+      simulation.on('tick', () => {
+        link
+          .attr('x1', d => d.source.x)
+          .attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x)
+          .attr('y2', d => d.target.y);
+
+        node
+          .attr('cx', d => d.x)
+          .attr('cy', d => d.y);
+
+        label
+          .attr('x', d => d.x)
+          .attr('y', d => d.y);
+      });
+
+      function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+      }
+
+      function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+      }
+
+      function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+      }
+    }
+
+    // ================================================================
+    // ATTRIBUTE DISTRIBUTIONS
+    // ================================================================
+    function renderAttributeDistributions() {
+      renderAttributeBars('ageDistribution', currentData.ageDistribution, 'red');
+      renderAttributeBars('genderDistribution', currentData.genderDistribution, 'navy');
+      renderAttributeBars('lifestageDistribution', currentData.lifestageDistribution, 'white');
+    }
+
+    function renderAttributeBars(containerId, data, colorClass) {
+      const container = document.getElementById(containerId);
+      const maxValue = Math.max(...data.map(d => d.value));
+
+      container.innerHTML = data.map(d => `
+        <div class="attribute-row">
+          <div class="attribute-row-header">
+            <span class="attribute-row-label">${d.label}</span>
+            <span class="attribute-row-value">${d.value}%</span>
+          </div>
+          <div class="attribute-row-bar">
+            <div class="attribute-row-fill ${colorClass}" style="width: ${(d.value / maxValue) * 100}%;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ================================================================
+    // RFM MATRIX
+    // ================================================================
+    function renderRFMMatrix() {
+      const container = document.getElementById('rfmGrid');
+
+      container.innerHTML = currentData.rfmMatrix.map(cell => {
+        let className = 'rfm-cell';
+        let label = '';
+
+        if (cell.isChampion) {
+          className += ' champion';
+          label = '優良';
+        } else if (cell.isLoyal) {
+          className += ' loyal';
+          label = 'ロイヤル';
+        } else if (cell.isAtRisk) {
+          className += ' at-risk';
+          label = '要注意';
+        }
+
+        return `
+          <div class="${className}" title="R${cell.r} x M${cell.m}: ${cell.count}人">
+            <span class="rfm-cell-count">${cell.count}</span>
+            <span class="rfm-cell-label">${label}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ================================================================
+    // CUSTOMER LIST (N1)
+    // ================================================================
+    function renderCustomerList() {
+      const container = document.getElementById('customerList');
+
+      container.innerHTML = currentData.customers.slice(0, 30).map((c, i) => `
+        <div class="entity-item" data-index="${i}">
+          <p class="entity-rank">RANK #${i + 1}</p>
+          <p class="entity-name">${c.id}</p>
+          <p class="entity-meta">¥${c.totalSpend.toLocaleString()} / ${c.visits}回 / ${c.age} ${c.gender}</p>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.entity-item').forEach(item => {
+        item.addEventListener('click', () => {
+          container.querySelectorAll('.entity-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          const index = parseInt(item.dataset.index);
+          renderCustomerDetail(currentData.customers[index]);
+        });
+      });
+    }
+
+    function renderCustomerDetail(customer) {
+      const container = document.getElementById('customerDetail');
+
+      container.innerHTML = `
+        <div style="margin-bottom: var(--space-xl);">
+          <p class="typo-title" style="color: var(--red); margin-bottom: var(--space-xs);">${customer.id}</p>
+          <p class="typo-caption">${customer.age} / ${customer.gender} / ${customer.lifestage}</p>
+        </div>
+
+        <div class="entity-profile">
+          <div class="profile-stat">
+            <p class="profile-stat-value red">¥${(customer.totalSpend / 1000).toFixed(0)}K</p>
+            <p class="profile-stat-label">総購買額</p>
+          </div>
+          <div class="profile-stat">
+            <p class="profile-stat-value">${customer.visits}</p>
+            <p class="profile-stat-label">来店回数</p>
+          </div>
+          <div class="profile-stat">
+            <p class="profile-stat-value">¥${customer.avgBasket.toLocaleString()}</p>
+            <p class="profile-stat-label">平均客単価</p>
+          </div>
+          <div class="profile-stat">
+            <p class="profile-stat-value">${customer.lastVisit}日前</p>
+            <p class="profile-stat-label">最終来店</p>
+          </div>
+        </div>
+
+        <div style="margin-bottom: var(--space-xl);">
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: var(--space-md);">顧客DNAレーダー</p>
+          <div class="radar-container">
+            <canvas id="customerRadar"></canvas>
+          </div>
+        </div>
+
+        <div>
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: var(--space-md);">購買タイムライン</p>
+          <div class="timeline-container">
+            ${customer.timeline.map(t => `
+              <div class="timeline-item">
+                <span class="timeline-date">${t.date}</span>
+                <div class="timeline-content">
+                  <p class="timeline-amount">¥${t.amount.toLocaleString()}</p>
+                  <p class="timeline-items">${t.items}点購入</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      renderCustomerRadar(customer);
+    }
+
+    function renderCustomerRadar(customer) {
+      const ctx = document.getElementById('customerRadar');
+      if (!ctx) return;
+
+      new Chart(ctx.getContext('2d'), {
+        type: 'radar',
+        data: {
+          labels: ['購買頻度', '客単価', '購買多様性', 'ロイヤルティ', '来店時間帯'],
+          datasets: [{
+            data: [
+              customer.dna.frequency,
+              customer.dna.basket,
+              customer.dna.variety,
+              customer.dna.loyalty,
+              customer.dna.timing
+            ],
+            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+            borderColor: '#FF0000',
+            borderWidth: 2,
+            pointBackgroundColor: '#FF0000',
+            pointBorderColor: '#000',
+            pointBorderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                stepSize: 20,
+                color: '#757575',
+                backdropColor: 'transparent'
+              },
+              grid: { color: '#424242' },
+              angleLines: { color: '#424242' },
+              pointLabels: {
+                color: '#9E9E9E',
+                font: { family: 'Noto Sans JP', size: 10 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // WINDOW RESIZE HANDLER
+    // ================================================================
+    window.addEventListener('resize', () => {
+      renderCrossSellNetwork();
+    });
+
+  </script>
+
+</body>
+</html>
