@@ -3,48 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEO-NOIR EDITORIAL / RETAIL ANALYTICS v3.0</title>
+  <title>DATA EDITORIAL / ANALYTICS v3.0</title>
 
   <!-- ================================================================
-       FONTS: Neo-Noir Typography Stack
+       FONTS
        ================================================================ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
   <!-- ================================================================
-       LIBRARIES: Chart.js + PapaParse + D3.js
+       LIBRARIES
        ================================================================ -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <!-- ================================================================
-       CSS: NEO-NOIR FASHION MAGAZINE DESIGN SYSTEM
+       CSS: NEO-NOIR MINIMAL DESIGN SYSTEM
        ================================================================ -->
   <style>
-    /* ==================== RESET & CSS VARIABLES ==================== */
+    /* ==================== RESET ==================== */
     *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    /* ==================== CSS VARIABLES ==================== */
     :root {
-      /* Core Palette */
       --black: #000000;
       --white: #FFFFFF;
       --navy: #002B61;
       --navy-light: #003D8A;
       --navy-dark: #001A3D;
-
-      /* Secondary Accents */
       --emerald: #10B981;
-      --amber: #F59E0B;
+      --gold: #F59E0B;
       --cyan: #06B6D4;
       --rose: #F43F5E;
       --violet: #8B5CF6;
-
-      /* Grayscale */
       --gray-50: #FAFAFA;
       --gray-100: #F5F5F5;
       --gray-200: #E5E5E5;
@@ -55,26 +51,11 @@
       --gray-700: #404040;
       --gray-800: #262626;
       --gray-900: #171717;
-
-      /* Typography */
-      --font-display: 'Arial Black', 'Helvetica Neue', sans-serif;
-      --font-mono: 'Montserrat', sans-serif;
+      --font-display: 'Montserrat', 'Impact', sans-serif;
       --font-jp: 'Noto Sans JP', sans-serif;
-
-      /* Spacing */
-      --space-xs: 4px;
-      --space-sm: 8px;
-      --space-md: 16px;
-      --space-lg: 24px;
-      --space-xl: 32px;
-      --space-2xl: 48px;
-      --space-3xl: 64px;
     }
 
-    html {
-      font-size: 16px;
-      scroll-behavior: smooth;
-    }
+    html { font-size: 16px; scroll-behavior: smooth; }
 
     body {
       background: var(--black);
@@ -85,10 +66,10 @@
       line-height: 1.6;
     }
 
-    /* ==================== TYPOGRAPHY SYSTEM ==================== */
+    /* ==================== TYPOGRAPHY ==================== */
     .typo-massive {
       font-family: var(--font-display);
-      font-size: clamp(72px, 15vw, 200px);
+      font-size: clamp(64px, 14vw, 180px);
       font-weight: 900;
       letter-spacing: -0.06em;
       line-height: 0.82;
@@ -97,56 +78,49 @@
 
     .typo-display {
       font-family: var(--font-display);
-      font-size: clamp(48px, 8vw, 120px);
+      font-size: clamp(36px, 6vw, 80px);
       font-weight: 900;
       letter-spacing: -0.04em;
-      line-height: 0.85;
+      line-height: 0.88;
       text-transform: uppercase;
     }
 
     .typo-headline {
       font-family: var(--font-display);
-      font-size: clamp(28px, 4vw, 56px);
-      font-weight: 900;
+      font-size: clamp(24px, 3.5vw, 48px);
+      font-weight: 800;
       letter-spacing: -0.03em;
-      line-height: 0.9;
       text-transform: uppercase;
     }
 
     .typo-title {
       font-family: var(--font-display);
-      font-size: clamp(18px, 2.5vw, 32px);
-      font-weight: 900;
+      font-size: clamp(16px, 2vw, 28px);
+      font-weight: 700;
       letter-spacing: -0.02em;
       text-transform: uppercase;
     }
 
     .typo-label {
       font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 900;
+      font-size: 10px;
+      font-weight: 700;
       letter-spacing: 0.25em;
       text-transform: uppercase;
     }
 
     .typo-number {
-      font-family: var(--font-mono);
-      font-size: clamp(36px, 6vw, 72px);
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 64px);
       font-weight: 800;
       letter-spacing: -0.03em;
-      line-height: 1;
     }
 
     .typo-kpi {
-      font-family: var(--font-mono);
-      font-size: clamp(28px, 4vw, 48px);
+      font-family: var(--font-display);
+      font-size: 40px;
       font-weight: 800;
       letter-spacing: -0.02em;
-    }
-
-    .typo-data {
-      font-family: var(--font-mono);
-      font-weight: 700;
     }
 
     .typo-body {
@@ -162,10 +136,8 @@
       color: var(--gray-400);
     }
 
-    /* ==================== LAYOUT CONTAINERS ==================== */
-    .app {
-      min-height: 100vh;
-    }
+    /* ==================== LAYOUT ==================== */
+    .app { min-height: 100vh; }
 
     /* ==================== HEADER ==================== */
     .header {
@@ -174,7 +146,8 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      background: var(--black);
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--gray-800);
     }
 
@@ -188,21 +161,26 @@
 
     .logo {
       font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 900;
+      font-size: 12px;
+      font-weight: 800;
       letter-spacing: 0.5em;
     }
 
-    .header-nav {
-      display: flex;
-      gap: 0;
+    .logo-sub {
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      color: var(--gray-500);
+      margin-left: 12px;
     }
+
+    .header-nav { display: flex; }
 
     .nav-btn {
       padding: 14px 28px;
       font-family: var(--font-display);
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.15em;
       color: var(--gray-500);
       background: transparent;
@@ -212,14 +190,8 @@
       transition: color 0.2s;
     }
 
-    .nav-btn:hover {
-      color: var(--white);
-    }
-
-    .nav-btn.active {
-      color: var(--white);
-    }
-
+    .nav-btn:hover { color: var(--white); }
+    .nav-btn.active { color: var(--white); }
     .nav-btn.active::after {
       content: '';
       position: absolute;
@@ -235,7 +207,7 @@
       font-family: var(--font-jp);
       font-size: 9px;
       font-weight: 400;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
       opacity: 0.6;
       margin-top: 3px;
     }
@@ -294,21 +266,18 @@
       margin: 0 16px;
     }
 
-    /* ==================== MAIN CONTENT ==================== */
-    .main {
-      padding-top: 120px;
-    }
+    /* ==================== MAIN ==================== */
+    .main { padding-top: 120px; }
 
-    /* ==================== HERO SECTION ==================== */
+    /* ==================== HERO ==================== */
     .hero {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      min-height: 65vh;
-      overflow: hidden;
+      grid-template-columns: 1.1fr 0.9fr;
+      min-height: 60vh;
     }
 
     .hero-left {
-      padding: 80px 60px;
+      padding: 70px 60px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -316,10 +285,6 @@
 
     .hero-right {
       background: var(--navy);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       position: relative;
       overflow: hidden;
     }
@@ -328,25 +293,25 @@
       content: 'DATA';
       position: absolute;
       font-family: var(--font-display);
-      font-size: 280px;
+      font-size: 300px;
       font-weight: 900;
-      color: rgba(255,255,255,0.03);
-      transform: rotate(-90deg) translateX(-50%);
+      color: rgba(255,255,255,0.02);
+      transform: rotate(-90deg) translateX(-40%);
       white-space: nowrap;
     }
 
     .hero-kpi-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 32px;
-      padding: 40px;
+      gap: 28px;
+      padding: 50px;
       position: relative;
       z-index: 1;
+      height: 100%;
+      align-content: center;
     }
 
-    .hero-kpi {
-      text-align: center;
-    }
+    .hero-kpi { text-align: center; }
 
     .hero-kpi-label {
       font-family: var(--font-display);
@@ -357,8 +322,8 @@
     }
 
     .hero-kpi-value {
-      font-family: var(--font-mono);
-      font-size: clamp(32px, 5vw, 56px);
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
       font-weight: 800;
       line-height: 1;
     }
@@ -372,26 +337,20 @@
     /* ==================== PANELS ==================== */
     .panel {
       display: none;
-      padding: var(--space-2xl) 40px;
+      padding: 48px 40px;
     }
 
-    .panel.active {
-      display: block;
-    }
+    .panel.active { display: block; }
 
     /* ==================== SECTION ==================== */
-    .section {
-      margin-bottom: var(--space-3xl);
-    }
+    .section { margin-bottom: 56px; }
 
-    .section-header {
-      margin-bottom: var(--space-xl);
-    }
+    .section-header { margin-bottom: 28px; }
 
     .section-num {
       font-family: var(--font-display);
       font-size: 10px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.4em;
       color: var(--navy-light);
       margin-bottom: 8px;
@@ -399,8 +358,8 @@
 
     .section-title-en {
       font-family: var(--font-display);
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 900;
+      font-size: clamp(24px, 3.5vw, 42px);
+      font-weight: 800;
       letter-spacing: -0.02em;
       text-transform: uppercase;
       line-height: 1;
@@ -416,7 +375,7 @@
     .divider {
       height: 4px;
       background: var(--navy);
-      margin: var(--space-3xl) 0;
+      margin: 56px 0;
     }
 
     .divider.thin {
@@ -430,7 +389,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 2px;
       background: var(--gray-800);
-      margin-bottom: var(--space-xl);
+      margin-bottom: 32px;
     }
 
     .kpi-card {
@@ -450,7 +409,7 @@
 
     .kpi-card:nth-child(1)::before { background: var(--navy); }
     .kpi-card:nth-child(2)::before { background: var(--emerald); }
-    .kpi-card:nth-child(3)::before { background: var(--amber); }
+    .kpi-card:nth-child(3)::before { background: var(--gold); }
     .kpi-card:nth-child(4)::before { background: var(--cyan); }
 
     .kpi-label {
@@ -462,8 +421,8 @@
     }
 
     .kpi-value {
-      font-family: var(--font-mono);
-      font-size: 42px;
+      font-family: var(--font-display);
+      font-size: 38px;
       font-weight: 800;
       line-height: 1;
       margin-bottom: 6px;
@@ -475,7 +434,7 @@
     }
 
     .kpi-change {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 12px;
       font-weight: 600;
       margin-top: 10px;
@@ -489,16 +448,11 @@
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 24px;
-      margin-bottom: var(--space-xl);
+      margin-bottom: 28px;
     }
 
-    .charts-row.equal {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .charts-row.triple {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    .charts-row.equal { grid-template-columns: 1fr 1fr; }
+    .charts-row.triple { grid-template-columns: repeat(3, 1fr); }
 
     .chart-box {
       background: var(--gray-900);
@@ -517,8 +471,9 @@
     }
 
     .chart-box.emerald::before { background: var(--emerald); }
-    .chart-box.amber::before { background: var(--amber); }
+    .chart-box.gold::before { background: var(--gold); }
     .chart-box.cyan::before { background: var(--cyan); }
+    .chart-box.rose::before { background: var(--rose); }
 
     .chart-head {
       display: flex;
@@ -529,8 +484,8 @@
 
     .chart-title {
       font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 900;
+      font-size: 12px;
+      font-weight: 700;
       letter-spacing: 0.12em;
     }
 
@@ -549,26 +504,20 @@
     .chart-area.short { height: 220px; }
     .chart-area.xlarge { height: 450px; }
 
-    /* ==================== STORE SIMULATION ==================== */
+    /* ==================== SIMULATION ==================== */
     .sim-container {
       background: var(--gray-900);
       padding: 28px;
-      margin-bottom: var(--space-xl);
-    }
-
-    .sim-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 32px;
     }
 
     .sim-canvas-wrap {
       position: relative;
       width: 100%;
-      height: 500px;
+      height: 480px;
       background: var(--black);
-      border: 1px solid var(--gray-700);
+      border: 1px solid var(--gray-800);
+      overflow: hidden;
     }
 
     .sim-canvas {
@@ -587,7 +536,7 @@
       padding: 10px 24px;
       font-family: var(--font-display);
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.12em;
       background: var(--navy);
       border: none;
@@ -598,7 +547,6 @@
 
     .sim-btn:hover { background: var(--navy-light); }
     .sim-btn.stop { background: var(--rose); }
-    .sim-btn.stop:hover { background: #E11D48; }
 
     .sim-stats {
       display: flex;
@@ -606,15 +554,13 @@
       margin-left: auto;
     }
 
-    .sim-stat {
-      text-align: center;
-    }
+    .sim-stat { text-align: center; }
 
     .sim-stat-value {
-      font-family: var(--font-mono);
-      font-size: 28px;
+      font-family: var(--font-display);
+      font-size: 26px;
       font-weight: 800;
-      color: var(--navy-light);
+      color: var(--cyan);
     }
 
     .sim-stat-label {
@@ -641,7 +587,7 @@
     }
 
     .heatmap-header {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 9px;
       font-weight: 600;
       color: var(--gray-500);
@@ -654,7 +600,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 9px;
       font-weight: 600;
       cursor: pointer;
@@ -687,7 +633,7 @@
     .attr-card-title {
       font-family: var(--font-display);
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.15em;
       color: var(--gray-300);
       padding-bottom: 14px;
@@ -695,9 +641,7 @@
       margin-bottom: 18px;
     }
 
-    .attr-row {
-      margin-bottom: 14px;
-    }
+    .attr-row { margin-bottom: 14px; }
 
     .attr-row-head {
       display: flex;
@@ -711,7 +655,7 @@
     }
 
     .attr-row-value {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 13px;
       font-weight: 700;
     }
@@ -729,8 +673,22 @@
 
     .attr-row-fill.navy { background: var(--navy); }
     .attr-row-fill.emerald { background: var(--emerald); }
-    .attr-row-fill.amber { background: var(--amber); }
+    .attr-row-fill.gold { background: var(--gold); }
     .attr-row-fill.cyan { background: var(--cyan); }
+
+    /* ==================== NETWORK GRAPH ==================== */
+    .network-container {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      background: var(--black);
+      border: 1px solid var(--gray-800);
+    }
+
+    .network-svg {
+      width: 100%;
+      height: 100%;
+    }
 
     /* ==================== RFM MATRIX ==================== */
     .rfm-container {
@@ -747,7 +705,7 @@
     }
 
     .rfm-y-label {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 10px;
       font-weight: 600;
       color: var(--gray-500);
@@ -768,7 +726,7 @@
     }
 
     .rfm-x-label {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 10px;
       font-weight: 600;
       color: var(--gray-500);
@@ -795,10 +753,10 @@
     .rfm-cell:hover { transform: scale(1.03); }
     .rfm-cell.champion { background: var(--navy); }
     .rfm-cell.loyal { background: var(--navy-dark); }
-    .rfm-cell.at-risk { background: var(--amber); }
+    .rfm-cell.at-risk { background: var(--gold); }
 
     .rfm-cell-count {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 20px;
       font-weight: 800;
     }
@@ -826,18 +784,42 @@
       height: 16px;
     }
 
-    /* ==================== NETWORK GRAPH ==================== */
-    .network-container {
-      position: relative;
-      width: 100%;
-      height: 400px;
-      background: var(--black);
-      border: 1px solid var(--gray-800);
+    /* ==================== PERSONA RADAR ==================== */
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
 
-    .network-svg {
-      width: 100%;
-      height: 100%;
+    .persona-card {
+      background: var(--gray-900);
+      padding: 24px;
+    }
+
+    .persona-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-700);
+    }
+
+    .persona-name {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .persona-tag {
+      font-size: 10px;
+      padding: 4px 10px;
+      background: var(--navy);
+      border-radius: 2px;
+    }
+
+    .persona-radar-wrap {
+      height: 200px;
     }
 
     /* ==================== ENTITY LIST ==================== */
@@ -860,8 +842,7 @@
       transition: background 0.15s;
     }
 
-    .entity-item:hover,
-    .entity-item.active {
+    .entity-item:hover, .entity-item.active {
       background: var(--gray-800);
     }
 
@@ -870,7 +851,7 @@
     }
 
     .entity-rank {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 10px;
       font-weight: 600;
       color: var(--gray-500);
@@ -878,7 +859,7 @@
     }
 
     .entity-name {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 15px;
       font-weight: 700;
       margin: 4px 0;
@@ -903,12 +884,10 @@
       margin-bottom: 28px;
     }
 
-    .profile-stat {
-      text-align: center;
-    }
+    .profile-stat { text-align: center; }
 
     .profile-stat-value {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 28px;
       font-weight: 800;
       margin-bottom: 6px;
@@ -916,6 +895,7 @@
 
     .profile-stat-value.navy { color: var(--navy-light); }
     .profile-stat-value.emerald { color: var(--emerald); }
+    .profile-stat-value.gold { color: var(--gold); }
 
     .profile-stat-label {
       font-size: 11px;
@@ -941,7 +921,7 @@
     }
 
     .timeline-date {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 12px;
       font-weight: 600;
       color: var(--gray-500);
@@ -949,7 +929,7 @@
     }
 
     .timeline-amount {
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
       font-size: 14px;
       font-weight: 700;
     }
@@ -975,13 +955,11 @@
       flex-direction: column;
     }
 
-    .upload-overlay.active {
-      display: flex;
-    }
+    .upload-overlay.active { display: flex; }
 
     .upload-zone {
       width: 90%;
-      max-width: 550px;
+      max-width: 600px;
       padding: 80px;
       border: 2px dashed var(--gray-600);
       text-align: center;
@@ -989,10 +967,30 @@
       transition: all 0.2s;
     }
 
-    .upload-zone:hover,
-    .upload-zone.drag-over {
-      border-color: var(--navy);
-      background: rgba(0,43,97,0.1);
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--cyan);
+      background: rgba(6,182,212,0.05);
+    }
+
+    .upload-info {
+      margin-top: 32px;
+      text-align: left;
+      max-width: 600px;
+    }
+
+    .upload-info-title {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      color: var(--gray-400);
+    }
+
+    .upload-info-list {
+      font-size: 12px;
+      color: var(--gray-500);
+      line-height: 1.8;
     }
 
     .upload-close {
@@ -1017,7 +1015,7 @@
       padding: 10px 20px;
       font-family: var(--font-display);
       font-size: 10px;
-      font-weight: 900;
+      font-weight: 700;
       letter-spacing: 0.15em;
       cursor: pointer;
       transition: all 0.15s;
@@ -1038,20 +1036,19 @@
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: var(--black); }
     ::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--gray-600); }
 
     /* ==================== RESPONSIVE ==================== */
     @media (max-width: 1200px) {
       .hero { grid-template-columns: 1fr; }
-      .hero-right { min-height: 350px; }
-      .charts-row, .attr-grid, .entity-grid { grid-template-columns: 1fr; }
+      .hero-right { min-height: 320px; }
+      .charts-row, .attr-grid, .entity-grid, .persona-grid { grid-template-columns: 1fr; }
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 768px) {
       .header-top { padding: 12px 20px; }
       .slicer-bar { padding: 12px 20px; }
-      .panel { padding: var(--space-xl) 20px; }
+      .panel { padding: 32px 20px; }
       .hero-left { padding: 40px 20px; }
       .kpi-grid { grid-template-columns: 1fr; }
     }
@@ -1067,13 +1064,13 @@
     <!-- ==================== HEADER ==================== -->
     <header class="header">
       <div class="header-top">
-        <div class="logo">NEO-NOIR EDITORIAL</div>
+        <div class="logo">DATA EDITORIAL<span class="logo-sub">ANALYTICS v3.0</span></div>
         <div class="header-nav">
-          <button class="nav-btn active" data-tab="trends">MOMENTUM<span>市場動向</span></button>
-          <button class="nav-btn" data-tab="structure">ARCHITECTURE<span>商品構造</span></button>
-          <button class="nav-btn" data-tab="n1">NARRATIVE<span>顧客物語</span></button>
+          <button class="nav-btn active" data-tab="momentum">MOMENTUM<span>売上動向</span></button>
+          <button class="nav-btn" data-tab="architecture">ARCHITECTURE<span>商品構造</span></button>
+          <button class="nav-btn" data-tab="n1">N1 NARRATIVE<span>個客分析</span></button>
         </div>
-        <button class="btn btn-outline" id="uploadBtn">IMPORT DATA</button>
+        <button class="btn btn-outline" id="uploadBtn">IMPORT CSV</button>
       </div>
 
       <!-- SLICER BAR -->
@@ -1109,17 +1106,17 @@
       </div>
     </header>
 
-    <!-- ==================== MAIN CONTENT ==================== -->
+    <!-- ==================== MAIN ==================== -->
     <main class="main">
 
-      <!-- HERO SECTION -->
+      <!-- HERO -->
       <section class="hero">
         <div class="hero-left">
-          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 16px;">RETAIL ANALYTICS PLATFORM v3.0</p>
-          <h1 class="typo-massive">IMAJUKU</h1>
-          <h1 class="typo-massive" style="color: var(--navy-light);">STORE</h1>
-          <p class="typo-body" style="color: var(--gray-400); margin-top: 32px; max-width: 480px;">
-            今宿店の顧客行動データをリアルタイムに可視化。スライサーで属性を切り替え、売上動向・商品構造・個客セグメントを即座に分析します。
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 16px;">UNIVERSAL RETAIL ANALYTICS PLATFORM</p>
+          <h1 class="typo-massive">RETAIL</h1>
+          <h1 class="typo-massive" style="color: var(--navy-light);">DATA</h1>
+          <p class="typo-body" style="color: var(--gray-400); margin-top: 32px; max-width: 500px;">
+            あらゆるリテールデータに対応する汎用分析プラットフォーム。CSVをドロップするだけでヘッダーを自動判別し、売上動向・商品構造・個客セグメントを即座に可視化します。
           </p>
         </div>
         <div class="hero-right">
@@ -1148,8 +1145,8 @@
         </div>
       </section>
 
-      <!-- ==================== PANEL: TRENDS ==================== -->
-      <section class="panel active" id="panel-trends">
+      <!-- ==================== TAB 1: MOMENTUM ==================== -->
+      <section class="panel active" id="panel-momentum">
 
         <!-- KPI CARDS -->
         <div class="kpi-grid">
@@ -1183,8 +1180,8 @@
         <div class="section">
           <div class="section-header">
             <p class="section-num">SECTION 01</p>
-            <h2 class="section-title-en">DAILY REVENUE</h2>
-            <p class="section-title-jp">日別売上推移 — 土日祝の売上増加パターンを可視化</p>
+            <h2 class="section-title-en">DAILY REVENUE TREND</h2>
+            <p class="section-title-jp">日別売上推移 — 曜日別パターンと特売日の影響を分析</p>
           </div>
           <div class="charts-row">
             <div class="chart-box">
@@ -1210,12 +1207,12 @@
 
         <div class="divider"></div>
 
-        <!-- CONGESTION HEATMAP -->
+        <!-- WEEKDAY × HOUR HEATMAP (Monday-start) -->
         <div class="section">
           <div class="section-header">
             <p class="section-num">SECTION 02</p>
             <h2 class="section-title-en">CONGESTION HEATMAP</h2>
-            <p class="section-title-jp">曜日×時間帯の混雑度ヒートマップ — 濃いセルほど混雑</p>
+            <p class="section-title-jp">曜日×時間帯の混雑度ヒートマップ — 月曜始まりで週間パターンを把握</p>
           </div>
           <div class="chart-box">
             <div class="heatmap-grid" id="heatmapGrid"></div>
@@ -1224,12 +1221,12 @@
 
         <div class="divider"></div>
 
-        <!-- SHOPPER FLOW SIMULATION -->
+        <!-- RETAIL GRID SIMULATION -->
         <div class="section">
           <div class="section-header">
             <p class="section-num">SECTION 03</p>
-            <h2 class="section-title-en">IMAJUKU SHOPPER FLOW</h2>
-            <p class="section-title-jp">今宿店 店内動線シミュレーション — 入口→青果→精肉→鮮魚→惣菜→レジ の主動線を再現</p>
+            <h2 class="section-title-en">RETAIL GRID SIMULATION</h2>
+            <p class="section-title-jp">店舗動線シミュレーション — 幾何学的グリッドで顧客流動を可視化</p>
           </div>
           <div class="sim-container">
             <div class="sim-canvas-wrap">
@@ -1258,15 +1255,15 @@
 
       </section>
 
-      <!-- ==================== PANEL: STRUCTURE ==================== -->
-      <section class="panel" id="panel-structure">
+      <!-- ==================== TAB 2: ARCHITECTURE ==================== -->
+      <section class="panel" id="panel-architecture">
 
         <!-- CATEGORY SHARE -->
         <div class="section">
           <div class="section-header">
             <p class="section-num">SECTION 01</p>
             <h2 class="section-title-en">CATEGORY ARCHITECTURE</h2>
-            <p class="section-title-jp">カテゴリ別売上構成 — 商品カテゴリの売上シェアを可視化</p>
+            <p class="section-title-jp">カテゴリ別売上構成 — 商品カテゴリのシェアと傾向を分析</p>
           </div>
           <div class="charts-row">
             <div class="chart-box">
@@ -1278,7 +1275,7 @@
               </div>
               <div class="chart-area tall"><canvas id="catChart"></canvas></div>
             </div>
-            <div class="chart-box amber">
+            <div class="chart-box gold">
               <div class="chart-head">
                 <div>
                   <h3 class="chart-title">TOP PRODUCTS</h3>
@@ -1292,18 +1289,18 @@
 
         <div class="divider"></div>
 
-        <!-- CORRELATION NETWORK -->
+        <!-- CORRELATION NETWORK (D3.js) -->
         <div class="section">
           <div class="section-header">
             <p class="section-num">SECTION 02</p>
-            <h2 class="section-title-en">PRODUCT CORRELATION</h2>
-            <p class="section-title-jp">商品相関ネットワーク — 同時購買される商品の関係性を可視化</p>
+            <h2 class="section-title-en">BASKET CORRELATION</h2>
+            <p class="section-title-jp">併売相関ネットワーク — 同時購買される商品の関係性をD3.jsで可視化</p>
           </div>
           <div class="chart-box cyan">
             <div class="chart-head">
               <div>
                 <h3 class="chart-title">CORRELATION NETWORK</h3>
-                <p class="chart-subtitle">同時購買ネットワーク（ノードサイズ=売上、線の太さ=相関強度）</p>
+                <p class="chart-subtitle">ノードサイズ=売上規模、線の太さ=相関強度（ドラッグで操作可能）</p>
               </div>
             </div>
             <div class="network-container" id="networkContainer">
@@ -1314,20 +1311,37 @@
 
         <div class="divider"></div>
 
-        <!-- CUSTOMER ATTRIBUTES -->
+        <!-- CATEGORY × WEEKDAY HEATMAP -->
         <div class="section">
           <div class="section-header">
             <p class="section-num">SECTION 03</p>
+            <h2 class="section-title-en">CATEGORY × WEEKDAY</h2>
+            <p class="section-title-jp">曜日×カテゴリ売上ヒートマップ — 曜日別の商品動向を把握</p>
+          </div>
+          <div class="chart-box">
+            <div class="heatmap-grid" id="catDayHeatmap" style="grid-template-columns: 80px repeat(7, 1fr);"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 3: N1 NARRATIVE ==================== -->
+      <section class="panel" id="panel-n1">
+
+        <!-- CUSTOMER ATTRIBUTES -->
+        <div class="section">
+          <div class="section-header">
+            <p class="section-num">SECTION 01</p>
             <h2 class="section-title-en">CUSTOMER ATTRIBUTES</h2>
-            <p class="section-title-jp">顧客属性分布 — 年代・性別・ライフステージ別の構成比</p>
+            <p class="section-title-jp">顧客属性分布 — 年代(10代〜80代以上)・性別・ライフステージ別の構成比</p>
           </div>
           <div class="attr-grid">
             <div class="attr-card">
-              <h4 class="attr-card-title">AGE / 年代別</h4>
+              <h4 class="attr-card-title">AGE / 年代別（10代→80代以上）</h4>
               <div id="attrAge"></div>
             </div>
             <div class="attr-card">
-              <h4 class="attr-card-title">GENDER / 性別</h4>
+              <h4 class="attr-card-title">GENDER / 性別（男→女）</h4>
               <div id="attrGender"></div>
             </div>
             <div class="attr-card">
@@ -1339,29 +1353,12 @@
 
         <div class="divider"></div>
 
-        <!-- CATEGORY × DAY HEATMAP -->
+        <!-- RFM SEGMENTATION -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">SECTION 04</p>
-            <h2 class="section-title-en">CATEGORY × WEEKDAY</h2>
-            <p class="section-title-jp">曜日×カテゴリ売上ヒートマップ</p>
-          </div>
-          <div class="chart-box">
-            <div class="heatmap-grid" id="catDayHeatmap"></div>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- ==================== PANEL: N1 ==================== -->
-      <section class="panel" id="panel-n1">
-
-        <!-- RFM MATRIX -->
-        <div class="section">
-          <div class="section-header">
-            <p class="section-num">SECTION 01</p>
+            <p class="section-num">SECTION 02</p>
             <h2 class="section-title-en">RFM SEGMENTATION</h2>
-            <p class="section-title-jp">RFM分析マトリックス — R:最終購買日 / M:購買金額 による顧客セグメント</p>
+            <p class="section-title-jp">RFM分析マトリックス — Recency(最終購買日) × Monetary(購買金額) による顧客セグメント</p>
           </div>
           <div class="chart-box">
             <div class="rfm-container">
@@ -1386,16 +1383,50 @@
             <div class="rfm-legend">
               <div class="rfm-legend-item">
                 <div class="rfm-legend-color" style="background:var(--navy);"></div>
-                <span class="typo-caption">優良顧客（Champion）</span>
+                <span class="typo-caption">Champion（優良顧客）</span>
               </div>
               <div class="rfm-legend-item">
                 <div class="rfm-legend-color" style="background:var(--navy-dark);"></div>
-                <span class="typo-caption">ロイヤル顧客</span>
+                <span class="typo-caption">Loyal（ロイヤル顧客）</span>
               </div>
               <div class="rfm-legend-item">
-                <div class="rfm-legend-color" style="background:var(--amber);"></div>
-                <span class="typo-caption">要注意顧客（At Risk）</span>
+                <div class="rfm-legend-color" style="background:var(--gold);"></div>
+                <span class="typo-caption">At Risk（要注意顧客）</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- PERSONA RADAR -->
+        <div class="section">
+          <div class="section-header">
+            <p class="section-num">SECTION 03</p>
+            <h2 class="section-title-en">PERSONA RADAR</h2>
+            <p class="section-title-jp">ペルソナレーダー — 顧客セグメントの特性（健康志向、時短派等）をレーダーチャートで描画</p>
+          </div>
+          <div class="persona-grid">
+            <div class="persona-card">
+              <div class="persona-card-header">
+                <span class="persona-name">健康志向ファミリー</span>
+                <span class="persona-tag">DEWKS</span>
+              </div>
+              <div class="persona-radar-wrap"><canvas id="personaRadar1"></canvas></div>
+            </div>
+            <div class="persona-card">
+              <div class="persona-card-header">
+                <span class="persona-name">時短重視シングル</span>
+                <span class="persona-tag">単身</span>
+              </div>
+              <div class="persona-radar-wrap"><canvas id="personaRadar2"></canvas></div>
+            </div>
+            <div class="persona-card">
+              <div class="persona-card-header">
+                <span class="persona-name">品質重視シニア</span>
+                <span class="persona-tag">老年夫婦</span>
+              </div>
+              <div class="persona-radar-wrap"><canvas id="personaRadar3"></canvas></div>
             </div>
           </div>
         </div>
@@ -1405,7 +1436,7 @@
         <!-- N1 DEEP DIVE -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">SECTION 02</p>
+            <p class="section-num">SECTION 04</p>
             <h2 class="section-title-en">N1 DEEP DIVE</h2>
             <p class="section-title-jp">個客深掘り分析 — 顧客DNA・購買タイムラインを詳細表示</p>
           </div>
@@ -1431,6 +1462,17 @@
         <p class="typo-body" style="color:var(--gray-400);">CSVファイルをドラッグ＆ドロップ<br>または クリックしてファイルを選択</p>
         <input type="file" id="fileInput" accept=".csv" style="display:none;">
       </div>
+      <div class="upload-info">
+        <p class="upload-info-title">対応カラム（自動判別）</p>
+        <p class="upload-info-list">
+          日付: date, 日付, 購買日, transaction_date<br>
+          金額: amount, 金額, 売上, revenue, price<br>
+          顧客ID: customer_id, 顧客ID, 会員番号, member_id<br>
+          性別: gender, 性別, sex<br>
+          年代: age, 年代, 年齢<br>
+          カテゴリ: category, カテゴリ, 商品分類
+        </p>
+      </div>
       <button class="upload-close" id="uploadClose">CLOSE</button>
     </div>
 
@@ -1455,177 +1497,131 @@
       customers: [],
       rfmMatrix: [],
       correlationNetwork: { nodes: [], links: [] },
-      catDayMatrix: []
+      catDayMatrix: [],
+      personas: []
     };
+
+    // ================================================================
+    // COLUMN MAPPING (Auto-detect CSV headers)
+    // ================================================================
+    const COLUMN_ALIASES = {
+      date: ['date', '日付', '購買日', 'transaction_date', 'sale_date'],
+      amount: ['amount', '金額', '売上', 'revenue', 'price', 'total'],
+      customerId: ['customer_id', '顧客ID', '会員番号', 'member_id', 'id'],
+      gender: ['gender', '性別', 'sex'],
+      age: ['age', '年代', '年齢', 'age_group'],
+      category: ['category', 'カテゴリ', '商品分類', 'product_category'],
+      lifestage: ['lifestage', 'ライフステージ', 'life_stage', 'household']
+    };
+
+    function detectColumn(headers, aliases) {
+      for (const alias of aliases) {
+        const found = headers.find(h => h.toLowerCase() === alias.toLowerCase());
+        if (found) return found;
+      }
+      return null;
+    }
+
+    // Monday-start weekday labels
+    const dayLabelsMonday = ['月', '火', '水', '木', '金', '土', '日'];
 
     // ================================================================
     // RICH DEMO DATA GENERATOR (October 2025)
     // ================================================================
     function generateDemoData() {
       // ==================== DAILY SALES ====================
-      const holidays = [13, 14]; // Sports Day
-      const weekends = [4, 5, 11, 12, 18, 19, 25, 26];
+      const holidays = [13, 14];
       DATA.dailySales = [];
-
       for (let d = 1; d <= 31; d++) {
-        let base = 780000 + Math.random() * 180000;
+        let base = 820000 + Math.random() * 160000;
         const dow = new Date(2025, 9, d).getDay();
-
-        // Weekend boost
-        if (dow === 0 || dow === 6) base *= 1.45;
-        // Holiday boost
-        if (holidays.includes(d)) base *= 1.55;
-        // Month-end boost
-        if (d >= 25) base *= 1.12;
-        // Payday effect (25th)
-        if (d === 25 || d === 26) base *= 1.2;
-
-        DATA.dailySales.push({
-          day: d,
-          date: `10/${d}`,
-          revenue: Math.round(base),
-          isWeekend: dow === 0 || dow === 6,
-          isHoliday: holidays.includes(d),
-          dow
-        });
+        const isWeekend = dow === 0 || dow === 6;
+        const isHoliday = holidays.includes(d);
+        if (isWeekend) base *= 1.42;
+        if (isHoliday) base *= 1.52;
+        if (d >= 25) base *= 1.1;
+        if (d === 25 || d === 26) base *= 1.18;
+        DATA.dailySales.push({ day: d, date: `10/${d}`, revenue: Math.round(base), isWeekend, isHoliday, dow });
       }
 
       // ==================== HOURLY SALES ====================
       DATA.hourlySales = [
-        { hour: '9時', value: 35, label: '開店直後' },
-        { hour: '10時', value: 58, label: '午前中' },
-        { hour: '11時', value: 82, label: '昼前ピーク' },
-        { hour: '12時', value: 75, label: '昼食時' },
-        { hour: '13時', value: 62, label: '午後早め' },
-        { hour: '14時', value: 68, label: '午後' },
-        { hour: '15時', value: 78, label: '夕方準備' },
-        { hour: '16時', value: 88, label: '夕方' },
-        { hour: '17時', value: 100, label: '夕食準備ピーク' },
-        { hour: '18時', value: 95, label: '夕方後半' },
-        { hour: '19時', value: 72, label: '夜間' },
-        { hour: '20時', value: 45, label: '閉店前' },
-        { hour: '21時', value: 20, label: '閉店間際' }
+        { hour: '9時', value: 32 }, { hour: '10時', value: 55 }, { hour: '11時', value: 80 },
+        { hour: '12時', value: 72 }, { hour: '13時', value: 60 }, { hour: '14時', value: 65 },
+        { hour: '15時', value: 75 }, { hour: '16時', value: 85 }, { hour: '17時', value: 100 },
+        { hour: '18時', value: 92 }, { hour: '19時', value: 68 }, { hour: '20時', value: 42 }, { hour: '21時', value: 18 }
       ];
 
-      // ==================== CONGESTION HEATMAP ====================
-      const dayLabels = ['日', '月', '火', '水', '木', '金', '土'];
+      // ==================== CONGESTION HEATMAP (Monday-start) ====================
       DATA.congestion = [];
-
       for (let di = 0; di < 7; di++) {
         for (let h = 9; h <= 21; h++) {
-          let val = 25 + Math.random() * 30;
-          // Weekend boost
-          if (di === 0 || di === 6) val += 28;
-          // Friday evening boost
-          if (di === 5 && h >= 17) val += 15;
-          // Evening rush
-          if (h >= 17 && h <= 19) val += 32;
-          // Lunch rush
-          if (h >= 11 && h <= 13) val += 15;
-          // Late night decrease
-          if (h >= 20) val -= 18;
-
-          DATA.congestion.push({
-            day: di,
-            dayLabel: dayLabels[di],
-            hour: h,
-            value: Math.min(100, Math.max(8, Math.round(val)))
-          });
+          let val = 22 + Math.random() * 28;
+          if (di >= 5) val += 30;
+          if (di === 4 && h >= 17) val += 18;
+          if (h >= 17 && h <= 19) val += 30;
+          if (h >= 11 && h <= 13) val += 14;
+          if (h >= 20) val -= 15;
+          DATA.congestion.push({ day: di, dayLabel: dayLabelsMonday[di], hour: h, value: Math.min(100, Math.max(5, Math.round(val))) });
         }
       }
 
       // ==================== CATEGORIES ====================
       DATA.categories = [
-        { name: '青果', revenue: 4800000, color: '#10B981' },
-        { name: '精肉', revenue: 5200000, color: '#F43F5E' },
-        { name: '鮮魚', revenue: 3800000, color: '#06B6D4' },
-        { name: '惣菜', revenue: 6100000, color: '#F59E0B' },
-        { name: '日配', revenue: 5600000, color: '#002B61' },
-        { name: '加工食品', revenue: 4200000, color: '#8B5CF6' },
-        { name: '菓子', revenue: 2800000, color: '#EC4899' },
-        { name: '飲料', revenue: 3200000, color: '#14B8A6' },
-        { name: '酒類', revenue: 2400000, color: '#6366F1' },
-        { name: '日用品', revenue: 1200000, color: '#64748B' }
+        { name: '生鮮・青果', revenue: 5200000, color: '#10B981' },
+        { name: '精肉', revenue: 5800000, color: '#F43F5E' },
+        { name: '鮮魚', revenue: 4200000, color: '#06B6D4' },
+        { name: '惣菜・弁当', revenue: 6800000, color: '#F59E0B' },
+        { name: '日配品', revenue: 5400000, color: '#002B61' },
+        { name: '加工食品', revenue: 4000000, color: '#8B5CF6' },
+        { name: '菓子・スナック', revenue: 2600000, color: '#EC4899' },
+        { name: '飲料', revenue: 3400000, color: '#14B8A6' },
+        { name: '酒類', revenue: 2200000, color: '#6366F1' },
+        { name: '日用品', revenue: 1400000, color: '#64748B' }
       ];
 
       // ==================== TOP ITEMS ====================
       DATA.topItems = [
-        { name: '国産豚ロース100g', revenue: 1280000, cat: '精肉' },
-        { name: 'おにぎり詰合せ', revenue: 980000, cat: '惣菜' },
-        { name: 'プレミアム牛乳1L', revenue: 920000, cat: '日配' },
-        { name: '旬の刺身盛合せ', revenue: 880000, cat: '鮮魚' },
-        { name: 'バナナ1房', revenue: 760000, cat: '青果' },
-        { name: '食パン6枚切', revenue: 720000, cat: '日配' },
-        { name: 'から揚げ弁当', revenue: 680000, cat: '惣菜' },
-        { name: '卵10個入り', revenue: 650000, cat: '日配' },
-        { name: 'カップヌードル', revenue: 580000, cat: '加工食品' },
-        { name: 'ミネラルウォーター2L', revenue: 520000, cat: '飲料' }
+        { name: '国産豚ロース100g', revenue: 1420000 }, { name: 'おにぎり詰合せ', revenue: 1080000 },
+        { name: 'プレミアム牛乳1L', revenue: 980000 }, { name: '旬の刺身盛合せ', revenue: 920000 },
+        { name: 'バナナ1房', revenue: 820000 }, { name: '食パン6枚切', revenue: 780000 },
+        { name: 'から揚げ弁当', revenue: 720000 }, { name: '卵10個入り', revenue: 680000 },
+        { name: 'カップヌードル', revenue: 620000 }, { name: 'ミネラルウォーター2L', revenue: 580000 }
       ];
 
-      // ==================== AGE DISTRIBUTION ====================
-      // Full age segments: 10代 to 80代以上
+      // ==================== AGE DISTRIBUTION (10代→80代以上) ====================
       DATA.ageDistribution = [
-        { label: '10代', value: 4, color: '#10B981' },
-        { label: '20代', value: 9, color: '#06B6D4' },
-        { label: '30代', value: 16, color: '#3B82F6' },
-        { label: '40代', value: 24, color: '#002B61' },
-        { label: '50代', value: 20, color: '#6366F1' },
-        { label: '60代', value: 15, color: '#8B5CF6' },
-        { label: '70代', value: 9, color: '#A855F7' },
-        { label: '80代以上', value: 3, color: '#C084FC' }
+        { label: '10代', value: 3 }, { label: '20代', value: 8 }, { label: '30代', value: 15 },
+        { label: '40代', value: 25 }, { label: '50代', value: 21 }, { label: '60代', value: 16 },
+        { label: '70代', value: 9 }, { label: '80代以上', value: 3 }
       ];
 
-      // ==================== GENDER DISTRIBUTION ====================
-      DATA.genderDistribution = [
-        { label: '男', value: 42, color: '#002B61' },
-        { label: '女', value: 58, color: '#F43F5E' }
-      ];
+      // ==================== GENDER DISTRIBUTION (男→女) ====================
+      DATA.genderDistribution = [{ label: '男', value: 41 }, { label: '女', value: 59 }];
 
-      // ==================== LIFESTAGE DISTRIBUTION ====================
-      // Sorted: 単身 -> DINKS -> DEWKS -> 老年夫婦
+      // ==================== LIFESTAGE DISTRIBUTION (単身→DINKS→DEWKS→老年夫婦) ====================
       DATA.lifeDistribution = [
-        { label: '単身', value: 22, color: '#06B6D4' },
-        { label: 'DINKS', value: 18, color: '#10B981' },
-        { label: 'DEWKS', value: 31, color: '#002B61' },
-        { label: '老年夫婦', value: 20, color: '#8B5CF6' },
-        { label: 'その他', value: 9, color: '#64748B' }
+        { label: '単身', value: 20 }, { label: 'DINKS', value: 16 },
+        { label: 'DEWKS', value: 32 }, { label: '老年夫婦', value: 22 }, { label: 'その他', value: 10 }
       ];
 
       // ==================== CUSTOMERS ====================
       const ages = ['10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代以上'];
       const genders = ['男', '女'];
       const lifestages = ['単身', 'DINKS', 'DEWKS', '老年夫婦', 'その他'];
-      const topCats = ['青果', '精肉', '鮮魚', '惣菜', '日配', '加工食品'];
-
       DATA.customers = [];
       for (let i = 0; i < 60; i++) {
-        const totalSpend = Math.round(30000 + Math.random() * 520000);
-        const visits = Math.round(3 + Math.random() * 45);
-        const age = ages[Math.floor(Math.random() * ages.length)];
-        const gender = genders[Math.floor(Math.random() * genders.length)];
-
+        const totalSpend = Math.round(35000 + Math.random() * 550000);
+        const visits = Math.round(3 + Math.random() * 42);
         DATA.customers.push({
-          id: `CU${String(i + 1).padStart(5, '0')}`,
-          totalSpend,
-          visits,
+          id: `CU${String(i + 1).padStart(5, '0')}`, totalSpend, visits,
           avgBasket: Math.round(totalSpend / visits),
           lastVisit: Math.round(1 + Math.random() * 28),
-          age,
-          gender,
+          age: ages[Math.floor(Math.random() * ages.length)],
+          gender: genders[Math.floor(Math.random() * genders.length)],
           life: lifestages[Math.floor(Math.random() * lifestages.length)],
-          topCat: topCats[Math.floor(Math.random() * topCats.length)],
-          dna: {
-            frequency: Math.round(15 + Math.random() * 85),
-            basket: Math.round(15 + Math.random() * 85),
-            variety: Math.round(15 + Math.random() * 85),
-            loyalty: Math.round(15 + Math.random() * 85),
-            timing: Math.round(15 + Math.random() * 85)
-          },
-          timeline: Array.from({ length: 8 }, () => ({
-            date: `10/${Math.round(1 + Math.random() * 28)}`,
-            amount: Math.round(1200 + Math.random() * 8500),
-            items: Math.round(3 + Math.random() * 12)
-          })).sort((a, b) => parseInt(b.date.split('/')[1]) - parseInt(a.date.split('/')[1]))
+          dna: { frequency: Math.round(10 + Math.random() * 90), basket: Math.round(10 + Math.random() * 90), variety: Math.round(10 + Math.random() * 90), loyalty: Math.round(10 + Math.random() * 90), timing: Math.round(10 + Math.random() * 90) },
+          timeline: Array.from({ length: 8 }, () => ({ date: `10/${Math.round(1 + Math.random() * 28)}`, amount: Math.round(1500 + Math.random() * 9000), items: Math.round(3 + Math.random() * 15) })).sort((a, b) => parseInt(b.date.split('/')[1]) - parseInt(a.date.split('/')[1]))
         });
       }
       DATA.customers.sort((a, b) => b.totalSpend - a.totalSpend);
@@ -1637,73 +1633,51 @@
           const isChampion = r >= 4 && m >= 4;
           const isLoyal = r >= 3 && m >= 3 && !isChampion;
           const isAtRisk = r <= 2 && m >= 4;
-
-          let count;
-          if (isChampion) count = Math.round(180 + Math.random() * 350);
-          else if (isAtRisk) count = Math.round(35 + Math.random() * 80);
-          else if (r <= 2 && m <= 2) count = Math.round(250 + Math.random() * 380);
-          else count = Math.round(80 + Math.random() * 180);
-
-          DATA.rfmMatrix.push({
-            r, m, count,
-            isChampion, isLoyal, isAtRisk
-          });
+          let count = isChampion ? Math.round(200 + Math.random() * 380) : isAtRisk ? Math.round(40 + Math.random() * 90) : r <= 2 && m <= 2 ? Math.round(280 + Math.random() * 400) : Math.round(90 + Math.random() * 200);
+          DATA.rfmMatrix.push({ r, m, count, isChampion, isLoyal, isAtRisk });
         }
       }
 
       // ==================== CORRELATION NETWORK ====================
-      const networkNodes = [
-        { id: 'banana', name: 'バナナ', revenue: 760000, cat: '青果' },
-        { id: 'milk', name: '牛乳', revenue: 920000, cat: '日配' },
-        { id: 'bread', name: '食パン', revenue: 720000, cat: '日配' },
-        { id: 'egg', name: '卵', revenue: 650000, cat: '日配' },
-        { id: 'pork', name: '豚肉', revenue: 1280000, cat: '精肉' },
-        { id: 'onigiri', name: 'おにぎり', revenue: 980000, cat: '惣菜' },
-        { id: 'sashimi', name: '刺身', revenue: 880000, cat: '鮮魚' },
-        { id: 'karaage', name: 'から揚げ', revenue: 680000, cat: '惣菜' },
-        { id: 'noodle', name: 'カップ麺', revenue: 580000, cat: '加工食品' },
-        { id: 'water', name: '水', revenue: 520000, cat: '飲料' },
-        { id: 'yogurt', name: 'ヨーグルト', revenue: 480000, cat: '日配' },
-        { id: 'tofu', name: '豆腐', revenue: 420000, cat: '日配' }
-      ];
-
-      const networkLinks = [
-        { source: 'milk', target: 'bread', strength: 0.85 },
-        { source: 'milk', target: 'egg', strength: 0.78 },
-        { source: 'bread', target: 'egg', strength: 0.72 },
-        { source: 'banana', target: 'milk', strength: 0.65 },
-        { source: 'banana', target: 'yogurt', strength: 0.7 },
-        { source: 'pork', target: 'egg', strength: 0.55 },
-        { source: 'pork', target: 'tofu', strength: 0.48 },
-        { source: 'onigiri', target: 'water', strength: 0.82 },
-        { source: 'karaage', target: 'onigiri', strength: 0.6 },
-        { source: 'sashimi', target: 'water', strength: 0.45 },
-        { source: 'noodle', target: 'egg', strength: 0.52 },
-        { source: 'yogurt', target: 'banana', strength: 0.68 },
-        { source: 'tofu', target: 'egg', strength: 0.42 }
-      ];
-
-      DATA.correlationNetwork = { nodes: networkNodes, links: networkLinks };
+      DATA.correlationNetwork = {
+        nodes: [
+          { id: 'milk', name: '牛乳', revenue: 980000 }, { id: 'bread', name: '食パン', revenue: 780000 },
+          { id: 'egg', name: '卵', revenue: 680000 }, { id: 'banana', name: 'バナナ', revenue: 820000 },
+          { id: 'pork', name: '豚肉', revenue: 1420000 }, { id: 'onigiri', name: 'おにぎり', revenue: 1080000 },
+          { id: 'sashimi', name: '刺身', revenue: 920000 }, { id: 'bento', name: '弁当', revenue: 720000 },
+          { id: 'noodle', name: 'カップ麺', revenue: 620000 }, { id: 'water', name: '水', revenue: 580000 },
+          { id: 'yogurt', name: 'ヨーグルト', revenue: 520000 }, { id: 'tofu', name: '豆腐', revenue: 460000 }
+        ],
+        links: [
+          { source: 'milk', target: 'bread', strength: 0.88 }, { source: 'milk', target: 'egg', strength: 0.82 },
+          { source: 'bread', target: 'egg', strength: 0.75 }, { source: 'banana', target: 'milk', strength: 0.68 },
+          { source: 'banana', target: 'yogurt', strength: 0.72 }, { source: 'pork', target: 'egg', strength: 0.58 },
+          { source: 'pork', target: 'tofu', strength: 0.52 }, { source: 'onigiri', target: 'water', strength: 0.85 },
+          { source: 'bento', target: 'water', strength: 0.78 }, { source: 'bento', target: 'onigiri', strength: 0.62 },
+          { source: 'sashimi', target: 'water', strength: 0.48 }, { source: 'noodle', target: 'egg', strength: 0.55 },
+          { source: 'yogurt', target: 'banana', strength: 0.7 }, { source: 'tofu', target: 'egg', strength: 0.45 }
+        ]
+      };
 
       // ==================== CATEGORY × DAY MATRIX ====================
-      const cats = ['青果', '精肉', '鮮魚', '惣菜', '日配', '加工食品'];
+      const cats = ['生鮮・青果', '精肉', '鮮魚', '惣菜・弁当', '日配品', '加工食品'];
       DATA.catDayMatrix = [];
-
       cats.forEach(cat => {
         for (let dow = 0; dow < 7; dow++) {
-          let val = 40 + Math.random() * 35;
-          if (dow === 0 || dow === 6) val += 25;
-          if (cat === '惣菜' && dow >= 5) val += 15;
-          if (cat === '鮮魚' && dow === 5) val += 20;
-
-          DATA.catDayMatrix.push({
-            category: cat,
-            day: dow,
-            dayLabel: dayLabels[dow],
-            value: Math.min(100, Math.round(val))
-          });
+          let val = 38 + Math.random() * 32;
+          if (dow >= 5) val += 28;
+          if (cat === '惣菜・弁当' && dow >= 4) val += 15;
+          if (cat === '鮮魚' && dow === 4) val += 22;
+          DATA.catDayMatrix.push({ category: cat, day: dow, dayLabel: dayLabelsMonday[dow], value: Math.min(100, Math.round(val)) });
         }
       });
+
+      // ==================== PERSONAS ====================
+      DATA.personas = [
+        { name: '健康志向ファミリー', tag: 'DEWKS', scores: { health: 92, convenience: 45, price: 55, variety: 78, loyalty: 85 } },
+        { name: '時短重視シングル', tag: '単身', scores: { health: 42, convenience: 95, price: 68, variety: 52, loyalty: 38 } },
+        { name: '品質重視シニア', tag: '老年夫婦', scores: { health: 75, convenience: 58, price: 35, variety: 62, loyalty: 92 } }
+      ];
     }
 
     // ================================================================
@@ -1711,11 +1685,7 @@
     // ================================================================
     let charts = {};
     let slicers = { gender: 'all', age: 'all', life: 'all' };
-    let simRunning = false;
-    let simAnimId = null;
-    let shoppers = [];
-    let simComplete = 0;
-    let simTotalTime = 0;
+    let simRunning = false, simAnimId = null, particles = [], simComplete = 0, simTotalTime = 0;
 
     // ================================================================
     // INITIALIZATION
@@ -1729,9 +1699,6 @@
       renderAll();
     });
 
-    // ================================================================
-    // NAVIGATION
-    // ================================================================
     function initNavigation() {
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1739,63 +1706,46 @@
           btn.classList.add('active');
           document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
           document.getElementById(`panel-${btn.dataset.tab}`).classList.add('active');
-
-          // Render network graph when switching to structure tab
-          if (btn.dataset.tab === 'structure') {
-            setTimeout(renderNetworkGraph, 100);
-          }
+          if (btn.dataset.tab === 'architecture') setTimeout(renderNetworkGraph, 100);
+          if (btn.dataset.tab === 'n1') setTimeout(renderPersonaRadars, 100);
         });
       });
     }
 
-    // ================================================================
-    // SLICERS
-    // ================================================================
     function initSlicers() {
       document.querySelectorAll('.slicer-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const slicerType = btn.dataset.slicer;
-          document.querySelectorAll(`.slicer-btn[data-slicer="${slicerType}"]`)
-            .forEach(b => b.classList.remove('active'));
+          const st = btn.dataset.slicer;
+          document.querySelectorAll(`.slicer-btn[data-slicer="${st}"]`).forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          slicers[slicerType] = btn.dataset.value;
+          slicers[st] = btn.dataset.value;
           renderAll();
         });
       });
     }
 
-    // ================================================================
-    // FILE UPLOAD
-    // ================================================================
     function initUpload() {
       const overlay = document.getElementById('uploadOverlay');
       const zone = document.getElementById('uploadZone');
       const input = document.getElementById('fileInput');
-
       document.getElementById('uploadBtn').onclick = () => overlay.classList.add('active');
       document.getElementById('uploadClose').onclick = () => overlay.classList.remove('active');
-
       zone.onclick = () => input.click();
       zone.ondragover = e => { e.preventDefault(); zone.classList.add('drag-over'); };
       zone.ondragleave = () => zone.classList.remove('drag-over');
-      zone.ondrop = e => {
-        e.preventDefault();
-        zone.classList.remove('drag-over');
-        if (e.dataTransfer.files[0]) parseCSVFile(e.dataTransfer.files[0]);
-      };
-      input.onchange = e => {
-        if (e.target.files[0]) parseCSVFile(e.target.files[0]);
-      };
+      zone.ondrop = e => { e.preventDefault(); zone.classList.remove('drag-over'); if (e.dataTransfer.files[0]) parseCSV(e.dataTransfer.files[0]); };
+      input.onchange = e => { if (e.target.files[0]) parseCSV(e.target.files[0]); };
     }
 
-    function parseCSVFile(file) {
+    function parseCSV(file) {
       Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        encoding: 'Shift_JIS',
-        complete: result => {
+        header: true, skipEmptyLines: true, encoding: 'Shift_JIS',
+        complete: r => {
+          const headers = r.meta.fields;
+          const map = { date: detectColumn(headers, COLUMN_ALIASES.date), amount: detectColumn(headers, COLUMN_ALIASES.amount), customerId: detectColumn(headers, COLUMN_ALIASES.customerId), gender: detectColumn(headers, COLUMN_ALIASES.gender), age: detectColumn(headers, COLUMN_ALIASES.age), category: detectColumn(headers, COLUMN_ALIASES.category) };
+          const det = Object.entries(map).filter(([k,v])=>v).map(([k,v])=>`${k}: ${v}`).join('\n');
           document.getElementById('uploadOverlay').classList.remove('active');
-          alert(`${result.data.length}件のデータを読み込みました。\n実装: データ変換ロジックを追加してください。`);
+          alert(`${r.data.length}件のデータを読み込みました。\n\n検出カラム:\n${det}`);
         }
       });
     }
@@ -1804,868 +1754,284 @@
     // RENDER ALL
     // ================================================================
     function renderAll() {
-      renderHeroKPIs();
-      renderKPICards();
-      renderDailyChart();
-      renderHourlyChart();
-      renderCongestionHeatmap();
-      renderCategoryChart();
-      renderTopItemsChart();
-      renderAttributeBars();
-      renderCatDayHeatmap();
-      renderRFMMatrix();
-      renderCustomerList();
+      renderHeroKPIs(); renderKPICards(); renderDailyChart(); renderHourlyChart(); renderCongestionHeatmap();
+      renderCategoryChart(); renderTopItemsChart(); renderCatDayHeatmap(); renderAttributeBars(); renderRFMMatrix(); renderCustomerList();
     }
 
-    // ================================================================
-    // HERO KPIs
-    // ================================================================
     function renderHeroKPIs() {
-      const totalRevenue = DATA.dailySales.reduce((sum, d) => sum + d.revenue, 0);
-      const totalTx = Math.round(totalRevenue / 2750);
-      const avgBasket = Math.round(totalRevenue / totalTx);
-
-      animateNumber('heroRevenue', totalRevenue, '¥', true);
-      animateNumber('heroCustomers', Math.round(totalTx * 0.72), '', false);
-      animateNumber('heroBasket', avgBasket, '¥', false);
-      animateNumber('heroFreq', 3.2, '', false, 1);
+      const total = DATA.dailySales.reduce((s,d)=>s+d.revenue,0);
+      const tx = Math.round(total/2800);
+      animateNumber('heroRevenue', total, '¥', true);
+      animateNumber('heroCustomers', Math.round(tx*0.7));
+      animateNumber('heroBasket', Math.round(total/tx), '¥');
+      animateNumber('heroFreq', 3.4, '', false, 1);
     }
 
-    // ================================================================
-    // KPI CARDS
-    // ================================================================
     function renderKPICards() {
-      const totalRevenue = DATA.dailySales.reduce((sum, d) => sum + d.revenue, 0);
-      const totalTx = Math.round(totalRevenue / 2750);
-      const avgBasket = Math.round(totalRevenue / totalTx);
-      const customers = Math.round(totalTx * 0.72);
-
-      animateNumber('kpiRevenue', totalRevenue, '¥', true);
-      animateNumber('kpiCust', customers, '', false);
-      animateNumber('kpiBasket', avgBasket, '¥', false);
-      animateNumber('kpiFreq', 3.2, '', false, 1);
-
-      document.getElementById('kpiRevenueChg').textContent = '+9.3% 前月比';
-      document.getElementById('kpiCustChg').textContent = '+6.8% 前月比';
-      document.getElementById('kpiBasketChg').textContent = '+2.4% 前月比';
-      document.getElementById('kpiFreqChg').textContent = '+0.3 前月比';
+      const total = DATA.dailySales.reduce((s,d)=>s+d.revenue,0);
+      const tx = Math.round(total/2800);
+      animateNumber('kpiRevenue', total, '¥', true);
+      animateNumber('kpiCust', Math.round(tx*0.7));
+      animateNumber('kpiBasket', Math.round(total/tx), '¥');
+      animateNumber('kpiFreq', 3.4, '', false, 1);
+      document.getElementById('kpiRevenueChg').textContent = '+10.2% 前月比';
+      document.getElementById('kpiCustChg').textContent = '+7.5% 前月比';
+      document.getElementById('kpiBasketChg').textContent = '+2.8% 前月比';
+      document.getElementById('kpiFreqChg').textContent = '+0.4 前月比';
     }
 
-    // ================================================================
-    // NUMBER ANIMATION
-    // ================================================================
-    function animateNumber(elementId, targetValue, prefix = '', useMillions = false, decimals = 0) {
-      const element = document.getElementById(elementId);
-      if (!element) return;
-
-      const duration = 1200;
-      const startTime = performance.now();
-
-      function update(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 4); // Ease out quartic
-
-        const currentValue = targetValue * eased;
-        let displayValue;
-
-        if (useMillions && currentValue >= 1000000) {
-          displayValue = (currentValue / 1000000).toFixed(1) + 'M';
-        } else if (decimals > 0) {
-          displayValue = currentValue.toFixed(decimals);
-        } else {
-          displayValue = Math.round(currentValue).toLocaleString();
-        }
-
-        element.textContent = prefix + displayValue;
-
-        if (progress < 1) {
-          requestAnimationFrame(update);
-        }
+    function animateNumber(id, target, prefix='', useMil=false, dec=0) {
+      const el = document.getElementById(id); if(!el) return;
+      const dur = 1200, start = performance.now();
+      function step(now) {
+        const p = Math.min((now-start)/dur, 1), e = 1 - Math.pow(1-p, 4);
+        const v = target * e;
+        let disp = useMil && v >= 1e6 ? (v/1e6).toFixed(1)+'M' : dec > 0 ? v.toFixed(dec) : Math.round(v).toLocaleString();
+        el.textContent = prefix + disp;
+        if (p < 1) requestAnimationFrame(step);
       }
-
-      requestAnimationFrame(update);
+      requestAnimationFrame(step);
     }
 
-    // ================================================================
-    // DAILY SALES CHART
-    // ================================================================
     function renderDailyChart() {
       const ctx = document.getElementById('dailyChart').getContext('2d');
       if (charts.daily) charts.daily.destroy();
-
       charts.daily = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: DATA.dailySales.map(d => d.date),
-          datasets: [{
-            data: DATA.dailySales.map(d => d.revenue),
-            backgroundColor: DATA.dailySales.map(d => {
-              if (d.isHoliday) return '#FFFFFF';
-              if (d.isWeekend) return '#003D8A';
-              return '#002B61';
-            }),
-            borderRadius: 2,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#000',
-              titleColor: '#FFF',
-              bodyColor: '#FFF',
-              borderColor: '#333',
-              borderWidth: 1,
-              callbacks: {
-                label: ctx => `¥${ctx.raw.toLocaleString()}`
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: { color: '#666', font: { family: 'Montserrat', size: 9 }, maxRotation: 0 },
-              grid: { display: false }
-            },
-            y: {
-              ticks: {
-                color: '#666',
-                font: { family: 'Montserrat', size: 10 },
-                callback: v => `¥${(v / 10000).toFixed(0)}万`
-              },
-              grid: { color: '#1A1A1A' }
-            }
-          }
-        }
+        type: 'bar', data: { labels: DATA.dailySales.map(d=>d.date), datasets: [{ data: DATA.dailySales.map(d=>d.revenue), backgroundColor: DATA.dailySales.map(d => d.isHoliday ? '#FFF' : d.isWeekend ? '#003D8A' : '#002B61'), borderRadius: 2 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#666', font: { family: 'Montserrat', size: 9 }, maxRotation: 0 }, grid: { display: false } }, y: { ticks: { color: '#666', font: { family: 'Montserrat' }, callback: v => `¥${(v/1e4).toFixed(0)}万` }, grid: { color: '#1A1A1A' } } } }
       });
     }
 
-    // ================================================================
-    // HOURLY PATTERN CHART
-    // ================================================================
     function renderHourlyChart() {
       const ctx = document.getElementById('hourlyChart').getContext('2d');
       if (charts.hourly) charts.hourly.destroy();
-
       charts.hourly = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: DATA.hourlySales.map(d => d.hour),
-          datasets: [{
-            data: DATA.hourlySales.map(d => d.value),
-            borderColor: '#10B981',
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
-            fill: true,
-            tension: 0.4,
-            pointRadius: 5,
-            pointBackgroundColor: '#10B981',
-            pointBorderColor: '#000',
-            pointBorderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: ctx => `来客指数: ${ctx.raw}%`
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: { color: '#666', font: { family: 'Montserrat' } },
-              grid: { display: false }
-            },
-            y: {
-              ticks: {
-                color: '#666',
-                font: { family: 'Montserrat' },
-                callback: v => `${v}%`
-              },
-              grid: { color: '#1A1A1A' },
-              min: 0,
-              max: 120
-            }
-          }
-        }
+        type: 'line', data: { labels: DATA.hourlySales.map(d=>d.hour), datasets: [{ data: DATA.hourlySales.map(d=>d.value), borderColor: '#10B981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.4, pointRadius: 5, pointBackgroundColor: '#10B981' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#666' }, grid: { display: false } }, y: { ticks: { color: '#666', callback: v => `${v}%` }, grid: { color: '#1A1A1A' }, min: 0, max: 120 } } }
       });
     }
 
-    // ================================================================
-    // CONGESTION HEATMAP
-    // ================================================================
     function renderCongestionHeatmap() {
-      const container = document.getElementById('heatmapGrid');
-      const days = ['日', '月', '火', '水', '木', '金', '土'];
-
-      let html = '<div class="heatmap-header"></div>';
-      for (let h = 9; h <= 21; h++) {
-        html += `<div class="heatmap-header">${h}時</div>`;
-      }
-
-      days.forEach((day, dayIndex) => {
-        html += `<div class="heatmap-label">${day}</div>`;
-        for (let h = 9; h <= 21; h++) {
-          const cell = DATA.congestion.find(c => c.day === dayIndex && c.hour === h);
-          const level = Math.ceil(cell.value / 20);
-          html += `<div class="heatmap-cell l${level}" title="${day}曜 ${h}時: ${cell.value}%">${cell.value}</div>`;
+      const c = document.getElementById('heatmapGrid');
+      let h = '<div class="heatmap-header"></div>';
+      for (let hr = 9; hr <= 21; hr++) h += `<div class="heatmap-header">${hr}時</div>`;
+      dayLabelsMonday.forEach((d, di) => {
+        h += `<div class="heatmap-label">${d}</div>`;
+        for (let hr = 9; hr <= 21; hr++) {
+          const cell = DATA.congestion.find(x => x.day === di && x.hour === hr);
+          h += `<div class="heatmap-cell l${Math.ceil(cell.value/20)}" title="${d}曜 ${hr}時: ${cell.value}%">${cell.value}</div>`;
         }
       });
-
-      container.innerHTML = html;
+      c.innerHTML = h;
     }
 
-    // ================================================================
-    // CATEGORY CHART
-    // ================================================================
     function renderCategoryChart() {
       const ctx = document.getElementById('catChart').getContext('2d');
-      if (charts.category) charts.category.destroy();
-
-      charts.category = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: DATA.categories.map(c => c.name),
-          datasets: [{
-            data: DATA.categories.map(c => c.revenue),
-            backgroundColor: DATA.categories.map(c => c.color),
-            borderRadius: 3,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: ctx => `¥${ctx.raw.toLocaleString()}`
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: {
-                color: '#666',
-                font: { family: 'Montserrat' },
-                callback: v => `¥${(v / 10000).toFixed(0)}万`
-              },
-              grid: { color: '#1A1A1A' }
-            },
-            y: {
-              ticks: { color: '#CCC', font: { family: 'Noto Sans JP' } },
-              grid: { display: false }
-            }
-          }
-        }
+      if (charts.cat) charts.cat.destroy();
+      charts.cat = new Chart(ctx, {
+        type: 'bar', data: { labels: DATA.categories.map(c=>c.name), datasets: [{ data: DATA.categories.map(c=>c.revenue), backgroundColor: DATA.categories.map(c=>c.color), borderRadius: 3 }] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#666', font: { family: 'Montserrat' }, callback: v => `¥${(v/1e4).toFixed(0)}万` }, grid: { color: '#1A1A1A' } }, y: { ticks: { color: '#CCC', font: { family: 'Noto Sans JP' } }, grid: { display: false } } } }
       });
     }
 
-    // ================================================================
-    // TOP ITEMS CHART
-    // ================================================================
     function renderTopItemsChart() {
       const ctx = document.getElementById('topChart').getContext('2d');
-      if (charts.topItems) charts.topItems.destroy();
-
-      charts.topItems = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: DATA.topItems.map(i => i.name.slice(0, 12)),
-          datasets: [{
-            data: DATA.topItems.map(i => i.revenue),
-            backgroundColor: '#F59E0B',
-            borderRadius: 3,
-            borderSkipped: false
-          }]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              callbacks: {
-                label: ctx => `¥${ctx.raw.toLocaleString()}`
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: {
-                color: '#666',
-                font: { family: 'Montserrat' },
-                callback: v => `¥${(v / 10000).toFixed(0)}万`
-              },
-              grid: { color: '#1A1A1A' }
-            },
-            y: {
-              ticks: { color: '#CCC', font: { family: 'Noto Sans JP', size: 11 } },
-              grid: { display: false }
-            }
-          }
-        }
+      if (charts.top) charts.top.destroy();
+      charts.top = new Chart(ctx, {
+        type: 'bar', data: { labels: DATA.topItems.map(i=>i.name.slice(0,12)), datasets: [{ data: DATA.topItems.map(i=>i.revenue), backgroundColor: '#F59E0B', borderRadius: 3 }] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#666', font: { family: 'Montserrat' }, callback: v => `¥${(v/1e4).toFixed(0)}万` }, grid: { color: '#1A1A1A' } }, y: { ticks: { color: '#CCC', font: { family: 'Noto Sans JP', size: 11 } }, grid: { display: false } } } }
       });
     }
 
-    // ================================================================
-    // ATTRIBUTE BARS
-    // ================================================================
-    function renderAttributeBars() {
-      renderAttrBarSet('attrAge', DATA.ageDistribution, 'navy');
-      renderAttrBarSet('attrGender', DATA.genderDistribution, 'emerald');
-      renderAttrBarSet('attrLife', DATA.lifeDistribution, 'amber');
-    }
-
-    function renderAttrBarSet(containerId, data, colorClass) {
-      const maxValue = Math.max(...data.map(d => d.value));
-      const container = document.getElementById(containerId);
-
-      container.innerHTML = data.map(d => `
-        <div class="attr-row">
-          <div class="attr-row-head">
-            <span class="attr-row-label">${d.label}</span>
-            <span class="attr-row-value">${d.value}%</span>
-          </div>
-          <div class="attr-row-bar">
-            <div class="attr-row-fill ${colorClass}" style="width: ${(d.value / maxValue) * 100}%"></div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // ================================================================
-    // CATEGORY × DAY HEATMAP
-    // ================================================================
     function renderCatDayHeatmap() {
-      const container = document.getElementById('catDayHeatmap');
-      const days = ['日', '月', '火', '水', '木', '金', '土'];
-      const cats = ['青果', '精肉', '鮮魚', '惣菜', '日配', '加工食品'];
-
-      let html = '<div class="heatmap-header"></div>';
-      days.forEach(d => html += `<div class="heatmap-header">${d}</div>`);
-
+      const c = document.getElementById('catDayHeatmap');
+      const cats = ['生鮮・青果', '精肉', '鮮魚', '惣菜・弁当', '日配品', '加工食品'];
+      let h = '<div class="heatmap-header"></div>';
+      dayLabelsMonday.forEach(d => h += `<div class="heatmap-header">${d}</div>`);
       cats.forEach(cat => {
-        html += `<div class="heatmap-label">${cat}</div>`;
+        h += `<div class="heatmap-label">${cat}</div>`;
         for (let dow = 0; dow < 7; dow++) {
-          const cell = DATA.catDayMatrix.find(c => c.category === cat && c.day === dow);
-          const level = Math.ceil(cell.value / 20);
-          html += `<div class="heatmap-cell l${level}" title="${cat} ${days[dow]}曜: ${cell.value}%">${cell.value}</div>`;
+          const cell = DATA.catDayMatrix.find(x => x.category === cat && x.day === dow);
+          h += `<div class="heatmap-cell l${Math.ceil(cell.value/20)}" title="${cat} ${dayLabelsMonday[dow]}曜: ${cell.value}%">${cell.value}</div>`;
         }
       });
-
-      container.innerHTML = html;
+      c.innerHTML = h;
     }
 
-    // ================================================================
-    // CORRELATION NETWORK GRAPH (D3.js)
-    // ================================================================
     function renderNetworkGraph() {
-      const container = document.getElementById('networkContainer');
-      const svg = d3.select('#networkSvg');
-      svg.selectAll('*').remove();
-
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-
-      const nodes = DATA.correlationNetwork.nodes.map(d => ({ ...d }));
-      const links = DATA.correlationNetwork.links.map(d => ({ ...d }));
-
-      const simulation = d3.forceSimulation(nodes)
-        .force('link', d3.forceLink(links).id(d => d.id).distance(100))
-        .force('charge', d3.forceManyBody().strength(-300))
-        .force('center', d3.forceCenter(width / 2, height / 2))
-        .force('collision', d3.forceCollide().radius(40));
-
-      // Links
-      const link = svg.append('g')
-        .selectAll('line')
-        .data(links)
-        .join('line')
-        .attr('stroke', '#444')
-        .attr('stroke-width', d => d.strength * 4)
-        .attr('stroke-opacity', 0.6);
-
-      // Node groups
-      const node = svg.append('g')
-        .selectAll('g')
-        .data(nodes)
-        .join('g')
-        .call(d3.drag()
-          .on('start', dragstarted)
-          .on('drag', dragged)
-          .on('end', dragended));
-
-      // Node circles
-      node.append('circle')
-        .attr('r', d => Math.sqrt(d.revenue) / 200 + 15)
-        .attr('fill', '#002B61')
-        .attr('stroke', '#10B981')
-        .attr('stroke-width', 2);
-
-      // Node labels
-      node.append('text')
-        .text(d => d.name)
-        .attr('fill', '#FFF')
-        .attr('font-size', '10px')
-        .attr('font-family', 'Noto Sans JP')
-        .attr('text-anchor', 'middle')
-        .attr('dy', 4);
-
-      simulation.on('tick', () => {
-        link
-          .attr('x1', d => d.source.x)
-          .attr('y1', d => d.source.y)
-          .attr('x2', d => d.target.x)
-          .attr('y2', d => d.target.y);
-
-        node.attr('transform', d => `translate(${d.x},${d.y})`);
-      });
-
-      function dragstarted(event) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        event.subject.fx = event.subject.x;
-        event.subject.fy = event.subject.y;
-      }
-
-      function dragged(event) {
-        event.subject.fx = event.x;
-        event.subject.fy = event.y;
-      }
-
-      function dragended(event) {
-        if (!event.active) simulation.alphaTarget(0);
-        event.subject.fx = null;
-        event.subject.fy = null;
-      }
+      const cont = document.getElementById('networkContainer');
+      const svg = d3.select('#networkSvg'); svg.selectAll('*').remove();
+      const W = cont.clientWidth, H = cont.clientHeight;
+      const nodes = DATA.correlationNetwork.nodes.map(d=>({...d}));
+      const links = DATA.correlationNetwork.links.map(d=>({...d}));
+      const sim = d3.forceSimulation(nodes).force('link', d3.forceLink(links).id(d=>d.id).distance(120)).force('charge', d3.forceManyBody().strength(-350)).force('center', d3.forceCenter(W/2, H/2)).force('collision', d3.forceCollide().radius(45));
+      const link = svg.append('g').selectAll('line').data(links).join('line').attr('stroke', '#06B6D4').attr('stroke-width', d => d.strength * 5).attr('stroke-opacity', 0.5);
+      const node = svg.append('g').selectAll('g').data(nodes).join('g').call(d3.drag().on('start', e => { if (!e.active) sim.alphaTarget(0.3).restart(); e.subject.fx = e.subject.x; e.subject.fy = e.subject.y; }).on('drag', e => { e.subject.fx = e.x; e.subject.fy = e.y; }).on('end', e => { if (!e.active) sim.alphaTarget(0); e.subject.fx = null; e.subject.fy = null; }));
+      node.append('circle').attr('r', d => Math.sqrt(d.revenue)/180 + 18).attr('fill', '#002B61').attr('stroke', '#06B6D4').attr('stroke-width', 2);
+      node.append('text').text(d => d.name).attr('fill', '#FFF').attr('font-size', '11px').attr('font-family', 'Noto Sans JP').attr('text-anchor', 'middle').attr('dy', 4);
+      sim.on('tick', () => { link.attr('x1', d=>d.source.x).attr('y1', d=>d.source.y).attr('x2', d=>d.target.x).attr('y2', d=>d.target.y); node.attr('transform', d=>`translate(${d.x},${d.y})`); });
     }
 
-    // ================================================================
-    // RFM MATRIX
-    // ================================================================
+    function renderAttributeBars() {
+      renderAttrBar('attrAge', DATA.ageDistribution, 'navy');
+      renderAttrBar('attrGender', DATA.genderDistribution, 'emerald');
+      renderAttrBar('attrLife', DATA.lifeDistribution, 'gold');
+    }
+
+    function renderAttrBar(id, data, cls) {
+      const max = Math.max(...data.map(d=>d.value));
+      document.getElementById(id).innerHTML = data.map(d => `<div class="attr-row"><div class="attr-row-head"><span class="attr-row-label">${d.label}</span><span class="attr-row-value">${d.value}%</span></div><div class="attr-row-bar"><div class="attr-row-fill ${cls}" style="width:${(d.value/max)*100}%"></div></div></div>`).join('');
+    }
+
     function renderRFMMatrix() {
-      const container = document.getElementById('rfmGrid');
-
-      container.innerHTML = DATA.rfmMatrix.map(cell => {
-        let className = 'rfm-cell';
-        let label = '';
-
-        if (cell.isChampion) { className += ' champion'; label = '優良'; }
-        else if (cell.isLoyal) { className += ' loyal'; label = 'ロイヤル'; }
-        else if (cell.isAtRisk) { className += ' at-risk'; label = '要注意'; }
-
-        return `
-          <div class="${className}" title="R${cell.r} × M${cell.m}: ${cell.count}人">
-            <span class="rfm-cell-count">${cell.count}</span>
-            <span class="rfm-cell-label">${label}</span>
-          </div>
-        `;
+      document.getElementById('rfmGrid').innerHTML = DATA.rfmMatrix.map(c => {
+        let cls = 'rfm-cell', lbl = '';
+        if (c.isChampion) { cls += ' champion'; lbl = 'Champion'; }
+        else if (c.isLoyal) { cls += ' loyal'; lbl = 'Loyal'; }
+        else if (c.isAtRisk) { cls += ' at-risk'; lbl = 'At Risk'; }
+        return `<div class="${cls}" title="R${c.r} × M${c.m}: ${c.count}人"><span class="rfm-cell-count">${c.count}</span><span class="rfm-cell-label">${lbl}</span></div>`;
       }).join('');
     }
 
-    // ================================================================
-    // CUSTOMER LIST
-    // ================================================================
-    function renderCustomerList() {
-      const container = document.getElementById('custList');
-
-      container.innerHTML = DATA.customers.slice(0, 30).map((customer, index) => `
-        <div class="entity-item" data-index="${index}">
-          <p class="entity-rank">RANK #${index + 1}</p>
-          <p class="entity-name">${customer.id}</p>
-          <p class="entity-meta">¥${customer.totalSpend.toLocaleString()} / ${customer.visits}回 / ${customer.age} ${customer.gender}</p>
-        </div>
-      `).join('');
-
-      container.querySelectorAll('.entity-item').forEach(item => {
-        item.addEventListener('click', () => {
-          container.querySelectorAll('.entity-item').forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          renderCustomerDetail(DATA.customers[+item.dataset.index]);
+    function renderPersonaRadars() {
+      DATA.personas.forEach((p, i) => {
+        const ctx = document.getElementById(`personaRadar${i+1}`); if (!ctx) return;
+        new Chart(ctx.getContext('2d'), {
+          type: 'radar', data: { labels: ['健康志向', '時短重視', '価格重視', '多様性', 'ロイヤルティ'], datasets: [{ data: [p.scores.health, p.scores.convenience, p.scores.price, p.scores.variety, p.scores.loyalty], backgroundColor: 'rgba(0,43,97,0.25)', borderColor: '#002B61', borderWidth: 2, pointBackgroundColor: '#002B61', pointRadius: 4 }] },
+          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { beginAtZero: true, max: 100, ticks: { stepSize: 25, color: '#666', backdropColor: 'transparent', font: { size: 9 } }, grid: { color: '#333' }, angleLines: { color: '#333' }, pointLabels: { color: '#999', font: { family: 'Noto Sans JP', size: 10 } } } } }
         });
       });
     }
 
-    // ================================================================
-    // CUSTOMER DETAIL
-    // ================================================================
-    function renderCustomerDetail(customer) {
-      const container = document.getElementById('custDetail');
-
-      container.innerHTML = `
-        <div style="margin-bottom: 24px;">
-          <p class="typo-title" style="color: var(--navy-light);">${customer.id}</p>
-          <p class="typo-caption" style="margin-top: 6px;">${customer.age} / ${customer.gender} / ${customer.life} / 主購買: ${customer.topCat}</p>
-        </div>
-
-        <div class="entity-profile">
-          <div class="profile-stat">
-            <p class="profile-stat-value navy">¥${(customer.totalSpend / 1000).toFixed(0)}K</p>
-            <p class="profile-stat-label">総購買額</p>
-          </div>
-          <div class="profile-stat">
-            <p class="profile-stat-value">${customer.visits}</p>
-            <p class="profile-stat-label">来店回数</p>
-          </div>
-          <div class="profile-stat">
-            <p class="profile-stat-value emerald">¥${customer.avgBasket.toLocaleString()}</p>
-            <p class="profile-stat-label">平均客単価</p>
-          </div>
-          <div class="profile-stat">
-            <p class="profile-stat-value">${customer.lastVisit}日前</p>
-            <p class="profile-stat-label">最終来店</p>
-          </div>
-        </div>
-
-        <div style="margin-bottom: 24px;">
-          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 14px;">顧客DNAレーダー</p>
-          <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
-        </div>
-
-        <div>
-          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 14px;">購買タイムライン</p>
-          <div class="timeline-list">
-            ${customer.timeline.map(t => `
-              <div class="timeline-item">
-                <span class="timeline-date">${t.date}</span>
-                <div>
-                  <p class="timeline-amount">¥${t.amount.toLocaleString()}</p>
-                  <p class="timeline-items">${t.items}点購入</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-
-      renderRadarChart(customer);
-    }
-
-    // ================================================================
-    // RADAR CHART
-    // ================================================================
-    function renderRadarChart(customer) {
-      const ctx = document.getElementById('radarChart');
-      if (!ctx) return;
-
-      new Chart(ctx.getContext('2d'), {
-        type: 'radar',
-        data: {
-          labels: ['購買頻度', '客単価', '多様性', 'ロイヤルティ', '時間帯分散'],
-          datasets: [{
-            data: [
-              customer.dna.frequency,
-              customer.dna.basket,
-              customer.dna.variety,
-              customer.dna.loyalty,
-              customer.dna.timing
-            ],
-            backgroundColor: 'rgba(0, 43, 97, 0.25)',
-            borderColor: '#002B61',
-            borderWidth: 2,
-            pointBackgroundColor: '#002B61',
-            pointBorderColor: '#000',
-            pointBorderWidth: 2,
-            pointRadius: 5
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            r: {
-              beginAtZero: true,
-              max: 100,
-              ticks: {
-                stepSize: 25,
-                color: '#666',
-                backdropColor: 'transparent',
-                font: { family: 'Montserrat' }
-              },
-              grid: { color: '#333' },
-              angleLines: { color: '#333' },
-              pointLabels: {
-                color: '#999',
-                font: { family: 'Noto Sans JP', size: 11 }
-              }
-            }
-          }
-        }
+    function renderCustomerList() {
+      const c = document.getElementById('custList');
+      c.innerHTML = DATA.customers.slice(0, 30).map((cu, i) => `<div class="entity-item" data-index="${i}"><p class="entity-rank">RANK #${i+1}</p><p class="entity-name">${cu.id}</p><p class="entity-meta">¥${cu.totalSpend.toLocaleString()} / ${cu.visits}回 / ${cu.age} ${cu.gender}</p></div>`).join('');
+      c.querySelectorAll('.entity-item').forEach(el => {
+        el.onclick = () => { c.querySelectorAll('.entity-item').forEach(e => e.classList.remove('active')); el.classList.add('active'); renderCustomerDetail(DATA.customers[+el.dataset.index]); };
       });
     }
 
+    function renderCustomerDetail(cu) {
+      const c = document.getElementById('custDetail');
+      c.innerHTML = `<div style="margin-bottom:24px;"><p class="typo-title" style="color:var(--navy-light);">${cu.id}</p><p class="typo-caption" style="margin-top:6px;">${cu.age} / ${cu.gender} / ${cu.life}</p></div><div class="entity-profile"><div class="profile-stat"><p class="profile-stat-value navy">¥${(cu.totalSpend/1000).toFixed(0)}K</p><p class="profile-stat-label">総購買額</p></div><div class="profile-stat"><p class="profile-stat-value">${cu.visits}</p><p class="profile-stat-label">来店回数</p></div><div class="profile-stat"><p class="profile-stat-value emerald">¥${cu.avgBasket.toLocaleString()}</p><p class="profile-stat-label">平均客単価</p></div><div class="profile-stat"><p class="profile-stat-value gold">${cu.lastVisit}日前</p><p class="profile-stat-label">最終来店</p></div></div><div style="margin-bottom:24px;"><p class="typo-label" style="color:var(--gray-500);margin-bottom:14px;">顧客DNAレーダー</p><div class="radar-wrap"><canvas id="customerRadar"></canvas></div></div><div><p class="typo-label" style="color:var(--gray-500);margin-bottom:14px;">購買タイムライン</p><div class="timeline-list">${cu.timeline.map(t => `<div class="timeline-item"><span class="timeline-date">${t.date}</span><div><p class="timeline-amount">¥${t.amount.toLocaleString()}</p><p class="timeline-items">${t.items}点購入</p></div></div>`).join('')}</div></div>`;
+      const ctx = document.getElementById('customerRadar'); if (!ctx) return;
+      new Chart(ctx.getContext('2d'), { type: 'radar', data: { labels: ['購買頻度', '客単価', '多様性', 'ロイヤルティ', '時間帯分散'], datasets: [{ data: [cu.dna.frequency, cu.dna.basket, cu.dna.variety, cu.dna.loyalty, cu.dna.timing], backgroundColor: 'rgba(0,43,97,0.25)', borderColor: '#002B61', borderWidth: 2, pointBackgroundColor: '#002B61', pointRadius: 5 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { beginAtZero: true, max: 100, ticks: { stepSize: 25, color: '#666', backdropColor: 'transparent' }, grid: { color: '#333' }, angleLines: { color: '#333' }, pointLabels: { color: '#999', font: { family: 'Noto Sans JP', size: 11 } } } } } });
+    }
+
     // ================================================================
-    // IMAJUKU STORE SIMULATION (Probability-Based Shopper Flow)
+    // RETAIL GRID SIMULATION (Geometric Nodes + Neon Trails)
     // ================================================================
-    const STORE_ZONES = [
-      { id: 'entrance', name: '入口', x: 0.06, y: 0.5, color: '#10B981', radius: 30 },
-      { id: 'produce', name: '青果', x: 0.22, y: 0.25, color: '#10B981', radius: 35 },
-      { id: 'meat', name: '精肉', x: 0.38, y: 0.2, color: '#F43F5E', radius: 35 },
-      { id: 'fish', name: '鮮魚', x: 0.54, y: 0.25, color: '#06B6D4', radius: 35 },
-      { id: 'deli', name: '惣菜', x: 0.7, y: 0.3, color: '#F59E0B', radius: 38 },
-      { id: 'dairy', name: '日配', x: 0.38, y: 0.55, color: '#002B61', radius: 32 },
-      { id: 'grocery', name: '加工食品', x: 0.55, y: 0.6, color: '#8B5CF6', radius: 32 },
-      { id: 'beverage', name: '飲料', x: 0.7, y: 0.65, color: '#14B8A6', radius: 30 },
-      { id: 'register', name: 'レジ', x: 0.92, y: 0.5, color: '#FFFFFF', radius: 32 }
+    const GRID_NODES = [
+      { id: 'entrance', name: 'ENTRANCE', x: 0.08, y: 0.5, color: '#10B981', size: 45 },
+      { id: 'perimeter1', name: 'PRODUCE', x: 0.28, y: 0.22, color: '#10B981', size: 40 },
+      { id: 'perimeter2', name: 'MEAT', x: 0.45, y: 0.18, color: '#F43F5E', size: 40 },
+      { id: 'perimeter3', name: 'FISH', x: 0.62, y: 0.22, color: '#06B6D4', size: 40 },
+      { id: 'perimeter4', name: 'DELI', x: 0.78, y: 0.28, color: '#F59E0B', size: 42 },
+      { id: 'center', name: 'CENTER', x: 0.45, y: 0.55, color: '#8B5CF6', size: 50 },
+      { id: 'beverage', name: 'BEVERAGE', x: 0.68, y: 0.6, color: '#14B8A6', size: 38 },
+      { id: 'checkout', name: 'CHECKOUT', x: 0.92, y: 0.5, color: '#FFFFFF', size: 48 }
     ];
 
-    // Probability-based path weights (Imajuku Main Aisle Flow)
-    const FLOW_PATHS = {
-      entrance: [
-        { to: 'produce', prob: 0.7 },
-        { to: 'dairy', prob: 0.2 },
-        { to: 'grocery', prob: 0.1 }
-      ],
-      produce: [
-        { to: 'meat', prob: 0.5 },
-        { to: 'fish', prob: 0.25 },
-        { to: 'deli', prob: 0.15 },
-        { to: 'register', prob: 0.1 }
-      ],
-      meat: [
-        { to: 'fish', prob: 0.35 },
-        { to: 'deli', prob: 0.35 },
-        { to: 'dairy', prob: 0.15 },
-        { to: 'register', prob: 0.15 }
-      ],
-      fish: [
-        { to: 'deli', prob: 0.45 },
-        { to: 'dairy', prob: 0.25 },
-        { to: 'register', prob: 0.3 }
-      ],
-      deli: [
-        { to: 'dairy', prob: 0.25 },
-        { to: 'grocery', prob: 0.25 },
-        { to: 'beverage', prob: 0.15 },
-        { to: 'register', prob: 0.35 }
-      ],
-      dairy: [
-        { to: 'grocery', prob: 0.4 },
-        { to: 'beverage', prob: 0.2 },
-        { to: 'register', prob: 0.4 }
-      ],
-      grocery: [
-        { to: 'beverage', prob: 0.35 },
-        { to: 'register', prob: 0.65 }
-      ],
-      beverage: [
-        { to: 'register', prob: 1.0 }
-      ],
-      register: []
+    const GRID_PATHS = {
+      entrance: [{ to: 'perimeter1', prob: 0.65 }, { to: 'center', prob: 0.25 }, { to: 'beverage', prob: 0.1 }],
+      perimeter1: [{ to: 'perimeter2', prob: 0.45 }, { to: 'perimeter3', prob: 0.25 }, { to: 'perimeter4', prob: 0.2 }, { to: 'checkout', prob: 0.1 }],
+      perimeter2: [{ to: 'perimeter3', prob: 0.35 }, { to: 'perimeter4', prob: 0.35 }, { to: 'center', prob: 0.15 }, { to: 'checkout', prob: 0.15 }],
+      perimeter3: [{ to: 'perimeter4', prob: 0.45 }, { to: 'center', prob: 0.25 }, { to: 'checkout', prob: 0.3 }],
+      perimeter4: [{ to: 'center', prob: 0.25 }, { to: 'beverage', prob: 0.2 }, { to: 'checkout', prob: 0.55 }],
+      center: [{ to: 'beverage', prob: 0.4 }, { to: 'checkout', prob: 0.6 }],
+      beverage: [{ to: 'checkout', prob: 1 }],
+      checkout: []
     };
 
     function initSimulation() {
-      document.getElementById('simStart').onclick = startSimulation;
-      document.getElementById('simStop').onclick = stopSimulation;
-      drawSimulationFrame();
+      document.getElementById('simStart').onclick = startSim;
+      document.getElementById('simStop').onclick = stopSim;
+      drawSimFrame();
     }
 
-    function startSimulation() {
+    function startSim() {
       if (simRunning) return;
-
-      simRunning = true;
-      shoppers = [];
-      simComplete = 0;
-      simTotalTime = 0;
-
+      simRunning = true; particles = []; simComplete = 0; simTotalTime = 0;
       document.getElementById('simStart').style.display = 'none';
       document.getElementById('simStop').style.display = 'inline-block';
-
-      // Spawn shoppers periodically
-      const spawner = setInterval(() => {
-        if (!simRunning) {
-          clearInterval(spawner);
-          return;
-        }
-        if (shoppers.length < 50) {
-          spawnShopper();
-        }
-      }, 500);
-
-      simulationLoop();
+      const spawner = setInterval(() => { if (!simRunning) { clearInterval(spawner); return; } if (particles.length < 60) spawnParticle(); }, 400);
+      simLoop();
     }
 
-    function stopSimulation() {
-      simRunning = false;
-      cancelAnimationFrame(simAnimId);
+    function stopSim() {
+      simRunning = false; cancelAnimationFrame(simAnimId);
       document.getElementById('simStart').style.display = 'inline-block';
       document.getElementById('simStop').style.display = 'none';
     }
 
-    function spawnShopper() {
-      const entrance = STORE_ZONES.find(z => z.id === 'entrance');
-      shoppers.push({
-        x: entrance.x,
-        y: entrance.y + (Math.random() - 0.5) * 0.08,
-        currentZone: 'entrance',
-        targetZone: null,
-        targetX: entrance.x,
-        targetY: entrance.y,
-        speed: 0.0025 + Math.random() * 0.002,
-        waitTime: 0,
-        startTime: performance.now(),
-        color: `hsl(${Math.random() * 120 + 140}, 70%, 50%)`
-      });
+    function spawnParticle() {
+      const e = GRID_NODES.find(n => n.id === 'entrance');
+      const hue = Math.random() * 60 + 160;
+      particles.push({ x: e.x, y: e.y + (Math.random()-0.5)*0.06, currentNode: 'entrance', targetX: e.x, targetY: e.y, speed: 0.002 + Math.random()*0.0015, waitTime: 0, startTime: performance.now(), color: `hsl(${hue}, 80%, 55%)`, trail: [] });
     }
 
-    function simulationLoop() {
+    function simLoop() {
       if (!simRunning) return;
-
-      updateShoppers();
-      drawSimulationFrame();
-
-      document.getElementById('simActive').textContent = shoppers.length;
+      updateParticles(); drawSimFrame();
+      document.getElementById('simActive').textContent = particles.length;
       document.getElementById('simComplete').textContent = simComplete;
-
-      const avgTime = simComplete > 0 ? Math.round(simTotalTime / simComplete / 1000) : 0;
-      document.getElementById('simAvgTime').textContent = avgTime;
-
-      simAnimId = requestAnimationFrame(simulationLoop);
+      document.getElementById('simAvgTime').textContent = simComplete > 0 ? Math.round(simTotalTime/simComplete/1000) : 0;
+      simAnimId = requestAnimationFrame(simLoop);
     }
 
-    function updateShoppers() {
-      shoppers.forEach(shopper => {
-        // If waiting at a zone
-        if (shopper.waitTime > 0) {
-          shopper.waitTime--;
-          return;
-        }
-
-        // Calculate distance to target
-        const dx = shopper.targetX - shopper.x;
-        const dy = shopper.targetY - shopper.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < 0.025) {
-          // Arrived at target zone
-          if (shopper.currentZone === 'register') {
-            // Exit store
-            shopper.remove = true;
-            simComplete++;
-            simTotalTime += performance.now() - shopper.startTime;
-            return;
-          }
-
-          // Select next zone based on probabilities
-          const paths = FLOW_PATHS[shopper.currentZone];
-          if (!paths || paths.length === 0) {
-            shopper.remove = true;
-            simComplete++;
-            simTotalTime += performance.now() - shopper.startTime;
-            return;
-          }
-
-          let random = Math.random();
-          let cumulative = 0;
-
-          for (const path of paths) {
-            cumulative += path.prob;
-            if (random <= cumulative) {
-              const nextZone = STORE_ZONES.find(z => z.id === path.to);
-              shopper.currentZone = path.to;
-              shopper.targetX = nextZone.x + (Math.random() - 0.5) * 0.06;
-              shopper.targetY = nextZone.y + (Math.random() - 0.5) * 0.06;
-              shopper.waitTime = Math.round(40 + Math.random() * 80); // Stay at zone
-              break;
-            }
-          }
-        } else {
-          // Move towards target (with slight wandering)
-          const wobble = (Math.random() - 0.5) * 0.002;
-          shopper.x += (dx / distance) * shopper.speed + wobble;
-          shopper.y += (dy / distance) * shopper.speed + wobble;
-        }
+    function updateParticles() {
+      particles.forEach(p => {
+        p.trail.push({ x: p.x, y: p.y }); if (p.trail.length > 25) p.trail.shift();
+        if (p.waitTime > 0) { p.waitTime--; return; }
+        const dx = p.targetX - p.x, dy = p.targetY - p.y, dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 0.02) {
+          if (p.currentNode === 'checkout') { p.remove = true; simComplete++; simTotalTime += performance.now() - p.startTime; return; }
+          const paths = GRID_PATHS[p.currentNode]; if (!paths || paths.length === 0) { p.remove = true; return; }
+          let rand = Math.random(), cumul = 0;
+          for (const path of paths) { cumul += path.prob; if (rand <= cumul) { const next = GRID_NODES.find(n => n.id === path.to); p.currentNode = path.to; p.targetX = next.x + (Math.random()-0.5)*0.05; p.targetY = next.y + (Math.random()-0.5)*0.05; p.waitTime = Math.round(50 + Math.random()*100); break; } }
+        } else { p.x += (dx/dist)*p.speed; p.y += (dy/dist)*p.speed; }
       });
-
-      // Remove exited shoppers
-      shoppers = shoppers.filter(s => !s.remove);
+      particles = particles.filter(p => !p.remove);
     }
 
-    function drawSimulationFrame() {
+    function drawSimFrame() {
       const canvas = document.getElementById('simCanvas');
       const ctx = canvas.getContext('2d');
       const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width; canvas.height = rect.height;
+      const W = canvas.width, H = canvas.height;
 
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
 
-      const W = canvas.width;
-      const H = canvas.height;
+      // Grid lines
+      ctx.strokeStyle = '#1A1A1A'; ctx.lineWidth = 1;
+      for (let i = 0; i < 20; i++) { ctx.beginPath(); ctx.moveTo(i*W/20, 0); ctx.lineTo(i*W/20, H); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, i*H/20); ctx.lineTo(W, i*H/20); ctx.stroke(); }
 
-      // Clear canvas
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0, 0, W, H);
-
-      // Draw flow paths
-      ctx.strokeStyle = '#1A1A1A';
-      ctx.lineWidth = 2;
-
-      Object.entries(FLOW_PATHS).forEach(([fromId, targets]) => {
-        const fromZone = STORE_ZONES.find(z => z.id === fromId);
-        targets.forEach(target => {
-          const toZone = STORE_ZONES.find(z => z.id === target.to);
-          ctx.globalAlpha = target.prob * 0.5;
-          ctx.beginPath();
-          ctx.moveTo(fromZone.x * W, fromZone.y * H);
-          ctx.lineTo(toZone.x * W, toZone.y * H);
-          ctx.stroke();
-        });
+      // Paths
+      ctx.strokeStyle = '#222'; ctx.lineWidth = 2;
+      Object.entries(GRID_PATHS).forEach(([from, targets]) => {
+        const f = GRID_NODES.find(n => n.id === from);
+        targets.forEach(t => { const to = GRID_NODES.find(n => n.id === t.to); ctx.globalAlpha = t.prob * 0.4; ctx.beginPath(); ctx.moveTo(f.x*W, f.y*H); ctx.lineTo(to.x*W, to.y*H); ctx.stroke(); });
       });
       ctx.globalAlpha = 1;
 
-      // Draw zones
-      STORE_ZONES.forEach(zone => {
-        // Zone background
-        ctx.fillStyle = zone.color;
-        ctx.globalAlpha = 0.2;
-        ctx.beginPath();
-        ctx.arc(zone.x * W, zone.y * H, zone.radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Zone border
-        ctx.globalAlpha = 0.6;
-        ctx.strokeStyle = zone.color;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Zone label
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = '#FFF';
-        ctx.font = '600 12px "Noto Sans JP"';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(zone.name, zone.x * W, zone.y * H);
+      // Nodes (hexagons)
+      GRID_NODES.forEach(node => {
+        const x = node.x*W, y = node.y*H, r = node.size;
+        ctx.fillStyle = node.color; ctx.globalAlpha = 0.15;
+        ctx.beginPath(); for (let i = 0; i < 6; i++) { const a = (Math.PI/3)*i - Math.PI/6, px = x + r*Math.cos(a), py = y + r*Math.sin(a); if (i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py); } ctx.closePath(); ctx.fill();
+        ctx.globalAlpha = 0.8; ctx.strokeStyle = node.color; ctx.lineWidth = 2; ctx.stroke();
+        ctx.globalAlpha = 1; ctx.fillStyle = '#FFF'; ctx.font = '700 11px Montserrat'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(node.name, x, y);
       });
 
-      // Draw shoppers
-      shoppers.forEach(shopper => {
-        ctx.fillStyle = shopper.color;
-        ctx.globalAlpha = 0.9;
-        ctx.beginPath();
-        ctx.arc(shopper.x * W, shopper.y * H, 6, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Shopper glow
-        ctx.fillStyle = shopper.color;
-        ctx.globalAlpha = 0.3;
-        ctx.beginPath();
-        ctx.arc(shopper.x * W, shopper.y * H, 10, 0, Math.PI * 2);
-        ctx.fill();
+      // Particles with neon trails
+      particles.forEach(p => {
+        if (p.trail.length > 1) { ctx.strokeStyle = p.color; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); p.trail.forEach((pt, i) => { ctx.globalAlpha = i/p.trail.length*0.6; if (i===0) ctx.moveTo(pt.x*W, pt.y*H); else ctx.lineTo(pt.x*W, pt.y*H); }); ctx.stroke(); }
+        ctx.globalAlpha = 0.4; ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x*W, p.y*H, 12, 0, Math.PI*2); ctx.fill();
+        ctx.globalAlpha = 1; ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x*W, p.y*H, 5, 0, Math.PI*2); ctx.fill();
       });
-
       ctx.globalAlpha = 1;
     }
-
   </script>
 
 </body>
