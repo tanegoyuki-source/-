@@ -3,21 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DATA EDITORIAL / ANALYTICS v2.0</title>
-
-  <!-- FONTS -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-
-  <!-- LIBRARIES -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>NEO-NOIR EDITORIAL / RETAIL ANALYTICS v3.0</title>
 
   <!-- ================================================================
-       CSS: TRIAL NAVY NOIR DESIGN SYSTEM
+       FONTS: Neo-Noir Typography Stack
+       ================================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- ================================================================
+       LIBRARIES: Chart.js + PapaParse + D3.js
+       ================================================================ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- ================================================================
+       CSS: NEO-NOIR FASHION MAGAZINE DESIGN SYSTEM
        ================================================================ -->
   <style>
-    /* ==================== RESET & VARIABLES ==================== */
+    /* ==================== RESET & CSS VARIABLES ==================== */
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -25,28 +30,51 @@
     }
 
     :root {
+      /* Core Palette */
       --black: #000000;
       --white: #FFFFFF;
       --navy: #002B61;
       --navy-light: #003D8A;
       --navy-dark: #001A3D;
+
+      /* Secondary Accents */
+      --emerald: #10B981;
+      --amber: #F59E0B;
+      --cyan: #06B6D4;
+      --rose: #F43F5E;
+      --violet: #8B5CF6;
+
+      /* Grayscale */
+      --gray-50: #FAFAFA;
       --gray-100: #F5F5F5;
       --gray-200: #E5E5E5;
-      --gray-300: #CCCCCC;
-      --gray-400: #999999;
-      --gray-500: #666666;
-      --gray-600: #444444;
-      --gray-700: #333333;
-      --gray-800: #1A1A1A;
-      --gray-900: #0D0D0D;
-      --success: #00C853;
-      --warning: #FF9100;
-      --danger: #FF1744;
-      --font-en: 'Helvetica Neue', 'Arial Black', sans-serif;
+      --gray-300: #D4D4D4;
+      --gray-400: #A3A3A3;
+      --gray-500: #737373;
+      --gray-600: #525252;
+      --gray-700: #404040;
+      --gray-800: #262626;
+      --gray-900: #171717;
+
+      /* Typography */
+      --font-display: 'Arial Black', 'Helvetica Neue', sans-serif;
+      --font-mono: 'Montserrat', sans-serif;
       --font-jp: 'Noto Sans JP', sans-serif;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+      --space-3xl: 64px;
     }
 
-    html { font-size: 16px; scroll-behavior: smooth; }
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--black);
@@ -54,22 +82,31 @@
       font-family: var(--font-jp);
       min-height: 100vh;
       overflow-x: hidden;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    /* ==================== TYPOGRAPHY ==================== */
+    /* ==================== TYPOGRAPHY SYSTEM ==================== */
     .typo-massive {
-      font-family: var(--font-en);
-      font-size: clamp(64px, 12vw, 180px);
+      font-family: var(--font-display);
+      font-size: clamp(72px, 15vw, 200px);
       font-weight: 900;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.06em;
+      line-height: 0.82;
+      text-transform: uppercase;
+    }
+
+    .typo-display {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8vw, 120px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
       line-height: 0.85;
       text-transform: uppercase;
     }
 
     .typo-headline {
-      font-family: var(--font-en);
-      font-size: clamp(32px, 5vw, 64px);
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 56px);
       font-weight: 900;
       letter-spacing: -0.03em;
       line-height: 0.9;
@@ -77,37 +114,65 @@
     }
 
     .typo-title {
-      font-family: var(--font-en);
-      font-size: clamp(18px, 2.5vw, 28px);
-      font-weight: 700;
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2.5vw, 32px);
+      font-weight: 900;
       letter-spacing: -0.02em;
       text-transform: uppercase;
     }
 
     .typo-label {
-      font-family: var(--font-en);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.2em;
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.25em;
       text-transform: uppercase;
     }
 
-    .typo-body { font-size: 14px; font-weight: 400; line-height: 1.7; }
-    .typo-caption { font-size: 12px; color: var(--gray-400); }
-    .typo-data {
-      font-family: var(--font-en);
+    .typo-number {
+      font-family: var(--font-mono);
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .typo-kpi {
+      font-family: var(--font-mono);
       font-size: clamp(28px, 4vw, 48px);
-      font-weight: 900;
+      font-weight: 800;
       letter-spacing: -0.02em;
     }
 
-    /* ==================== LAYOUT ==================== */
-    .app { min-height: 100vh; }
+    .typo-data {
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
 
-    /* Header */
+    .typo-body {
+      font-family: var(--font-jp);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.8;
+    }
+
+    .typo-caption {
+      font-family: var(--font-jp);
+      font-size: 12px;
+      color: var(--gray-400);
+    }
+
+    /* ==================== LAYOUT CONTAINERS ==================== */
+    .app {
+      min-height: 100vh;
+    }
+
+    /* ==================== HEADER ==================== */
     .header {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 1000;
       background: var(--black);
       border-bottom: 1px solid var(--gray-800);
@@ -117,15 +182,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 32px;
+      padding: 14px 40px;
       border-bottom: 1px solid var(--gray-800);
     }
 
     .logo {
-      font-family: var(--font-en);
-      font-size: 12px;
+      font-family: var(--font-display);
+      font-size: 13px;
       font-weight: 900;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.5em;
     }
 
     .header-nav {
@@ -134,11 +199,11 @@
     }
 
     .nav-btn {
-      padding: 12px 24px;
-      font-family: var(--font-en);
+      padding: 14px 28px;
+      font-family: var(--font-display);
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-weight: 900;
+      letter-spacing: 0.15em;
       color: var(--gray-500);
       background: transparent;
       border: none;
@@ -147,13 +212,21 @@
       transition: color 0.2s;
     }
 
-    .nav-btn:hover { color: var(--white); }
-    .nav-btn.active { color: var(--white); }
+    .nav-btn:hover {
+      color: var(--white);
+    }
+
+    .nav-btn.active {
+      color: var(--white);
+    }
+
     .nav-btn.active::after {
       content: '';
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 2px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
       background: var(--navy);
     }
 
@@ -162,17 +235,17 @@
       font-family: var(--font-jp);
       font-size: 9px;
       font-weight: 400;
-      letter-spacing: 0.05em;
-      opacity: 0.5;
-      margin-top: 2px;
+      letter-spacing: 0.08em;
+      opacity: 0.6;
+      margin-top: 3px;
     }
 
-    /* Slicer Bar */
+    /* ==================== SLICER BAR ==================== */
     .slicer-bar {
       display: flex;
       align-items: center;
-      padding: 10px 32px;
-      gap: 8px;
+      padding: 12px 40px;
+      gap: 10px;
       flex-wrap: wrap;
       background: var(--gray-900);
     }
@@ -184,16 +257,17 @@
     }
 
     .slicer-label {
-      font-size: 10px;
-      color: var(--gray-500);
-      margin-right: 6px;
+      font-family: var(--font-jp);
+      font-size: 11px;
       font-weight: 500;
+      color: var(--gray-500);
+      margin-right: 8px;
     }
 
     .slicer-btn {
-      padding: 5px 10px;
+      padding: 6px 12px;
       font-family: var(--font-jp);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 500;
       color: var(--gray-400);
       background: transparent;
@@ -215,23 +289,26 @@
 
     .slicer-divider {
       width: 1px;
-      height: 20px;
+      height: 24px;
       background: var(--gray-700);
-      margin: 0 12px;
+      margin: 0 16px;
     }
 
-    /* Main */
-    .main { padding-top: 110px; }
+    /* ==================== MAIN CONTENT ==================== */
+    .main {
+      padding-top: 120px;
+    }
 
-    /* Hero */
+    /* ==================== HERO SECTION ==================== */
     .hero {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 55vh;
+      grid-template-columns: 1.2fr 0.8fr;
+      min-height: 65vh;
+      overflow: hidden;
     }
 
     .hero-left {
-      padding: 60px 48px;
+      padding: 80px 60px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -248,190 +325,248 @@
     }
 
     .hero-right::before {
-      content: 'ANALYTICS';
+      content: 'DATA';
       position: absolute;
-      font-family: var(--font-en);
-      font-size: 160px;
+      font-family: var(--font-display);
+      font-size: 280px;
       font-weight: 900;
       color: rgba(255,255,255,0.03);
-      transform: rotate(-90deg);
+      transform: rotate(-90deg) translateX(-50%);
       white-space: nowrap;
     }
 
-    .hero-metric {
-      text-align: center;
+    .hero-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      padding: 40px;
       position: relative;
       z-index: 1;
     }
 
-    .hero-metric-label {
-      font-size: 11px;
+    .hero-kpi {
+      text-align: center;
+    }
+
+    .hero-kpi-label {
+      font-family: var(--font-display);
+      font-size: 10px;
       letter-spacing: 0.3em;
       color: rgba(255,255,255,0.5);
       margin-bottom: 8px;
     }
 
-    .hero-metric-value {
-      font-family: var(--font-en);
-      font-size: clamp(48px, 10vw, 100px);
-      font-weight: 900;
+    .hero-kpi-value {
+      font-family: var(--font-mono);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 800;
       line-height: 1;
     }
 
-    .hero-metric-sub {
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-      margin-top: 12px;
+    .hero-kpi-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 8px;
     }
 
-    /* Panels */
-    .panel { display: none; padding: 48px 32px; }
-    .panel.active { display: block; }
+    /* ==================== PANELS ==================== */
+    .panel {
+      display: none;
+      padding: var(--space-2xl) 40px;
+    }
 
-    /* Section */
-    .section { margin-bottom: 48px; }
-    .section-header { margin-bottom: 24px; }
+    .panel.active {
+      display: block;
+    }
+
+    /* ==================== SECTION ==================== */
+    .section {
+      margin-bottom: var(--space-3xl);
+    }
+
+    .section-header {
+      margin-bottom: var(--space-xl);
+    }
+
     .section-num {
-      font-family: var(--font-en);
+      font-family: var(--font-display);
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.3em;
+      font-weight: 900;
+      letter-spacing: 0.4em;
       color: var(--navy-light);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
+
     .section-title-en {
-      font-family: var(--font-en);
-      font-size: clamp(24px, 3vw, 36px);
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
       font-weight: 900;
       letter-spacing: -0.02em;
       text-transform: uppercase;
-    }
-    .section-title-jp {
-      font-size: 12px;
-      color: var(--gray-400);
-      margin-top: 6px;
+      line-height: 1;
     }
 
-    /* Divider */
-    .divider {
-      height: 3px;
-      background: var(--navy);
-      margin: 48px 0;
+    .section-title-jp {
+      font-size: 13px;
+      color: var(--gray-400);
+      margin-top: 8px;
     }
+
+    /* ==================== DIVIDER ==================== */
+    .divider {
+      height: 4px;
+      background: var(--navy);
+      margin: var(--space-3xl) 0;
+    }
+
     .divider.thin {
       height: 1px;
       background: var(--gray-800);
     }
 
-    /* Cards Grid */
-    .cards-grid {
+    /* ==================== KPI CARDS ==================== */
+    .kpi-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
+      gap: 2px;
       background: var(--gray-800);
-      margin-bottom: 32px;
+      margin-bottom: var(--space-xl);
     }
 
-    .card {
+    .kpi-card {
       background: var(--black);
-      padding: 24px;
+      padding: 28px;
       position: relative;
     }
 
-    .card::before {
+    .kpi-card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
     }
 
-    .card:nth-child(1)::before { background: var(--navy); }
-    .card:nth-child(2)::before { background: var(--white); }
-    .card:nth-child(3)::before { background: var(--navy-light); }
-    .card:nth-child(4)::before { background: var(--gray-500); }
+    .kpi-card:nth-child(1)::before { background: var(--navy); }
+    .kpi-card:nth-child(2)::before { background: var(--emerald); }
+    .kpi-card:nth-child(3)::before { background: var(--amber); }
+    .kpi-card:nth-child(4)::before { background: var(--cyan); }
 
-    .card-label {
+    .kpi-label {
+      font-family: var(--font-display);
       font-size: 10px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.2em;
       color: var(--gray-500);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
-    .card-value {
-      font-family: var(--font-en);
-      font-size: 36px;
-      font-weight: 900;
+    .kpi-value {
+      font-family: var(--font-mono);
+      font-size: 42px;
+      font-weight: 800;
       line-height: 1;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
-    .card-sub { font-size: 11px; color: var(--gray-500); }
-    .card-change { font-size: 11px; margin-top: 8px; }
-    .card-change.up { color: var(--success); }
-    .card-change.down { color: var(--danger); }
+    .kpi-sub {
+      font-size: 11px;
+      color: var(--gray-500);
+    }
 
-    /* Charts */
+    .kpi-change {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .kpi-change.up { color: var(--emerald); }
+    .kpi-change.down { color: var(--rose); }
+
+    /* ==================== CHART CONTAINERS ==================== */
     .charts-row {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 24px;
-      margin-bottom: 32px;
+      margin-bottom: var(--space-xl);
     }
 
-    .charts-row.equal { grid-template-columns: 1fr 1fr; }
-    .charts-row.triple { grid-template-columns: repeat(3, 1fr); }
+    .charts-row.equal {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .charts-row.triple {
+      grid-template-columns: repeat(3, 1fr);
+    }
 
     .chart-box {
       background: var(--gray-900);
-      padding: 24px;
+      padding: 28px;
       position: relative;
     }
 
     .chart-box::before {
       content: '';
       position: absolute;
-      top: 0; left: 0;
-      width: 60px; height: 3px;
+      top: 0;
+      left: 0;
+      width: 80px;
+      height: 4px;
       background: var(--navy);
     }
 
-    .chart-box.alt::before { background: var(--gray-500); }
+    .chart-box.emerald::before { background: var(--emerald); }
+    .chart-box.amber::before { background: var(--amber); }
+    .chart-box.cyan::before { background: var(--cyan); }
 
     .chart-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .chart-title {
-      font-family: var(--font-en);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
     }
 
     .chart-subtitle {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--gray-500);
       margin-top: 4px;
     }
 
-    .chart-area { height: 280px; position: relative; }
-    .chart-area.tall { height: 360px; }
-    .chart-area.short { height: 200px; }
+    .chart-area {
+      height: 300px;
+      position: relative;
+    }
 
-    /* Store Simulation */
+    .chart-area.tall { height: 380px; }
+    .chart-area.short { height: 220px; }
+    .chart-area.xlarge { height: 450px; }
+
+    /* ==================== STORE SIMULATION ==================== */
     .sim-container {
       background: var(--gray-900);
-      padding: 24px;
-      margin-bottom: 32px;
+      padding: 28px;
+      margin-bottom: var(--space-xl);
+    }
+
+    .sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
 
     .sim-canvas-wrap {
       position: relative;
       width: 100%;
-      height: 450px;
+      height: 500px;
       background: var(--black);
       border: 1px solid var(--gray-700);
     }
@@ -445,28 +580,29 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      margin-top: 16px;
+      margin-top: 20px;
     }
 
     .sim-btn {
-      padding: 8px 20px;
-      font-family: var(--font-en);
+      padding: 10px 24px;
+      font-family: var(--font-display);
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+      font-weight: 900;
+      letter-spacing: 0.12em;
       background: var(--navy);
       border: none;
       color: var(--white);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
 
     .sim-btn:hover { background: var(--navy-light); }
-    .sim-btn.stop { background: var(--danger); }
+    .sim-btn.stop { background: var(--rose); }
+    .sim-btn.stop:hover { background: #E11D48; }
 
     .sim-stats {
       display: flex;
-      gap: 24px;
+      gap: 32px;
       margin-left: auto;
     }
 
@@ -475,38 +611,42 @@
     }
 
     .sim-stat-value {
-      font-family: var(--font-en);
-      font-size: 24px;
-      font-weight: 900;
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 800;
       color: var(--navy-light);
     }
 
     .sim-stat-label {
       font-size: 10px;
       color: var(--gray-500);
+      margin-top: 4px;
     }
 
-    /* Heatmap */
+    /* ==================== HEATMAP ==================== */
     .heatmap-grid {
       display: grid;
-      grid-template-columns: 40px repeat(13, 1fr);
-      gap: 2px;
+      grid-template-columns: 50px repeat(13, 1fr);
+      gap: 3px;
     }
 
     .heatmap-label {
-      font-size: 10px;
+      font-family: var(--font-jp);
+      font-size: 11px;
       color: var(--gray-500);
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding-right: 8px;
+      padding-right: 10px;
     }
 
     .heatmap-header {
+      font-family: var(--font-mono);
       font-size: 9px;
+      font-weight: 600;
       color: var(--gray-500);
       text-align: center;
-      padding: 6px 0;
+      padding: 8px 0;
     }
 
     .heatmap-cell {
@@ -514,19 +654,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 8px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
       cursor: pointer;
       transition: transform 0.1s;
     }
 
-    .heatmap-cell:hover { transform: scale(1.1); z-index: 10; }
-    .heatmap-cell.l1 { background: rgba(0,43,97,0.2); color: var(--gray-500); }
-    .heatmap-cell.l2 { background: rgba(0,43,97,0.4); color: var(--gray-300); }
-    .heatmap-cell.l3 { background: rgba(0,43,97,0.6); color: var(--white); }
-    .heatmap-cell.l4 { background: rgba(0,43,97,0.8); color: var(--white); }
+    .heatmap-cell:hover {
+      transform: scale(1.15);
+      z-index: 10;
+    }
+
+    .heatmap-cell.l1 { background: rgba(0,43,97,0.15); color: var(--gray-600); }
+    .heatmap-cell.l2 { background: rgba(0,43,97,0.3); color: var(--gray-400); }
+    .heatmap-cell.l3 { background: rgba(0,43,97,0.5); color: var(--gray-200); }
+    .heatmap-cell.l4 { background: rgba(0,43,97,0.75); color: var(--white); }
     .heatmap-cell.l5 { background: var(--navy); color: var(--white); }
 
-    /* Attribute Bars */
+    /* ==================== ATTRIBUTE BARS ==================== */
     .attr-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -535,78 +681,96 @@
 
     .attr-card {
       background: var(--gray-900);
-      padding: 20px;
+      padding: 24px;
     }
 
     .attr-card-title {
-      font-family: var(--font-en);
+      font-family: var(--font-display);
       font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-weight: 900;
+      letter-spacing: 0.15em;
       color: var(--gray-300);
-      padding-bottom: 12px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--gray-700);
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
-    .attr-row { margin-bottom: 12px; }
+    .attr-row {
+      margin-bottom: 14px;
+    }
 
     .attr-row-head {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
-    .attr-row-label { font-size: 12px; color: var(--gray-300); }
-    .attr-row-value { font-family: var(--font-en); font-size: 12px; font-weight: 700; }
+    .attr-row-label {
+      font-size: 13px;
+      color: var(--gray-300);
+    }
+
+    .attr-row-value {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+    }
 
     .attr-row-bar {
-      height: 18px;
+      height: 20px;
       background: var(--gray-800);
       overflow: hidden;
     }
 
     .attr-row-fill {
       height: 100%;
-      transition: width 0.6s ease;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .attr-row-fill.navy { background: var(--navy); }
-    .attr-row-fill.light { background: var(--navy-light); }
-    .attr-row-fill.white { background: var(--white); }
+    .attr-row-fill.emerald { background: var(--emerald); }
+    .attr-row-fill.amber { background: var(--amber); }
+    .attr-row-fill.cyan { background: var(--cyan); }
 
-    /* RFM Matrix */
-    .rfm-wrap {
+    /* ==================== RFM MATRIX ==================== */
+    .rfm-container {
       display: grid;
-      grid-template-columns: 50px 1fr;
-      gap: 8px;
+      grid-template-columns: 60px 1fr;
+      gap: 10px;
     }
 
-    .rfm-y {
+    .rfm-y-axis {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      padding-top: 32px;
+      padding-top: 40px;
     }
 
     .rfm-y-label {
-      font-size: 9px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
       color: var(--gray-500);
       text-align: right;
-      padding-right: 8px;
+      padding-right: 10px;
     }
 
-    .rfm-main { display: flex; flex-direction: column; }
+    .rfm-main {
+      display: flex;
+      flex-direction: column;
+    }
 
-    .rfm-x {
+    .rfm-x-axis {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 2px;
-      margin-bottom: 6px;
+      gap: 3px;
+      margin-bottom: 8px;
     }
 
     .rfm-x-label {
-      font-size: 9px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
       color: var(--gray-500);
       text-align: center;
     }
@@ -614,7 +778,7 @@
     .rfm-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 2px;
+      gap: 3px;
     }
 
     .rfm-cell {
@@ -628,173 +792,235 @@
       transition: transform 0.15s;
     }
 
-    .rfm-cell:hover { transform: scale(1.02); }
+    .rfm-cell:hover { transform: scale(1.03); }
     .rfm-cell.champion { background: var(--navy); }
     .rfm-cell.loyal { background: var(--navy-dark); }
-    .rfm-cell.at-risk { background: var(--warning); }
+    .rfm-cell.at-risk { background: var(--amber); }
 
     .rfm-cell-count {
-      font-family: var(--font-en);
-      font-size: 18px;
-      font-weight: 900;
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 800;
     }
 
     .rfm-cell-label {
-      font-size: 8px;
+      font-size: 9px;
       color: rgba(255,255,255,0.7);
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
-    /* Entity List */
+    .rfm-legend {
+      display: flex;
+      gap: 28px;
+      margin-top: 20px;
+    }
+
+    .rfm-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rfm-legend-color {
+      width: 16px;
+      height: 16px;
+    }
+
+    /* ==================== NETWORK GRAPH ==================== */
+    .network-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background: var(--black);
+      border: 1px solid var(--gray-800);
+    }
+
+    .network-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ==================== ENTITY LIST ==================== */
     .entity-grid {
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 300px 1fr;
       gap: 24px;
     }
 
     .entity-list {
       background: var(--gray-900);
-      max-height: 500px;
+      max-height: 550px;
       overflow-y: auto;
     }
 
     .entity-item {
-      padding: 14px 18px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--gray-800);
       cursor: pointer;
       transition: background 0.15s;
     }
 
-    .entity-item:hover, .entity-item.active { background: var(--gray-800); }
-    .entity-item.active { border-left: 3px solid var(--navy); }
+    .entity-item:hover,
+    .entity-item.active {
+      background: var(--gray-800);
+    }
+
+    .entity-item.active {
+      border-left: 4px solid var(--navy);
+    }
 
     .entity-rank {
-      font-family: var(--font-en);
-      font-size: 9px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
       color: var(--gray-500);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
     }
 
     .entity-name {
-      font-family: var(--font-en);
-      font-size: 14px;
+      font-family: var(--font-mono);
+      font-size: 15px;
       font-weight: 700;
-      margin: 3px 0;
+      margin: 4px 0;
     }
 
-    .entity-meta { font-size: 11px; color: var(--gray-500); }
+    .entity-meta {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
 
     .entity-detail {
       background: var(--gray-900);
-      padding: 28px;
+      padding: 32px;
     }
 
     .entity-profile {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      padding-bottom: 24px;
+      gap: 20px;
+      padding-bottom: 28px;
       border-bottom: 1px solid var(--gray-700);
-      margin-bottom: 24px;
+      margin-bottom: 28px;
     }
 
-    .profile-stat { text-align: center; }
+    .profile-stat {
+      text-align: center;
+    }
 
     .profile-stat-value {
-      font-family: var(--font-en);
-      font-size: 24px;
-      font-weight: 900;
-      margin-bottom: 4px;
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
     }
 
     .profile-stat-value.navy { color: var(--navy-light); }
+    .profile-stat-value.emerald { color: var(--emerald); }
 
     .profile-stat-label {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--gray-500);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
     }
 
-    .radar-wrap { height: 240px; margin-bottom: 24px; }
+    .radar-wrap {
+      height: 260px;
+      margin-bottom: 28px;
+    }
 
-    .timeline-list { max-height: 180px; overflow-y: auto; }
+    .timeline-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
 
     .timeline-item {
       display: flex;
-      gap: 16px;
-      padding: 8px 0;
+      gap: 20px;
+      padding: 10px 0;
       border-bottom: 1px solid var(--gray-800);
     }
 
     .timeline-date {
-      font-family: var(--font-en);
-      font-size: 11px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
       color: var(--gray-500);
-      min-width: 60px;
+      min-width: 70px;
     }
 
     .timeline-amount {
-      font-family: var(--font-en);
-      font-size: 12px;
+      font-family: var(--font-mono);
+      font-size: 14px;
       font-weight: 700;
     }
 
     .timeline-items {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--gray-400);
-      margin-top: 2px;
+      margin-top: 3px;
     }
 
-    /* Upload */
+    /* ==================== UPLOAD OVERLAY ==================== */
     .upload-overlay {
       display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.95);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.96);
       z-index: 2000;
       align-items: center;
       justify-content: center;
       flex-direction: column;
     }
 
-    .upload-overlay.active { display: flex; }
+    .upload-overlay.active {
+      display: flex;
+    }
 
     .upload-zone {
       width: 90%;
-      max-width: 500px;
-      padding: 60px;
+      max-width: 550px;
+      padding: 80px;
       border: 2px dashed var(--gray-600);
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .upload-zone:hover, .upload-zone.drag-over {
+    .upload-zone:hover,
+    .upload-zone.drag-over {
       border-color: var(--navy);
       background: rgba(0,43,97,0.1);
     }
 
     .upload-close {
-      margin-top: 32px;
-      padding: 10px 28px;
+      margin-top: 40px;
+      padding: 12px 32px;
       background: transparent;
       border: 1px solid var(--gray-600);
       color: var(--white);
-      font-family: var(--font-en);
+      font-family: var(--font-display);
       font-size: 11px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       cursor: pointer;
     }
 
-    .upload-close:hover { background: var(--white); color: var(--black); }
+    .upload-close:hover {
+      background: var(--white);
+      color: var(--black);
+    }
 
+    /* ==================== BUTTONS ==================== */
     .btn {
-      padding: 8px 16px;
-      font-family: var(--font-en);
+      padding: 10px 20px;
+      font-family: var(--font-display);
       font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-weight: 900;
+      letter-spacing: 0.15em;
       cursor: pointer;
+      transition: all 0.15s;
     }
 
     .btn-outline {
@@ -803,26 +1029,31 @@
       color: var(--white);
     }
 
-    .btn-outline:hover { background: var(--white); color: var(--black); }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--black); }
-    ::-webkit-scrollbar-thumb { background: var(--gray-700); }
-
-    /* Responsive */
-    @media (max-width: 1100px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-right { min-height: 300px; }
-      .charts-row, .attr-grid, .entity-grid { grid-template-columns: 1fr; }
-      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .btn-outline:hover {
+      background: var(--white);
+      color: var(--black);
     }
 
-    @media (max-width: 700px) {
-      .header-top { padding: 10px 16px; }
-      .slicer-bar { padding: 10px 16px; }
-      .panel { padding: 32px 16px; }
-      .cards-grid { grid-template-columns: 1fr; }
+    /* ==================== SCROLLBAR ==================== */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--gray-700); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gray-600); }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1200px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 350px; }
+      .charts-row, .attr-grid, .entity-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .header-top { padding: 12px 20px; }
+      .slicer-bar { padding: 12px 20px; }
+      .panel { padding: var(--space-xl) 20px; }
+      .hero-left { padding: 40px 20px; }
+      .kpi-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -833,24 +1064,25 @@
        ================================================================ -->
   <div class="app">
 
-    <!-- HEADER -->
+    <!-- ==================== HEADER ==================== -->
     <header class="header">
       <div class="header-top">
-        <div class="logo">DATA EDITORIAL</div>
+        <div class="logo">NEO-NOIR EDITORIAL</div>
         <div class="header-nav">
-          <button class="nav-btn active" data-tab="trends">TRENDS<span>売上動向</span></button>
-          <button class="nav-btn" data-tab="structure">STRUCTURE<span>商品構造</span></button>
-          <button class="nav-btn" data-tab="n1">N1 ANALYSIS<span>顧客分析</span></button>
+          <button class="nav-btn active" data-tab="trends">MOMENTUM<span>市場動向</span></button>
+          <button class="nav-btn" data-tab="structure">ARCHITECTURE<span>商品構造</span></button>
+          <button class="nav-btn" data-tab="n1">NARRATIVE<span>顧客物語</span></button>
         </div>
-        <button class="btn btn-outline" id="uploadBtn">CSV UPLOAD</button>
+        <button class="btn btn-outline" id="uploadBtn">IMPORT DATA</button>
       </div>
 
+      <!-- SLICER BAR -->
       <div class="slicer-bar">
         <div class="slicer-group">
           <span class="slicer-label">性別</span>
           <button class="slicer-btn active" data-slicer="gender" data-value="all">全て</button>
-          <button class="slicer-btn" data-slicer="gender" data-value="male">男性</button>
-          <button class="slicer-btn" data-slicer="gender" data-value="female">女性</button>
+          <button class="slicer-btn" data-slicer="gender" data-value="male">男</button>
+          <button class="slicer-btn" data-slicer="gender" data-value="female">女</button>
         </div>
         <div class="slicer-divider"></div>
         <div class="slicer-group">
@@ -877,74 +1109,94 @@
       </div>
     </header>
 
-    <!-- MAIN -->
+    <!-- ==================== MAIN CONTENT ==================== -->
     <main class="main">
 
-      <!-- HERO -->
+      <!-- HERO SECTION -->
       <section class="hero">
         <div class="hero-left">
-          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 12px;">ANALYTICS PLATFORM v2.0</p>
-          <h1 class="typo-massive">RETAIL</h1>
-          <h1 class="typo-massive" style="color: var(--navy-light);">DATA</h1>
-          <p class="typo-body" style="color: var(--gray-400); margin-top: 24px; max-width: 420px;">
-            汎用リテール分析プラットフォーム。スライサーで属性を切り替え、売上・商品構造・顧客セグメントを即座に可視化します。
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 16px;">RETAIL ANALYTICS PLATFORM v3.0</p>
+          <h1 class="typo-massive">IMAJUKU</h1>
+          <h1 class="typo-massive" style="color: var(--navy-light);">STORE</h1>
+          <p class="typo-body" style="color: var(--gray-400); margin-top: 32px; max-width: 480px;">
+            今宿店の顧客行動データをリアルタイムに可視化。スライサーで属性を切り替え、売上動向・商品構造・個客セグメントを即座に分析します。
           </p>
         </div>
         <div class="hero-right">
-          <div class="hero-metric">
-            <p class="hero-metric-label">TOTAL REVENUE</p>
-            <p class="hero-metric-value" id="heroRevenue">¥0</p>
-            <p class="hero-metric-sub">2025年10月 集計</p>
+          <div class="hero-kpi-grid">
+            <div class="hero-kpi">
+              <p class="hero-kpi-label">REVENUE</p>
+              <p class="hero-kpi-value" id="heroRevenue">¥0</p>
+              <p class="hero-kpi-sub">月間売上</p>
+            </div>
+            <div class="hero-kpi">
+              <p class="hero-kpi-label">CUSTOMERS</p>
+              <p class="hero-kpi-value" id="heroCustomers">0</p>
+              <p class="hero-kpi-sub">来店客数</p>
+            </div>
+            <div class="hero-kpi">
+              <p class="hero-kpi-label">BASKET</p>
+              <p class="hero-kpi-value" id="heroBasket">¥0</p>
+              <p class="hero-kpi-sub">平均単価</p>
+            </div>
+            <div class="hero-kpi">
+              <p class="hero-kpi-label">FREQUENCY</p>
+              <p class="hero-kpi-value" id="heroFreq">0</p>
+              <p class="hero-kpi-sub">月間頻度</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- PANEL: TRENDS -->
+      <!-- ==================== PANEL: TRENDS ==================== -->
       <section class="panel active" id="panel-trends">
-        <div class="cards-grid">
-          <div class="card">
-            <p class="card-label">取引件数</p>
-            <p class="card-value" id="kpiTx">—</p>
-            <p class="card-sub">Total Transactions</p>
-            <p class="card-change up" id="kpiTxChg">—</p>
+
+        <!-- KPI CARDS -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <p class="kpi-label">売上</p>
+            <p class="kpi-value" id="kpiRevenue">—</p>
+            <p class="kpi-sub">Total Revenue</p>
+            <p class="kpi-change up" id="kpiRevenueChg">—</p>
           </div>
-          <div class="card">
-            <p class="card-label">平均客単価</p>
-            <p class="card-value" id="kpiBasket">—</p>
-            <p class="card-sub">Avg. Basket</p>
-            <p class="card-change up" id="kpiBasketChg">—</p>
+          <div class="kpi-card">
+            <p class="kpi-label">客数</p>
+            <p class="kpi-value" id="kpiCust">—</p>
+            <p class="kpi-sub">Unique Customers</p>
+            <p class="kpi-change up" id="kpiCustChg">—</p>
           </div>
-          <div class="card">
-            <p class="card-label">顧客数</p>
-            <p class="card-value" id="kpiCust">—</p>
-            <p class="card-sub">Unique Customers</p>
-            <p class="card-change up" id="kpiCustChg">—</p>
+          <div class="kpi-card">
+            <p class="kpi-label">単価</p>
+            <p class="kpi-value" id="kpiBasket">—</p>
+            <p class="kpi-sub">Avg. Basket</p>
+            <p class="kpi-change up" id="kpiBasketChg">—</p>
           </div>
-          <div class="card">
-            <p class="card-label">販売点数</p>
-            <p class="card-value" id="kpiItems">—</p>
-            <p class="card-sub">Items Sold</p>
-            <p class="card-change up" id="kpiItemsChg">—</p>
+          <div class="kpi-card">
+            <p class="kpi-label">頻度</p>
+            <p class="kpi-value" id="kpiFreq">—</p>
+            <p class="kpi-sub">Monthly Visits</p>
+            <p class="kpi-change up" id="kpiFreqChg">—</p>
           </div>
         </div>
 
+        <!-- DAILY REVENUE -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">01</p>
+            <p class="section-num">SECTION 01</p>
             <h2 class="section-title-en">DAILY REVENUE</h2>
-            <p class="section-title-jp">日別売上推移 — 土日祝は色分け表示</p>
+            <p class="section-title-jp">日別売上推移 — 土日祝の売上増加パターンを可視化</p>
           </div>
           <div class="charts-row">
             <div class="chart-box">
               <div class="chart-head">
                 <div>
                   <h3 class="chart-title">DAILY SALES</h3>
-                  <p class="chart-subtitle">日別売上金額（10月）</p>
+                  <p class="chart-subtitle">日別売上金額（2025年10月）</p>
                 </div>
               </div>
               <div class="chart-area tall"><canvas id="dailyChart"></canvas></div>
             </div>
-            <div class="chart-box alt">
+            <div class="chart-box emerald">
               <div class="chart-head">
                 <div>
                   <h3 class="chart-title">HOURLY PATTERN</h3>
@@ -958,11 +1210,12 @@
 
         <div class="divider"></div>
 
+        <!-- CONGESTION HEATMAP -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">02</p>
+            <p class="section-num">SECTION 02</p>
             <h2 class="section-title-en">CONGESTION HEATMAP</h2>
-            <p class="section-title-jp">曜日×時間帯の混雑度 — 濃いほど混雑</p>
+            <p class="section-title-jp">曜日×時間帯の混雑度ヒートマップ — 濃いセルほど混雑</p>
           </div>
           <div class="chart-box">
             <div class="heatmap-grid" id="heatmapGrid"></div>
@@ -971,18 +1224,19 @@
 
         <div class="divider"></div>
 
+        <!-- SHOPPER FLOW SIMULATION -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">03</p>
-            <h2 class="section-title-en">SHOPPER FLOW SIMULATION</h2>
-            <p class="section-title-jp">店内動線シミュレーション — 入口から各ゾーンへの顧客移動を再現</p>
+            <p class="section-num">SECTION 03</p>
+            <h2 class="section-title-en">IMAJUKU SHOPPER FLOW</h2>
+            <p class="section-title-jp">今宿店 店内動線シミュレーション — 入口→青果→精肉→鮮魚→惣菜→レジ の主動線を再現</p>
           </div>
           <div class="sim-container">
             <div class="sim-canvas-wrap">
               <canvas id="simCanvas" class="sim-canvas"></canvas>
             </div>
             <div class="sim-controls">
-              <button class="sim-btn" id="simStart">START</button>
+              <button class="sim-btn" id="simStart">START SIMULATION</button>
               <button class="sim-btn stop" id="simStop" style="display:none;">STOP</button>
               <div class="sim-stats">
                 <div class="sim-stat">
@@ -993,19 +1247,26 @@
                   <p class="sim-stat-value" id="simComplete">0</p>
                   <p class="sim-stat-label">退店済み</p>
                 </div>
+                <div class="sim-stat">
+                  <p class="sim-stat-value" id="simAvgTime">0</p>
+                  <p class="sim-stat-label">平均滞在(秒)</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
       </section>
 
-      <!-- PANEL: STRUCTURE -->
+      <!-- ==================== PANEL: STRUCTURE ==================== -->
       <section class="panel" id="panel-structure">
+
+        <!-- CATEGORY SHARE -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">01</p>
-            <h2 class="section-title-en">CATEGORY SHARE</h2>
-            <p class="section-title-jp">カテゴリ別売上構成</p>
+            <p class="section-num">SECTION 01</p>
+            <h2 class="section-title-en">CATEGORY ARCHITECTURE</h2>
+            <p class="section-title-jp">カテゴリ別売上構成 — 商品カテゴリの売上シェアを可視化</p>
           </div>
           <div class="charts-row">
             <div class="chart-box">
@@ -1017,11 +1278,11 @@
               </div>
               <div class="chart-area tall"><canvas id="catChart"></canvas></div>
             </div>
-            <div class="chart-box alt">
+            <div class="chart-box amber">
               <div class="chart-head">
                 <div>
-                  <h3 class="chart-title">TOP ITEMS</h3>
-                  <p class="chart-subtitle">売上トップ商品</p>
+                  <h3 class="chart-title">TOP PRODUCTS</h3>
+                  <p class="chart-subtitle">売上トップ10商品</p>
                 </div>
               </div>
               <div class="chart-area tall"><canvas id="topChart"></canvas></div>
@@ -1031,15 +1292,38 @@
 
         <div class="divider"></div>
 
+        <!-- CORRELATION NETWORK -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">02</p>
+            <p class="section-num">SECTION 02</p>
+            <h2 class="section-title-en">PRODUCT CORRELATION</h2>
+            <p class="section-title-jp">商品相関ネットワーク — 同時購買される商品の関係性を可視化</p>
+          </div>
+          <div class="chart-box cyan">
+            <div class="chart-head">
+              <div>
+                <h3 class="chart-title">CORRELATION NETWORK</h3>
+                <p class="chart-subtitle">同時購買ネットワーク（ノードサイズ=売上、線の太さ=相関強度）</p>
+              </div>
+            </div>
+            <div class="network-container" id="networkContainer">
+              <svg id="networkSvg" class="network-svg"></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- CUSTOMER ATTRIBUTES -->
+        <div class="section">
+          <div class="section-header">
+            <p class="section-num">SECTION 03</p>
             <h2 class="section-title-en">CUSTOMER ATTRIBUTES</h2>
-            <p class="section-title-jp">顧客属性分布</p>
+            <p class="section-title-jp">顧客属性分布 — 年代・性別・ライフステージ別の構成比</p>
           </div>
           <div class="attr-grid">
             <div class="attr-card">
-              <h4 class="attr-card-title">AGE / 年代</h4>
+              <h4 class="attr-card-title">AGE / 年代別</h4>
               <div id="attrAge"></div>
             </div>
             <div class="attr-card">
@@ -1052,19 +1336,36 @@
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- PANEL: N1 -->
-      <section class="panel" id="panel-n1">
+        <div class="divider"></div>
+
+        <!-- CATEGORY × DAY HEATMAP -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">01</p>
-            <h2 class="section-title-en">RFM MATRIX</h2>
-            <p class="section-title-jp">RFM分析 — R:最終購買日 / M:購買金額</p>
+            <p class="section-num">SECTION 04</p>
+            <h2 class="section-title-en">CATEGORY × WEEKDAY</h2>
+            <p class="section-title-jp">曜日×カテゴリ売上ヒートマップ</p>
           </div>
           <div class="chart-box">
-            <div class="rfm-wrap">
-              <div class="rfm-y">
+            <div class="heatmap-grid" id="catDayHeatmap"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== PANEL: N1 ==================== -->
+      <section class="panel" id="panel-n1">
+
+        <!-- RFM MATRIX -->
+        <div class="section">
+          <div class="section-header">
+            <p class="section-num">SECTION 01</p>
+            <h2 class="section-title-en">RFM SEGMENTATION</h2>
+            <p class="section-title-jp">RFM分析マトリックス — R:最終購買日 / M:購買金額 による顧客セグメント</p>
+          </div>
+          <div class="chart-box">
+            <div class="rfm-container">
+              <div class="rfm-y-axis">
                 <div class="rfm-y-label">R5 最近</div>
                 <div class="rfm-y-label">R4</div>
                 <div class="rfm-y-label">R3</div>
@@ -1072,28 +1373,28 @@
                 <div class="rfm-y-label">R1 過去</div>
               </div>
               <div class="rfm-main">
-                <div class="rfm-x">
-                  <div class="rfm-x-label">M1 低</div>
+                <div class="rfm-x-axis">
+                  <div class="rfm-x-label">M1 低額</div>
                   <div class="rfm-x-label">M2</div>
                   <div class="rfm-x-label">M3</div>
                   <div class="rfm-x-label">M4</div>
-                  <div class="rfm-x-label">M5 高</div>
+                  <div class="rfm-x-label">M5 高額</div>
                 </div>
                 <div class="rfm-grid" id="rfmGrid"></div>
               </div>
             </div>
-            <div style="display:flex;gap:24px;margin-top:16px;">
-              <div style="display:flex;align-items:center;gap:6px;">
-                <div style="width:14px;height:14px;background:var(--navy);"></div>
+            <div class="rfm-legend">
+              <div class="rfm-legend-item">
+                <div class="rfm-legend-color" style="background:var(--navy);"></div>
                 <span class="typo-caption">優良顧客（Champion）</span>
               </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <div style="width:14px;height:14px;background:var(--navy-dark);"></div>
+              <div class="rfm-legend-item">
+                <div class="rfm-legend-color" style="background:var(--navy-dark);"></div>
                 <span class="typo-caption">ロイヤル顧客</span>
               </div>
-              <div style="display:flex;align-items:center;gap:6px;">
-                <div style="width:14px;height:14px;background:var(--warning);"></div>
-                <span class="typo-caption">要注意顧客</span>
+              <div class="rfm-legend-item">
+                <div class="rfm-legend-color" style="background:var(--amber);"></div>
+                <span class="typo-caption">要注意顧客（At Risk）</span>
               </div>
             </div>
           </div>
@@ -1101,44 +1402,46 @@
 
         <div class="divider"></div>
 
+        <!-- N1 DEEP DIVE -->
         <div class="section">
           <div class="section-header">
-            <p class="section-num">02</p>
+            <p class="section-num">SECTION 02</p>
             <h2 class="section-title-en">N1 DEEP DIVE</h2>
-            <p class="section-title-jp">個客深掘り分析</p>
+            <p class="section-title-jp">個客深掘り分析 — 顧客DNA・購買タイムラインを詳細表示</p>
           </div>
           <div class="entity-grid">
             <div class="entity-list" id="custList"></div>
             <div class="entity-detail" id="custDetail">
-              <div style="text-align:center;padding:60px;color:var(--gray-500);">
+              <div style="text-align:center;padding:80px;color:var(--gray-500);">
                 <p class="typo-label">SELECT CUSTOMER</p>
-                <p class="typo-caption" style="margin-top:8px;">左のリストから選択してください</p>
+                <p class="typo-caption" style="margin-top:12px;">左のリストから顧客を選択してください</p>
               </div>
             </div>
           </div>
         </div>
+
       </section>
 
     </main>
 
-    <!-- UPLOAD OVERLAY -->
+    <!-- ==================== UPLOAD OVERLAY ==================== -->
     <div class="upload-overlay" id="uploadOverlay">
       <div class="upload-zone" id="uploadZone">
-        <h2 class="typo-title" style="margin-bottom:12px;">DROP CSV FILE</h2>
-        <p class="typo-body" style="color:var(--gray-400);">CSVをドラッグ＆ドロップ</p>
+        <h2 class="typo-title" style="margin-bottom:16px;">DROP CSV FILE</h2>
+        <p class="typo-body" style="color:var(--gray-400);">CSVファイルをドラッグ＆ドロップ<br>または クリックしてファイルを選択</p>
         <input type="file" id="fileInput" accept=".csv" style="display:none;">
       </div>
-      <button class="upload-close" id="uploadClose">閉じる</button>
+      <button class="upload-close" id="uploadClose">CLOSE</button>
     </div>
 
   </div>
 
   <!-- ================================================================
-       JAVASCRIPT: LOGIC LAYER
+       JAVASCRIPT: COMPREHENSIVE ANALYSIS ENGINE
        ================================================================ -->
   <script>
     // ================================================================
-    // DEMO DATA
+    // DATA STORE
     // ================================================================
     const DATA = {
       dailySales: [],
@@ -1150,183 +1453,297 @@
       genderDistribution: [],
       lifeDistribution: [],
       customers: [],
-      rfmMatrix: []
+      rfmMatrix: [],
+      correlationNetwork: { nodes: [], links: [] },
+      catDayMatrix: []
     };
 
-    function generateData() {
-      // Daily Sales (October 2025)
-      const holidays = [13, 14];
+    // ================================================================
+    // RICH DEMO DATA GENERATOR (October 2025)
+    // ================================================================
+    function generateDemoData() {
+      // ==================== DAILY SALES ====================
+      const holidays = [13, 14]; // Sports Day
       const weekends = [4, 5, 11, 12, 18, 19, 25, 26];
       DATA.dailySales = [];
+
       for (let d = 1; d <= 31; d++) {
-        let base = 720000 + Math.random() * 200000;
-        if (weekends.includes(d)) base *= 1.4;
-        if (holidays.includes(d)) base *= 1.6;
-        if (d <= 5 || d >= 25) base *= 1.1;
+        let base = 780000 + Math.random() * 180000;
         const dow = new Date(2025, 9, d).getDay();
+
+        // Weekend boost
+        if (dow === 0 || dow === 6) base *= 1.45;
+        // Holiday boost
+        if (holidays.includes(d)) base *= 1.55;
+        // Month-end boost
+        if (d >= 25) base *= 1.12;
+        // Payday effect (25th)
+        if (d === 25 || d === 26) base *= 1.2;
+
         DATA.dailySales.push({
           day: d,
           date: `10/${d}`,
           revenue: Math.round(base),
           isWeekend: dow === 0 || dow === 6,
-          isHoliday: holidays.includes(d)
+          isHoliday: holidays.includes(d),
+          dow
         });
       }
 
-      // Hourly Sales
+      // ==================== HOURLY SALES ====================
       DATA.hourlySales = [
-        { hour: '9時', value: 40 }, { hour: '10時', value: 62 },
-        { hour: '11時', value: 85 }, { hour: '12時', value: 78 },
-        { hour: '13時', value: 65 }, { hour: '14時', value: 70 },
-        { hour: '15時', value: 82 }, { hour: '16時', value: 90 },
-        { hour: '17時', value: 100 }, { hour: '18時', value: 95 },
-        { hour: '19時', value: 75 }, { hour: '20時', value: 48 },
-        { hour: '21時', value: 22 }
+        { hour: '9時', value: 35, label: '開店直後' },
+        { hour: '10時', value: 58, label: '午前中' },
+        { hour: '11時', value: 82, label: '昼前ピーク' },
+        { hour: '12時', value: 75, label: '昼食時' },
+        { hour: '13時', value: 62, label: '午後早め' },
+        { hour: '14時', value: 68, label: '午後' },
+        { hour: '15時', value: 78, label: '夕方準備' },
+        { hour: '16時', value: 88, label: '夕方' },
+        { hour: '17時', value: 100, label: '夕食準備ピーク' },
+        { hour: '18時', value: 95, label: '夕方後半' },
+        { hour: '19時', value: 72, label: '夜間' },
+        { hour: '20時', value: 45, label: '閉店前' },
+        { hour: '21時', value: 20, label: '閉店間際' }
       ];
 
-      // Congestion Heatmap
-      const days = ['日', '月', '火', '水', '木', '金', '土'];
+      // ==================== CONGESTION HEATMAP ====================
+      const dayLabels = ['日', '月', '火', '水', '木', '金', '土'];
       DATA.congestion = [];
+
       for (let di = 0; di < 7; di++) {
         for (let h = 9; h <= 21; h++) {
-          let val = 30 + Math.random() * 35;
-          if (di === 0 || di === 6) val += 25;
-          if (h >= 17 && h <= 19) val += 28;
-          if (h >= 11 && h <= 13) val += 12;
-          if (h >= 20) val -= 15;
+          let val = 25 + Math.random() * 30;
+          // Weekend boost
+          if (di === 0 || di === 6) val += 28;
+          // Friday evening boost
+          if (di === 5 && h >= 17) val += 15;
+          // Evening rush
+          if (h >= 17 && h <= 19) val += 32;
+          // Lunch rush
+          if (h >= 11 && h <= 13) val += 15;
+          // Late night decrease
+          if (h >= 20) val -= 18;
+
           DATA.congestion.push({
-            day: di, dayLabel: days[di], hour: h,
-            value: Math.min(100, Math.max(10, Math.round(val)))
+            day: di,
+            dayLabel: dayLabels[di],
+            hour: h,
+            value: Math.min(100, Math.max(8, Math.round(val)))
           });
         }
       }
 
-      // Categories
+      // ==================== CATEGORIES ====================
       DATA.categories = [
-        { name: '日配食品', revenue: 5400000 },
-        { name: '加工食品', revenue: 4600000 },
-        { name: '菓子', revenue: 3100000 },
-        { name: '飲料', revenue: 2700000 },
-        { name: '酒類', revenue: 2300000 },
-        { name: '生鮮食品', revenue: 2000000 },
-        { name: '冷凍食品', revenue: 1500000 },
-        { name: '日用品', revenue: 1100000 },
-        { name: '化粧品', revenue: 500000 }
+        { name: '青果', revenue: 4800000, color: '#10B981' },
+        { name: '精肉', revenue: 5200000, color: '#F43F5E' },
+        { name: '鮮魚', revenue: 3800000, color: '#06B6D4' },
+        { name: '惣菜', revenue: 6100000, color: '#F59E0B' },
+        { name: '日配', revenue: 5600000, color: '#002B61' },
+        { name: '加工食品', revenue: 4200000, color: '#8B5CF6' },
+        { name: '菓子', revenue: 2800000, color: '#EC4899' },
+        { name: '飲料', revenue: 3200000, color: '#14B8A6' },
+        { name: '酒類', revenue: 2400000, color: '#6366F1' },
+        { name: '日用品', revenue: 1200000, color: '#64748B' }
       ];
 
-      // Top Items
+      // ==================== TOP ITEMS ====================
       DATA.topItems = [
-        { name: 'プレミアム牛乳 1L', revenue: 980000 },
-        { name: '食パン 6枚切', revenue: 620000 },
-        { name: 'ミネラルウォーター 2L', revenue: 380000 },
-        { name: 'カップヌードル', revenue: 680000 },
-        { name: 'バナナ 1房', revenue: 460000 },
-        { name: 'ヨーグルト 4個パック', revenue: 560000 },
-        { name: '卵 10個入り', revenue: 690000 },
-        { name: 'ポテトチップス', revenue: 420000 }
+        { name: '国産豚ロース100g', revenue: 1280000, cat: '精肉' },
+        { name: 'おにぎり詰合せ', revenue: 980000, cat: '惣菜' },
+        { name: 'プレミアム牛乳1L', revenue: 920000, cat: '日配' },
+        { name: '旬の刺身盛合せ', revenue: 880000, cat: '鮮魚' },
+        { name: 'バナナ1房', revenue: 760000, cat: '青果' },
+        { name: '食パン6枚切', revenue: 720000, cat: '日配' },
+        { name: 'から揚げ弁当', revenue: 680000, cat: '惣菜' },
+        { name: '卵10個入り', revenue: 650000, cat: '日配' },
+        { name: 'カップヌードル', revenue: 580000, cat: '加工食品' },
+        { name: 'ミネラルウォーター2L', revenue: 520000, cat: '飲料' }
       ];
 
-      // Age Distribution
+      // ==================== AGE DISTRIBUTION ====================
+      // Full age segments: 10代 to 80代以上
       DATA.ageDistribution = [
-        { label: '10代', value: 5 }, { label: '20代', value: 11 },
-        { label: '30代', value: 17 }, { label: '40代', value: 23 },
-        { label: '50代', value: 19 }, { label: '60代', value: 14 },
-        { label: '70代', value: 8 }, { label: '80代以上', value: 3 }
+        { label: '10代', value: 4, color: '#10B981' },
+        { label: '20代', value: 9, color: '#06B6D4' },
+        { label: '30代', value: 16, color: '#3B82F6' },
+        { label: '40代', value: 24, color: '#002B61' },
+        { label: '50代', value: 20, color: '#6366F1' },
+        { label: '60代', value: 15, color: '#8B5CF6' },
+        { label: '70代', value: 9, color: '#A855F7' },
+        { label: '80代以上', value: 3, color: '#C084FC' }
       ];
 
-      // Gender Distribution
+      // ==================== GENDER DISTRIBUTION ====================
       DATA.genderDistribution = [
-        { label: '女性', value: 57 }, { label: '男性', value: 43 }
+        { label: '男', value: 42, color: '#002B61' },
+        { label: '女', value: 58, color: '#F43F5E' }
       ];
 
-      // Lifestage Distribution
+      // ==================== LIFESTAGE DISTRIBUTION ====================
+      // Sorted: 単身 -> DINKS -> DEWKS -> 老年夫婦
       DATA.lifeDistribution = [
-        { label: '単身', value: 21 }, { label: 'DINKS', value: 17 },
-        { label: 'DEWKS', value: 29 }, { label: '老年夫婦', value: 21 },
-        { label: 'その他', value: 12 }
+        { label: '単身', value: 22, color: '#06B6D4' },
+        { label: 'DINKS', value: 18, color: '#10B981' },
+        { label: 'DEWKS', value: 31, color: '#002B61' },
+        { label: '老年夫婦', value: 20, color: '#8B5CF6' },
+        { label: 'その他', value: 9, color: '#64748B' }
       ];
 
-      // Customers
+      // ==================== CUSTOMERS ====================
       const ages = ['10代', '20代', '30代', '40代', '50代', '60代', '70代', '80代以上'];
-      const genders = ['女性', '男性'];
-      const lifes = ['単身', 'DINKS', 'DEWKS', '老年夫婦', 'その他'];
-      const cats = ['日配食品', '加工食品', '菓子', '飲料', '酒類'];
+      const genders = ['男', '女'];
+      const lifestages = ['単身', 'DINKS', 'DEWKS', '老年夫婦', 'その他'];
+      const topCats = ['青果', '精肉', '鮮魚', '惣菜', '日配', '加工食品'];
+
       DATA.customers = [];
-      for (let i = 0; i < 50; i++) {
-        const spend = Math.round(25000 + Math.random() * 480000);
-        const visits = Math.round(2 + Math.random() * 48);
+      for (let i = 0; i < 60; i++) {
+        const totalSpend = Math.round(30000 + Math.random() * 520000);
+        const visits = Math.round(3 + Math.random() * 45);
+        const age = ages[Math.floor(Math.random() * ages.length)];
+        const gender = genders[Math.floor(Math.random() * genders.length)];
+
         DATA.customers.push({
           id: `CU${String(i + 1).padStart(5, '0')}`,
-          totalSpend: spend,
+          totalSpend,
           visits,
-          avgBasket: Math.round(spend / visits),
+          avgBasket: Math.round(totalSpend / visits),
           lastVisit: Math.round(1 + Math.random() * 28),
-          age: ages[Math.floor(Math.random() * ages.length)],
-          gender: genders[Math.floor(Math.random() * genders.length)],
-          life: lifes[Math.floor(Math.random() * lifes.length)],
-          topCat: cats[Math.floor(Math.random() * cats.length)],
+          age,
+          gender,
+          life: lifestages[Math.floor(Math.random() * lifestages.length)],
+          topCat: topCats[Math.floor(Math.random() * topCats.length)],
           dna: {
-            freq: Math.round(20 + Math.random() * 80),
-            basket: Math.round(20 + Math.random() * 80),
-            variety: Math.round(20 + Math.random() * 80),
-            loyalty: Math.round(20 + Math.random() * 80),
-            timing: Math.round(20 + Math.random() * 80)
+            frequency: Math.round(15 + Math.random() * 85),
+            basket: Math.round(15 + Math.random() * 85),
+            variety: Math.round(15 + Math.random() * 85),
+            loyalty: Math.round(15 + Math.random() * 85),
+            timing: Math.round(15 + Math.random() * 85)
           },
-          timeline: Array.from({ length: 6 }, () => ({
+          timeline: Array.from({ length: 8 }, () => ({
             date: `10/${Math.round(1 + Math.random() * 28)}`,
-            amount: Math.round(800 + Math.random() * 7000),
-            items: Math.round(2 + Math.random() * 10)
+            amount: Math.round(1200 + Math.random() * 8500),
+            items: Math.round(3 + Math.random() * 12)
           })).sort((a, b) => parseInt(b.date.split('/')[1]) - parseInt(a.date.split('/')[1]))
         });
       }
       DATA.customers.sort((a, b) => b.totalSpend - a.totalSpend);
 
-      // RFM Matrix
+      // ==================== RFM MATRIX ====================
       DATA.rfmMatrix = [];
       for (let r = 5; r >= 1; r--) {
         for (let m = 1; m <= 5; m++) {
-          const isChamp = r >= 4 && m >= 4;
-          const isLoyal = r >= 3 && m >= 3 && !isChamp;
-          const isRisk = r <= 2 && m >= 4;
-          let cnt;
-          if (isChamp) cnt = Math.round(160 + Math.random() * 300);
-          else if (isRisk) cnt = Math.round(30 + Math.random() * 70);
-          else if (r <= 2 && m <= 2) cnt = Math.round(220 + Math.random() * 320);
-          else cnt = Math.round(70 + Math.random() * 160);
-          DATA.rfmMatrix.push({ r, m, count: cnt, isChamp, isLoyal, isRisk });
+          const isChampion = r >= 4 && m >= 4;
+          const isLoyal = r >= 3 && m >= 3 && !isChampion;
+          const isAtRisk = r <= 2 && m >= 4;
+
+          let count;
+          if (isChampion) count = Math.round(180 + Math.random() * 350);
+          else if (isAtRisk) count = Math.round(35 + Math.random() * 80);
+          else if (r <= 2 && m <= 2) count = Math.round(250 + Math.random() * 380);
+          else count = Math.round(80 + Math.random() * 180);
+
+          DATA.rfmMatrix.push({
+            r, m, count,
+            isChampion, isLoyal, isAtRisk
+          });
         }
       }
+
+      // ==================== CORRELATION NETWORK ====================
+      const networkNodes = [
+        { id: 'banana', name: 'バナナ', revenue: 760000, cat: '青果' },
+        { id: 'milk', name: '牛乳', revenue: 920000, cat: '日配' },
+        { id: 'bread', name: '食パン', revenue: 720000, cat: '日配' },
+        { id: 'egg', name: '卵', revenue: 650000, cat: '日配' },
+        { id: 'pork', name: '豚肉', revenue: 1280000, cat: '精肉' },
+        { id: 'onigiri', name: 'おにぎり', revenue: 980000, cat: '惣菜' },
+        { id: 'sashimi', name: '刺身', revenue: 880000, cat: '鮮魚' },
+        { id: 'karaage', name: 'から揚げ', revenue: 680000, cat: '惣菜' },
+        { id: 'noodle', name: 'カップ麺', revenue: 580000, cat: '加工食品' },
+        { id: 'water', name: '水', revenue: 520000, cat: '飲料' },
+        { id: 'yogurt', name: 'ヨーグルト', revenue: 480000, cat: '日配' },
+        { id: 'tofu', name: '豆腐', revenue: 420000, cat: '日配' }
+      ];
+
+      const networkLinks = [
+        { source: 'milk', target: 'bread', strength: 0.85 },
+        { source: 'milk', target: 'egg', strength: 0.78 },
+        { source: 'bread', target: 'egg', strength: 0.72 },
+        { source: 'banana', target: 'milk', strength: 0.65 },
+        { source: 'banana', target: 'yogurt', strength: 0.7 },
+        { source: 'pork', target: 'egg', strength: 0.55 },
+        { source: 'pork', target: 'tofu', strength: 0.48 },
+        { source: 'onigiri', target: 'water', strength: 0.82 },
+        { source: 'karaage', target: 'onigiri', strength: 0.6 },
+        { source: 'sashimi', target: 'water', strength: 0.45 },
+        { source: 'noodle', target: 'egg', strength: 0.52 },
+        { source: 'yogurt', target: 'banana', strength: 0.68 },
+        { source: 'tofu', target: 'egg', strength: 0.42 }
+      ];
+
+      DATA.correlationNetwork = { nodes: networkNodes, links: networkLinks };
+
+      // ==================== CATEGORY × DAY MATRIX ====================
+      const cats = ['青果', '精肉', '鮮魚', '惣菜', '日配', '加工食品'];
+      DATA.catDayMatrix = [];
+
+      cats.forEach(cat => {
+        for (let dow = 0; dow < 7; dow++) {
+          let val = 40 + Math.random() * 35;
+          if (dow === 0 || dow === 6) val += 25;
+          if (cat === '惣菜' && dow >= 5) val += 15;
+          if (cat === '鮮魚' && dow === 5) val += 20;
+
+          DATA.catDayMatrix.push({
+            category: cat,
+            day: dow,
+            dayLabel: dayLabels[dow],
+            value: Math.min(100, Math.round(val))
+          });
+        }
+      });
     }
 
     // ================================================================
-    // STATE
+    // APPLICATION STATE
     // ================================================================
     let charts = {};
     let slicers = { gender: 'all', age: 'all', life: 'all' };
-    let simRunning = false, simAnimId = null, shoppers = [], simComplete = 0;
+    let simRunning = false;
+    let simAnimId = null;
+    let shoppers = [];
+    let simComplete = 0;
+    let simTotalTime = 0;
 
     // ================================================================
-    // INIT
+    // INITIALIZATION
     // ================================================================
     document.addEventListener('DOMContentLoaded', () => {
-      generateData();
-      initNav();
+      generateDemoData();
+      initNavigation();
       initSlicers();
       initUpload();
-      initSim();
-      render();
+      initSimulation();
+      renderAll();
     });
 
     // ================================================================
     // NAVIGATION
     // ================================================================
-    function initNav() {
+    function initNavigation() {
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
           document.getElementById(`panel-${btn.dataset.tab}`).classList.add('active');
+
+          // Render network graph when switching to structure tab
+          if (btn.dataset.tab === 'structure') {
+            setTimeout(renderNetworkGraph, 100);
+          }
         });
       });
     }
@@ -1337,325 +1754,189 @@
     function initSlicers() {
       document.querySelectorAll('.slicer-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const s = btn.dataset.slicer;
-          document.querySelectorAll(`.slicer-btn[data-slicer="${s}"]`).forEach(b => b.classList.remove('active'));
+          const slicerType = btn.dataset.slicer;
+          document.querySelectorAll(`.slicer-btn[data-slicer="${slicerType}"]`)
+            .forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          slicers[s] = btn.dataset.value;
-          render();
+          slicers[slicerType] = btn.dataset.value;
+          renderAll();
         });
       });
     }
 
     // ================================================================
-    // UPLOAD
+    // FILE UPLOAD
     // ================================================================
     function initUpload() {
       const overlay = document.getElementById('uploadOverlay');
       const zone = document.getElementById('uploadZone');
       const input = document.getElementById('fileInput');
+
       document.getElementById('uploadBtn').onclick = () => overlay.classList.add('active');
       document.getElementById('uploadClose').onclick = () => overlay.classList.remove('active');
+
       zone.onclick = () => input.click();
       zone.ondragover = e => { e.preventDefault(); zone.classList.add('drag-over'); };
       zone.ondragleave = () => zone.classList.remove('drag-over');
-      zone.ondrop = e => { e.preventDefault(); zone.classList.remove('drag-over'); if (e.dataTransfer.files[0]) parseFile(e.dataTransfer.files[0]); };
-      input.onchange = e => { if (e.target.files[0]) parseFile(e.target.files[0]); };
+      zone.ondrop = e => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        if (e.dataTransfer.files[0]) parseCSVFile(e.dataTransfer.files[0]);
+      };
+      input.onchange = e => {
+        if (e.target.files[0]) parseCSVFile(e.target.files[0]);
+      };
     }
 
-    function parseFile(file) {
+    function parseCSVFile(file) {
       Papa.parse(file, {
-        header: true, skipEmptyLines: true, encoding: 'Shift_JIS',
-        complete: r => {
+        header: true,
+        skipEmptyLines: true,
+        encoding: 'Shift_JIS',
+        complete: result => {
           document.getElementById('uploadOverlay').classList.remove('active');
-          alert(`${r.data.length}件のデータを読み込みました`);
+          alert(`${result.data.length}件のデータを読み込みました。\n実装: データ変換ロジックを追加してください。`);
         }
       });
     }
 
     // ================================================================
-    // RENDER
+    // RENDER ALL
     // ================================================================
-    function render() {
-      renderHero();
-      renderKPIs();
+    function renderAll() {
+      renderHeroKPIs();
+      renderKPICards();
       renderDailyChart();
       renderHourlyChart();
-      renderHeatmap();
-      renderCatChart();
-      renderTopChart();
-      renderAttrs();
-      renderRFM();
-      renderCustList();
+      renderCongestionHeatmap();
+      renderCategoryChart();
+      renderTopItemsChart();
+      renderAttributeBars();
+      renderCatDayHeatmap();
+      renderRFMMatrix();
+      renderCustomerList();
     }
 
-    function renderHero() {
-      const total = DATA.dailySales.reduce((s, d) => s + d.revenue, 0);
-      animateNum('heroRevenue', total, '¥', true);
+    // ================================================================
+    // HERO KPIs
+    // ================================================================
+    function renderHeroKPIs() {
+      const totalRevenue = DATA.dailySales.reduce((sum, d) => sum + d.revenue, 0);
+      const totalTx = Math.round(totalRevenue / 2750);
+      const avgBasket = Math.round(totalRevenue / totalTx);
+
+      animateNumber('heroRevenue', totalRevenue, '¥', true);
+      animateNumber('heroCustomers', Math.round(totalTx * 0.72), '', false);
+      animateNumber('heroBasket', avgBasket, '¥', false);
+      animateNumber('heroFreq', 3.2, '', false, 1);
     }
 
-    function renderKPIs() {
-      const total = DATA.dailySales.reduce((s, d) => s + d.revenue, 0);
-      const tx = Math.round(total / 2850);
-      animateNum('kpiTx', tx);
-      animateNum('kpiBasket', Math.round(total / tx), '¥');
-      animateNum('kpiCust', Math.round(tx * 0.7));
-      animateNum('kpiItems', Math.round(tx * 4.3));
-      document.getElementById('kpiTxChg').textContent = '+8.2% 前月比';
-      document.getElementById('kpiBasketChg').textContent = '+3.1% 前月比';
-      document.getElementById('kpiCustChg').textContent = '+5.5% 前月比';
-      document.getElementById('kpiItemsChg').textContent = '+12.4% 前月比';
+    // ================================================================
+    // KPI CARDS
+    // ================================================================
+    function renderKPICards() {
+      const totalRevenue = DATA.dailySales.reduce((sum, d) => sum + d.revenue, 0);
+      const totalTx = Math.round(totalRevenue / 2750);
+      const avgBasket = Math.round(totalRevenue / totalTx);
+      const customers = Math.round(totalTx * 0.72);
+
+      animateNumber('kpiRevenue', totalRevenue, '¥', true);
+      animateNumber('kpiCust', customers, '', false);
+      animateNumber('kpiBasket', avgBasket, '¥', false);
+      animateNumber('kpiFreq', 3.2, '', false, 1);
+
+      document.getElementById('kpiRevenueChg').textContent = '+9.3% 前月比';
+      document.getElementById('kpiCustChg').textContent = '+6.8% 前月比';
+      document.getElementById('kpiBasketChg').textContent = '+2.4% 前月比';
+      document.getElementById('kpiFreqChg').textContent = '+0.3 前月比';
     }
 
-    function animateNum(id, target, prefix = '', useMil = false) {
-      const el = document.getElementById(id);
-      const dur = 1000, start = performance.now();
-      function step(now) {
-        const p = Math.min((now - start) / dur, 1);
-        const v = Math.round(target * (1 - Math.pow(1 - p, 3)));
-        el.textContent = prefix + (useMil && v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v.toLocaleString());
-        if (p < 1) requestAnimationFrame(step);
+    // ================================================================
+    // NUMBER ANIMATION
+    // ================================================================
+    function animateNumber(elementId, targetValue, prefix = '', useMillions = false, decimals = 0) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
+      const duration = 1200;
+      const startTime = performance.now();
+
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 4); // Ease out quartic
+
+        const currentValue = targetValue * eased;
+        let displayValue;
+
+        if (useMillions && currentValue >= 1000000) {
+          displayValue = (currentValue / 1000000).toFixed(1) + 'M';
+        } else if (decimals > 0) {
+          displayValue = currentValue.toFixed(decimals);
+        } else {
+          displayValue = Math.round(currentValue).toLocaleString();
+        }
+
+        element.textContent = prefix + displayValue;
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
       }
-      requestAnimationFrame(step);
+
+      requestAnimationFrame(update);
     }
 
+    // ================================================================
+    // DAILY SALES CHART
+    // ================================================================
     function renderDailyChart() {
       const ctx = document.getElementById('dailyChart').getContext('2d');
       if (charts.daily) charts.daily.destroy();
+
       charts.daily = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: DATA.dailySales.map(d => d.date),
           datasets: [{
             data: DATA.dailySales.map(d => d.revenue),
-            backgroundColor: DATA.dailySales.map(d =>
-              d.isHoliday ? '#FFFFFF' : d.isWeekend ? '#003D8A' : '#002B61'
-            ),
-            borderRadius: 2
+            backgroundColor: DATA.dailySales.map(d => {
+              if (d.isHoliday) return '#FFFFFF';
+              if (d.isWeekend) return '#003D8A';
+              return '#002B61';
+            }),
+            borderRadius: 2,
+            borderSkipped: false
           }]
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#000',
+              titleColor: '#FFF',
+              bodyColor: '#FFF',
+              borderColor: '#333',
+              borderWidth: 1,
+              callbacks: {
+                label: ctx => `¥${ctx.raw.toLocaleString()}`
+              }
+            }
+          },
           scales: {
-            x: { ticks: { color: '#666', font: { size: 9 }, maxRotation: 0 }, grid: { display: false } },
-            y: { ticks: { color: '#666', callback: v => `¥${(v / 1e4).toFixed(0)}万` }, grid: { color: '#1A1A1A' } }
-          }
-        }
-      });
-    }
-
-    function renderHourlyChart() {
-      const ctx = document.getElementById('hourlyChart').getContext('2d');
-      if (charts.hourly) charts.hourly.destroy();
-      charts.hourly = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: DATA.hourlySales.map(d => d.hour),
-          datasets: [{
-            data: DATA.hourlySales.map(d => d.value),
-            borderColor: '#002B61',
-            backgroundColor: 'rgba(0,43,97,0.15)',
-            fill: true, tension: 0.4,
-            pointRadius: 4, pointBackgroundColor: '#002B61'
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#666' }, grid: { display: false } },
-            y: { ticks: { color: '#666', callback: v => `${v}%` }, grid: { color: '#1A1A1A' }, min: 0, max: 120 }
-          }
-        }
-      });
-    }
-
-    function renderHeatmap() {
-      const cont = document.getElementById('heatmapGrid');
-      const days = ['日', '月', '火', '水', '木', '金', '土'];
-      let html = '<div class="heatmap-header"></div>';
-      for (let h = 9; h <= 21; h++) html += `<div class="heatmap-header">${h}時</div>`;
-      days.forEach((d, di) => {
-        html += `<div class="heatmap-label">${d}</div>`;
-        for (let h = 9; h <= 21; h++) {
-          const c = DATA.congestion.find(x => x.day === di && x.hour === h);
-          const lv = Math.ceil(c.value / 20);
-          html += `<div class="heatmap-cell l${lv}" title="${d}曜 ${h}時: ${c.value}%"></div>`;
-        }
-      });
-      cont.innerHTML = html;
-    }
-
-    function renderCatChart() {
-      const ctx = document.getElementById('catChart').getContext('2d');
-      if (charts.cat) charts.cat.destroy();
-      charts.cat = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: DATA.categories.map(c => c.name),
-          datasets: [{
-            data: DATA.categories.map(c => c.revenue),
-            backgroundColor: DATA.categories.map((_, i) => i % 2 === 0 ? '#002B61' : '#003D8A'),
-            borderRadius: 2
-          }]
-        },
-        options: {
-          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#666', callback: v => `¥${(v / 1e4).toFixed(0)}万` }, grid: { color: '#1A1A1A' } },
-            y: { ticks: { color: '#CCC' }, grid: { display: false } }
-          }
-        }
-      });
-    }
-
-    function renderTopChart() {
-      const ctx = document.getElementById('topChart').getContext('2d');
-      if (charts.top) charts.top.destroy();
-      charts.top = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: DATA.topItems.map(i => i.name.slice(0, 10)),
-          datasets: [{
-            data: DATA.topItems.map(i => i.revenue),
-            backgroundColor: '#002B61',
-            borderRadius: 2
-          }]
-        },
-        options: {
-          indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { ticks: { color: '#666', callback: v => `¥${(v / 1e4).toFixed(0)}万` }, grid: { color: '#1A1A1A' } },
-            y: { ticks: { color: '#CCC', font: { size: 10 } }, grid: { display: false } }
-          }
-        }
-      });
-    }
-
-    function renderAttrs() {
-      renderAttrBars('attrAge', DATA.ageDistribution, 'navy');
-      renderAttrBars('attrGender', DATA.genderDistribution, 'light');
-      renderAttrBars('attrLife', DATA.lifeDistribution, 'white');
-    }
-
-    function renderAttrBars(id, data, cls) {
-      const max = Math.max(...data.map(d => d.value));
-      document.getElementById(id).innerHTML = data.map(d => `
-        <div class="attr-row">
-          <div class="attr-row-head">
-            <span class="attr-row-label">${d.label}</span>
-            <span class="attr-row-value">${d.value}%</span>
-          </div>
-          <div class="attr-row-bar">
-            <div class="attr-row-fill ${cls}" style="width:${(d.value / max) * 100}%"></div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderRFM() {
-      document.getElementById('rfmGrid').innerHTML = DATA.rfmMatrix.map(c => {
-        let cls = 'rfm-cell', lbl = '';
-        if (c.isChamp) { cls += ' champion'; lbl = '優良'; }
-        else if (c.isLoyal) { cls += ' loyal'; lbl = 'ロイヤル'; }
-        else if (c.isRisk) { cls += ' at-risk'; lbl = '要注意'; }
-        return `<div class="${cls}" title="R${c.r} x M${c.m}">
-          <span class="rfm-cell-count">${c.count}</span>
-          <span class="rfm-cell-label">${lbl}</span>
-        </div>`;
-      }).join('');
-    }
-
-    function renderCustList() {
-      const cont = document.getElementById('custList');
-      cont.innerHTML = DATA.customers.slice(0, 25).map((c, i) => `
-        <div class="entity-item" data-idx="${i}">
-          <p class="entity-rank">RANK #${i + 1}</p>
-          <p class="entity-name">${c.id}</p>
-          <p class="entity-meta">¥${c.totalSpend.toLocaleString()} / ${c.visits}回 / ${c.age} ${c.gender}</p>
-        </div>
-      `).join('');
-      cont.querySelectorAll('.entity-item').forEach(el => {
-        el.onclick = () => {
-          cont.querySelectorAll('.entity-item').forEach(e => e.classList.remove('active'));
-          el.classList.add('active');
-          renderCustDetail(DATA.customers[+el.dataset.idx]);
-        };
-      });
-    }
-
-    function renderCustDetail(c) {
-      const cont = document.getElementById('custDetail');
-      cont.innerHTML = `
-        <div style="margin-bottom:20px;">
-          <p class="typo-title" style="color:var(--navy-light)">${c.id}</p>
-          <p class="typo-caption">${c.age} / ${c.gender} / ${c.life}</p>
-        </div>
-        <div class="entity-profile">
-          <div class="profile-stat">
-            <p class="profile-stat-value navy">¥${(c.totalSpend / 1000).toFixed(0)}K</p>
-            <p class="profile-stat-label">総購買額</p>
-          </div>
-          <div class="profile-stat">
-            <p class="profile-stat-value">${c.visits}</p>
-            <p class="profile-stat-label">来店回数</p>
-          </div>
-          <div class="profile-stat">
-            <p class="profile-stat-value">¥${c.avgBasket.toLocaleString()}</p>
-            <p class="profile-stat-label">平均客単価</p>
-          </div>
-          <div class="profile-stat">
-            <p class="profile-stat-value">${c.lastVisit}日前</p>
-            <p class="profile-stat-label">最終来店</p>
-          </div>
-        </div>
-        <div style="margin-bottom:20px;">
-          <p class="typo-label" style="color:var(--gray-500);margin-bottom:12px;">顧客DNAレーダー</p>
-          <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
-        </div>
-        <div>
-          <p class="typo-label" style="color:var(--gray-500);margin-bottom:12px;">購買タイムライン</p>
-          <div class="timeline-list">${c.timeline.map(t => `
-            <div class="timeline-item">
-              <span class="timeline-date">${t.date}</span>
-              <div>
-                <p class="timeline-amount">¥${t.amount.toLocaleString()}</p>
-                <p class="timeline-items">${t.items}点購入</p>
-              </div>
-            </div>
-          `).join('')}</div>
-        </div>
-      `;
-      renderRadar(c);
-    }
-
-    function renderRadar(c) {
-      const ctx = document.getElementById('radarChart');
-      if (!ctx) return;
-      new Chart(ctx.getContext('2d'), {
-        type: 'radar',
-        data: {
-          labels: ['購買頻度', '客単価', '多様性', 'ロイヤルティ', '時間帯'],
-          datasets: [{
-            data: [c.dna.freq, c.dna.basket, c.dna.variety, c.dna.loyalty, c.dna.timing],
-            backgroundColor: 'rgba(0,43,97,0.25)',
-            borderColor: '#002B61',
-            borderWidth: 2,
-            pointBackgroundColor: '#002B61'
-          }]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            r: {
-              beginAtZero: true, max: 100,
-              ticks: { stepSize: 20, color: '#666', backdropColor: 'transparent' },
-              grid: { color: '#333' },
-              angleLines: { color: '#333' },
-              pointLabels: { color: '#999', font: { size: 10 } }
+            x: {
+              ticks: { color: '#666', font: { family: 'Montserrat', size: 9 }, maxRotation: 0 },
+              grid: { display: false }
+            },
+            y: {
+              ticks: {
+                color: '#666',
+                font: { family: 'Montserrat', size: 10 },
+                callback: v => `¥${(v / 10000).toFixed(0)}万`
+              },
+              grid: { color: '#1A1A1A' }
             }
           }
         }
@@ -1663,52 +1944,558 @@
     }
 
     // ================================================================
-    // STORE SIMULATION
+    // HOURLY PATTERN CHART
     // ================================================================
-    const ZONES = [
-      { id: 'entrance', name: '入口', x: 0.08, y: 0.5, color: '#00C853' },
-      { id: 'fresh', name: '生鮮', x: 0.25, y: 0.25, color: '#002B61' },
-      { id: 'meat', name: '精肉', x: 0.4, y: 0.2, color: '#003D8A' },
-      { id: 'fish', name: '鮮魚', x: 0.55, y: 0.25, color: '#001A3D' },
-      { id: 'deli', name: '惣菜', x: 0.7, y: 0.3, color: '#FF9100' },
-      { id: 'dairy', name: '日配', x: 0.4, y: 0.55, color: '#002B61' },
-      { id: 'processed', name: '加工食品', x: 0.6, y: 0.6, color: '#003D8A' },
-      { id: 'register', name: 'レジ', x: 0.9, y: 0.5, color: '#FF1744' }
+    function renderHourlyChart() {
+      const ctx = document.getElementById('hourlyChart').getContext('2d');
+      if (charts.hourly) charts.hourly.destroy();
+
+      charts.hourly = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: DATA.hourlySales.map(d => d.hour),
+          datasets: [{
+            data: DATA.hourlySales.map(d => d.value),
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointBackgroundColor: '#10B981',
+            pointBorderColor: '#000',
+            pointBorderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `来客指数: ${ctx.raw}%`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#666', font: { family: 'Montserrat' } },
+              grid: { display: false }
+            },
+            y: {
+              ticks: {
+                color: '#666',
+                font: { family: 'Montserrat' },
+                callback: v => `${v}%`
+              },
+              grid: { color: '#1A1A1A' },
+              min: 0,
+              max: 120
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // CONGESTION HEATMAP
+    // ================================================================
+    function renderCongestionHeatmap() {
+      const container = document.getElementById('heatmapGrid');
+      const days = ['日', '月', '火', '水', '木', '金', '土'];
+
+      let html = '<div class="heatmap-header"></div>';
+      for (let h = 9; h <= 21; h++) {
+        html += `<div class="heatmap-header">${h}時</div>`;
+      }
+
+      days.forEach((day, dayIndex) => {
+        html += `<div class="heatmap-label">${day}</div>`;
+        for (let h = 9; h <= 21; h++) {
+          const cell = DATA.congestion.find(c => c.day === dayIndex && c.hour === h);
+          const level = Math.ceil(cell.value / 20);
+          html += `<div class="heatmap-cell l${level}" title="${day}曜 ${h}時: ${cell.value}%">${cell.value}</div>`;
+        }
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ================================================================
+    // CATEGORY CHART
+    // ================================================================
+    function renderCategoryChart() {
+      const ctx = document.getElementById('catChart').getContext('2d');
+      if (charts.category) charts.category.destroy();
+
+      charts.category = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: DATA.categories.map(c => c.name),
+          datasets: [{
+            data: DATA.categories.map(c => c.revenue),
+            backgroundColor: DATA.categories.map(c => c.color),
+            borderRadius: 3,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `¥${ctx.raw.toLocaleString()}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: '#666',
+                font: { family: 'Montserrat' },
+                callback: v => `¥${(v / 10000).toFixed(0)}万`
+              },
+              grid: { color: '#1A1A1A' }
+            },
+            y: {
+              ticks: { color: '#CCC', font: { family: 'Noto Sans JP' } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // TOP ITEMS CHART
+    // ================================================================
+    function renderTopItemsChart() {
+      const ctx = document.getElementById('topChart').getContext('2d');
+      if (charts.topItems) charts.topItems.destroy();
+
+      charts.topItems = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: DATA.topItems.map(i => i.name.slice(0, 12)),
+          datasets: [{
+            data: DATA.topItems.map(i => i.revenue),
+            backgroundColor: '#F59E0B',
+            borderRadius: 3,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `¥${ctx.raw.toLocaleString()}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: '#666',
+                font: { family: 'Montserrat' },
+                callback: v => `¥${(v / 10000).toFixed(0)}万`
+              },
+              grid: { color: '#1A1A1A' }
+            },
+            y: {
+              ticks: { color: '#CCC', font: { family: 'Noto Sans JP', size: 11 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // ATTRIBUTE BARS
+    // ================================================================
+    function renderAttributeBars() {
+      renderAttrBarSet('attrAge', DATA.ageDistribution, 'navy');
+      renderAttrBarSet('attrGender', DATA.genderDistribution, 'emerald');
+      renderAttrBarSet('attrLife', DATA.lifeDistribution, 'amber');
+    }
+
+    function renderAttrBarSet(containerId, data, colorClass) {
+      const maxValue = Math.max(...data.map(d => d.value));
+      const container = document.getElementById(containerId);
+
+      container.innerHTML = data.map(d => `
+        <div class="attr-row">
+          <div class="attr-row-head">
+            <span class="attr-row-label">${d.label}</span>
+            <span class="attr-row-value">${d.value}%</span>
+          </div>
+          <div class="attr-row-bar">
+            <div class="attr-row-fill ${colorClass}" style="width: ${(d.value / maxValue) * 100}%"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ================================================================
+    // CATEGORY × DAY HEATMAP
+    // ================================================================
+    function renderCatDayHeatmap() {
+      const container = document.getElementById('catDayHeatmap');
+      const days = ['日', '月', '火', '水', '木', '金', '土'];
+      const cats = ['青果', '精肉', '鮮魚', '惣菜', '日配', '加工食品'];
+
+      let html = '<div class="heatmap-header"></div>';
+      days.forEach(d => html += `<div class="heatmap-header">${d}</div>`);
+
+      cats.forEach(cat => {
+        html += `<div class="heatmap-label">${cat}</div>`;
+        for (let dow = 0; dow < 7; dow++) {
+          const cell = DATA.catDayMatrix.find(c => c.category === cat && c.day === dow);
+          const level = Math.ceil(cell.value / 20);
+          html += `<div class="heatmap-cell l${level}" title="${cat} ${days[dow]}曜: ${cell.value}%">${cell.value}</div>`;
+        }
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ================================================================
+    // CORRELATION NETWORK GRAPH (D3.js)
+    // ================================================================
+    function renderNetworkGraph() {
+      const container = document.getElementById('networkContainer');
+      const svg = d3.select('#networkSvg');
+      svg.selectAll('*').remove();
+
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      const nodes = DATA.correlationNetwork.nodes.map(d => ({ ...d }));
+      const links = DATA.correlationNetwork.links.map(d => ({ ...d }));
+
+      const simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id).distance(100))
+        .force('charge', d3.forceManyBody().strength(-300))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(40));
+
+      // Links
+      const link = svg.append('g')
+        .selectAll('line')
+        .data(links)
+        .join('line')
+        .attr('stroke', '#444')
+        .attr('stroke-width', d => d.strength * 4)
+        .attr('stroke-opacity', 0.6);
+
+      // Node groups
+      const node = svg.append('g')
+        .selectAll('g')
+        .data(nodes)
+        .join('g')
+        .call(d3.drag()
+          .on('start', dragstarted)
+          .on('drag', dragged)
+          .on('end', dragended));
+
+      // Node circles
+      node.append('circle')
+        .attr('r', d => Math.sqrt(d.revenue) / 200 + 15)
+        .attr('fill', '#002B61')
+        .attr('stroke', '#10B981')
+        .attr('stroke-width', 2);
+
+      // Node labels
+      node.append('text')
+        .text(d => d.name)
+        .attr('fill', '#FFF')
+        .attr('font-size', '10px')
+        .attr('font-family', 'Noto Sans JP')
+        .attr('text-anchor', 'middle')
+        .attr('dy', 4);
+
+      simulation.on('tick', () => {
+        link
+          .attr('x1', d => d.source.x)
+          .attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x)
+          .attr('y2', d => d.target.y);
+
+        node.attr('transform', d => `translate(${d.x},${d.y})`);
+      });
+
+      function dragstarted(event) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        event.subject.fx = event.subject.x;
+        event.subject.fy = event.subject.y;
+      }
+
+      function dragged(event) {
+        event.subject.fx = event.x;
+        event.subject.fy = event.y;
+      }
+
+      function dragended(event) {
+        if (!event.active) simulation.alphaTarget(0);
+        event.subject.fx = null;
+        event.subject.fy = null;
+      }
+    }
+
+    // ================================================================
+    // RFM MATRIX
+    // ================================================================
+    function renderRFMMatrix() {
+      const container = document.getElementById('rfmGrid');
+
+      container.innerHTML = DATA.rfmMatrix.map(cell => {
+        let className = 'rfm-cell';
+        let label = '';
+
+        if (cell.isChampion) { className += ' champion'; label = '優良'; }
+        else if (cell.isLoyal) { className += ' loyal'; label = 'ロイヤル'; }
+        else if (cell.isAtRisk) { className += ' at-risk'; label = '要注意'; }
+
+        return `
+          <div class="${className}" title="R${cell.r} × M${cell.m}: ${cell.count}人">
+            <span class="rfm-cell-count">${cell.count}</span>
+            <span class="rfm-cell-label">${label}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ================================================================
+    // CUSTOMER LIST
+    // ================================================================
+    function renderCustomerList() {
+      const container = document.getElementById('custList');
+
+      container.innerHTML = DATA.customers.slice(0, 30).map((customer, index) => `
+        <div class="entity-item" data-index="${index}">
+          <p class="entity-rank">RANK #${index + 1}</p>
+          <p class="entity-name">${customer.id}</p>
+          <p class="entity-meta">¥${customer.totalSpend.toLocaleString()} / ${customer.visits}回 / ${customer.age} ${customer.gender}</p>
+        </div>
+      `).join('');
+
+      container.querySelectorAll('.entity-item').forEach(item => {
+        item.addEventListener('click', () => {
+          container.querySelectorAll('.entity-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          renderCustomerDetail(DATA.customers[+item.dataset.index]);
+        });
+      });
+    }
+
+    // ================================================================
+    // CUSTOMER DETAIL
+    // ================================================================
+    function renderCustomerDetail(customer) {
+      const container = document.getElementById('custDetail');
+
+      container.innerHTML = `
+        <div style="margin-bottom: 24px;">
+          <p class="typo-title" style="color: var(--navy-light);">${customer.id}</p>
+          <p class="typo-caption" style="margin-top: 6px;">${customer.age} / ${customer.gender} / ${customer.life} / 主購買: ${customer.topCat}</p>
+        </div>
+
+        <div class="entity-profile">
+          <div class="profile-stat">
+            <p class="profile-stat-value navy">¥${(customer.totalSpend / 1000).toFixed(0)}K</p>
+            <p class="profile-stat-label">総購買額</p>
+          </div>
+          <div class="profile-stat">
+            <p class="profile-stat-value">${customer.visits}</p>
+            <p class="profile-stat-label">来店回数</p>
+          </div>
+          <div class="profile-stat">
+            <p class="profile-stat-value emerald">¥${customer.avgBasket.toLocaleString()}</p>
+            <p class="profile-stat-label">平均客単価</p>
+          </div>
+          <div class="profile-stat">
+            <p class="profile-stat-value">${customer.lastVisit}日前</p>
+            <p class="profile-stat-label">最終来店</p>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 14px;">顧客DNAレーダー</p>
+          <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+        </div>
+
+        <div>
+          <p class="typo-label" style="color: var(--gray-500); margin-bottom: 14px;">購買タイムライン</p>
+          <div class="timeline-list">
+            ${customer.timeline.map(t => `
+              <div class="timeline-item">
+                <span class="timeline-date">${t.date}</span>
+                <div>
+                  <p class="timeline-amount">¥${t.amount.toLocaleString()}</p>
+                  <p class="timeline-items">${t.items}点購入</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      renderRadarChart(customer);
+    }
+
+    // ================================================================
+    // RADAR CHART
+    // ================================================================
+    function renderRadarChart(customer) {
+      const ctx = document.getElementById('radarChart');
+      if (!ctx) return;
+
+      new Chart(ctx.getContext('2d'), {
+        type: 'radar',
+        data: {
+          labels: ['購買頻度', '客単価', '多様性', 'ロイヤルティ', '時間帯分散'],
+          datasets: [{
+            data: [
+              customer.dna.frequency,
+              customer.dna.basket,
+              customer.dna.variety,
+              customer.dna.loyalty,
+              customer.dna.timing
+            ],
+            backgroundColor: 'rgba(0, 43, 97, 0.25)',
+            borderColor: '#002B61',
+            borderWidth: 2,
+            pointBackgroundColor: '#002B61',
+            pointBorderColor: '#000',
+            pointBorderWidth: 2,
+            pointRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                stepSize: 25,
+                color: '#666',
+                backdropColor: 'transparent',
+                font: { family: 'Montserrat' }
+              },
+              grid: { color: '#333' },
+              angleLines: { color: '#333' },
+              pointLabels: {
+                color: '#999',
+                font: { family: 'Noto Sans JP', size: 11 }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ================================================================
+    // IMAJUKU STORE SIMULATION (Probability-Based Shopper Flow)
+    // ================================================================
+    const STORE_ZONES = [
+      { id: 'entrance', name: '入口', x: 0.06, y: 0.5, color: '#10B981', radius: 30 },
+      { id: 'produce', name: '青果', x: 0.22, y: 0.25, color: '#10B981', radius: 35 },
+      { id: 'meat', name: '精肉', x: 0.38, y: 0.2, color: '#F43F5E', radius: 35 },
+      { id: 'fish', name: '鮮魚', x: 0.54, y: 0.25, color: '#06B6D4', radius: 35 },
+      { id: 'deli', name: '惣菜', x: 0.7, y: 0.3, color: '#F59E0B', radius: 38 },
+      { id: 'dairy', name: '日配', x: 0.38, y: 0.55, color: '#002B61', radius: 32 },
+      { id: 'grocery', name: '加工食品', x: 0.55, y: 0.6, color: '#8B5CF6', radius: 32 },
+      { id: 'beverage', name: '飲料', x: 0.7, y: 0.65, color: '#14B8A6', radius: 30 },
+      { id: 'register', name: 'レジ', x: 0.92, y: 0.5, color: '#FFFFFF', radius: 32 }
     ];
 
-    const PATHS = {
-      entrance: [{ to: 'fresh', prob: 0.6 }, { to: 'dairy', prob: 0.3 }, { to: 'processed', prob: 0.1 }],
-      fresh: [{ to: 'meat', prob: 0.4 }, { to: 'fish', prob: 0.3 }, { to: 'deli', prob: 0.2 }, { to: 'register', prob: 0.1 }],
-      meat: [{ to: 'fish', prob: 0.3 }, { to: 'deli', prob: 0.3 }, { to: 'dairy', prob: 0.2 }, { to: 'register', prob: 0.2 }],
-      fish: [{ to: 'deli', prob: 0.4 }, { to: 'dairy', prob: 0.3 }, { to: 'register', prob: 0.3 }],
-      deli: [{ to: 'dairy', prob: 0.3 }, { to: 'processed', prob: 0.3 }, { to: 'register', prob: 0.4 }],
-      dairy: [{ to: 'processed', prob: 0.5 }, { to: 'register', prob: 0.5 }],
-      processed: [{ to: 'register', prob: 1 }],
+    // Probability-based path weights (Imajuku Main Aisle Flow)
+    const FLOW_PATHS = {
+      entrance: [
+        { to: 'produce', prob: 0.7 },
+        { to: 'dairy', prob: 0.2 },
+        { to: 'grocery', prob: 0.1 }
+      ],
+      produce: [
+        { to: 'meat', prob: 0.5 },
+        { to: 'fish', prob: 0.25 },
+        { to: 'deli', prob: 0.15 },
+        { to: 'register', prob: 0.1 }
+      ],
+      meat: [
+        { to: 'fish', prob: 0.35 },
+        { to: 'deli', prob: 0.35 },
+        { to: 'dairy', prob: 0.15 },
+        { to: 'register', prob: 0.15 }
+      ],
+      fish: [
+        { to: 'deli', prob: 0.45 },
+        { to: 'dairy', prob: 0.25 },
+        { to: 'register', prob: 0.3 }
+      ],
+      deli: [
+        { to: 'dairy', prob: 0.25 },
+        { to: 'grocery', prob: 0.25 },
+        { to: 'beverage', prob: 0.15 },
+        { to: 'register', prob: 0.35 }
+      ],
+      dairy: [
+        { to: 'grocery', prob: 0.4 },
+        { to: 'beverage', prob: 0.2 },
+        { to: 'register', prob: 0.4 }
+      ],
+      grocery: [
+        { to: 'beverage', prob: 0.35 },
+        { to: 'register', prob: 0.65 }
+      ],
+      beverage: [
+        { to: 'register', prob: 1.0 }
+      ],
       register: []
     };
 
-    function initSim() {
-      document.getElementById('simStart').onclick = startSim;
-      document.getElementById('simStop').onclick = stopSim;
-      drawSimFrame();
+    function initSimulation() {
+      document.getElementById('simStart').onclick = startSimulation;
+      document.getElementById('simStop').onclick = stopSimulation;
+      drawSimulationFrame();
     }
 
-    function startSim() {
+    function startSimulation() {
       if (simRunning) return;
+
       simRunning = true;
       shoppers = [];
       simComplete = 0;
+      simTotalTime = 0;
+
       document.getElementById('simStart').style.display = 'none';
       document.getElementById('simStop').style.display = 'inline-block';
-      simLoop();
+
       // Spawn shoppers periodically
       const spawner = setInterval(() => {
-        if (!simRunning) { clearInterval(spawner); return; }
-        if (shoppers.length < 40) spawnShopper();
-      }, 600);
+        if (!simRunning) {
+          clearInterval(spawner);
+          return;
+        }
+        if (shoppers.length < 50) {
+          spawnShopper();
+        }
+      }, 500);
+
+      simulationLoop();
     }
 
-    function stopSim() {
+    function stopSimulation() {
       simRunning = false;
       cancelAnimationFrame(simAnimId);
       document.getElementById('simStart').style.display = 'inline-block';
@@ -1716,114 +2503,167 @@
     }
 
     function spawnShopper() {
-      const entrance = ZONES.find(z => z.id === 'entrance');
+      const entrance = STORE_ZONES.find(z => z.id === 'entrance');
       shoppers.push({
         x: entrance.x,
-        y: entrance.y + (Math.random() - 0.5) * 0.1,
-        zone: 'entrance',
-        target: null,
-        tx: entrance.x,
-        ty: entrance.y,
-        speed: 0.003 + Math.random() * 0.002,
-        wait: 0
+        y: entrance.y + (Math.random() - 0.5) * 0.08,
+        currentZone: 'entrance',
+        targetZone: null,
+        targetX: entrance.x,
+        targetY: entrance.y,
+        speed: 0.0025 + Math.random() * 0.002,
+        waitTime: 0,
+        startTime: performance.now(),
+        color: `hsl(${Math.random() * 120 + 140}, 70%, 50%)`
       });
     }
 
-    function simLoop() {
+    function simulationLoop() {
       if (!simRunning) return;
+
       updateShoppers();
-      drawSimFrame();
+      drawSimulationFrame();
+
       document.getElementById('simActive').textContent = shoppers.length;
       document.getElementById('simComplete').textContent = simComplete;
-      simAnimId = requestAnimationFrame(simLoop);
+
+      const avgTime = simComplete > 0 ? Math.round(simTotalTime / simComplete / 1000) : 0;
+      document.getElementById('simAvgTime').textContent = avgTime;
+
+      simAnimId = requestAnimationFrame(simulationLoop);
     }
 
     function updateShoppers() {
-      shoppers.forEach(s => {
-        if (s.wait > 0) { s.wait--; return; }
+      shoppers.forEach(shopper => {
+        // If waiting at a zone
+        if (shopper.waitTime > 0) {
+          shopper.waitTime--;
+          return;
+        }
 
-        // Move towards target
-        const dx = s.tx - s.x, dy = s.ty - s.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        // Calculate distance to target
+        const dx = shopper.targetX - shopper.x;
+        const dy = shopper.targetY - shopper.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if (dist < 0.02) {
-          // Arrived at target
-          if (s.zone === 'register') {
-            // Exit
-            s.remove = true;
+        if (distance < 0.025) {
+          // Arrived at target zone
+          if (shopper.currentZone === 'register') {
+            // Exit store
+            shopper.remove = true;
             simComplete++;
+            simTotalTime += performance.now() - shopper.startTime;
             return;
           }
-          // Pick next zone
-          const paths = PATHS[s.zone];
-          if (paths.length === 0) { s.remove = true; simComplete++; return; }
-          let r = Math.random(), cumul = 0;
-          for (const p of paths) {
-            cumul += p.prob;
-            if (r <= cumul) {
-              s.zone = p.to;
-              const nextZone = ZONES.find(z => z.id === p.to);
-              s.tx = nextZone.x + (Math.random() - 0.5) * 0.08;
-              s.ty = nextZone.y + (Math.random() - 0.5) * 0.08;
-              s.wait = Math.round(30 + Math.random() * 60); // Wait at zone
+
+          // Select next zone based on probabilities
+          const paths = FLOW_PATHS[shopper.currentZone];
+          if (!paths || paths.length === 0) {
+            shopper.remove = true;
+            simComplete++;
+            simTotalTime += performance.now() - shopper.startTime;
+            return;
+          }
+
+          let random = Math.random();
+          let cumulative = 0;
+
+          for (const path of paths) {
+            cumulative += path.prob;
+            if (random <= cumulative) {
+              const nextZone = STORE_ZONES.find(z => z.id === path.to);
+              shopper.currentZone = path.to;
+              shopper.targetX = nextZone.x + (Math.random() - 0.5) * 0.06;
+              shopper.targetY = nextZone.y + (Math.random() - 0.5) * 0.06;
+              shopper.waitTime = Math.round(40 + Math.random() * 80); // Stay at zone
               break;
             }
           }
         } else {
-          // Move
-          s.x += (dx / dist) * s.speed;
-          s.y += (dy / dist) * s.speed;
+          // Move towards target (with slight wandering)
+          const wobble = (Math.random() - 0.5) * 0.002;
+          shopper.x += (dx / distance) * shopper.speed + wobble;
+          shopper.y += (dy / distance) * shopper.speed + wobble;
         }
       });
+
+      // Remove exited shoppers
       shoppers = shoppers.filter(s => !s.remove);
     }
 
-    function drawSimFrame() {
+    function drawSimulationFrame() {
       const canvas = document.getElementById('simCanvas');
       const ctx = canvas.getContext('2d');
       const rect = canvas.parentElement.getBoundingClientRect();
+
       canvas.width = rect.width;
       canvas.height = rect.height;
-      const W = canvas.width, H = canvas.height;
 
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // Clear canvas
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, W, H);
 
-      // Draw zones
-      ZONES.forEach(z => {
-        ctx.fillStyle = z.color;
-        ctx.globalAlpha = 0.3;
-        ctx.beginPath();
-        ctx.arc(z.x * W, z.y * H, 35, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-        ctx.fillStyle = '#FFF';
-        ctx.font = '11px "Noto Sans JP"';
-        ctx.textAlign = 'center';
-        ctx.fillText(z.name, z.x * W, z.y * H + 4);
-      });
+      // Draw flow paths
+      ctx.strokeStyle = '#1A1A1A';
+      ctx.lineWidth = 2;
 
-      // Draw paths
-      ctx.strokeStyle = '#333';
-      ctx.lineWidth = 1;
-      Object.entries(PATHS).forEach(([from, tos]) => {
-        const fz = ZONES.find(z => z.id === from);
-        tos.forEach(t => {
-          const tz = ZONES.find(z => z.id === t.to);
+      Object.entries(FLOW_PATHS).forEach(([fromId, targets]) => {
+        const fromZone = STORE_ZONES.find(z => z.id === fromId);
+        targets.forEach(target => {
+          const toZone = STORE_ZONES.find(z => z.id === target.to);
+          ctx.globalAlpha = target.prob * 0.5;
           ctx.beginPath();
-          ctx.moveTo(fz.x * W, fz.y * H);
-          ctx.lineTo(tz.x * W, tz.y * H);
+          ctx.moveTo(fromZone.x * W, fromZone.y * H);
+          ctx.lineTo(toZone.x * W, toZone.y * H);
           ctx.stroke();
         });
       });
+      ctx.globalAlpha = 1;
+
+      // Draw zones
+      STORE_ZONES.forEach(zone => {
+        // Zone background
+        ctx.fillStyle = zone.color;
+        ctx.globalAlpha = 0.2;
+        ctx.beginPath();
+        ctx.arc(zone.x * W, zone.y * H, zone.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Zone border
+        ctx.globalAlpha = 0.6;
+        ctx.strokeStyle = zone.color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Zone label
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = '#FFF';
+        ctx.font = '600 12px "Noto Sans JP"';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(zone.name, zone.x * W, zone.y * H);
+      });
 
       // Draw shoppers
-      shoppers.forEach(s => {
-        ctx.fillStyle = '#00C853';
+      shoppers.forEach(shopper => {
+        ctx.fillStyle = shopper.color;
+        ctx.globalAlpha = 0.9;
         ctx.beginPath();
-        ctx.arc(s.x * W, s.y * H, 5, 0, Math.PI * 2);
+        ctx.arc(shopper.x * W, shopper.y * H, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Shopper glow
+        ctx.fillStyle = shopper.color;
+        ctx.globalAlpha = 0.3;
+        ctx.beginPath();
+        ctx.arc(shopper.x * W, shopper.y * H, 10, 0, Math.PI * 2);
         ctx.fill();
       });
+
+      ctx.globalAlpha = 1;
     }
 
   </script>
